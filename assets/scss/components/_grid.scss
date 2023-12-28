@@ -1,0 +1,37 @@
+$grid-breakpoint-map: (
+	sm: 576px,
+	md: 768px,
+	lg: 992px,
+	xl: 1200px,
+	xxl: 1440px,
+);
+
+@mixin media-sm {
+	@media screen and (min-width: map-get($grid-breakpoint-map, "sm")) {
+		@content;
+	}
+}
+
+@mixin media-md {
+	@media screen and (min-width: map-get($grid-breakpoint-map, "md")) {
+		@content;
+	}
+}
+
+@mixin media-lg {
+	@media screen and (min-width: map-get($grid-breakpoint-map, "lg")) {
+		@content;
+	}
+}
+
+@mixin media-xl {
+	@media screen and (min-width: map-get($grid-breakpoint-map, "xl")) {
+		@content;
+	}
+}
+
+@mixin media-xxl {
+	@media screen and (min-width: map-get($grid-breakpoint-map, "xxl")) {
+		@content;
+	}
+}

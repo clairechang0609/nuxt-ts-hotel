@@ -1,0 +1,50 @@
+$primary: #90725b !default;
+$secondary: #140F0A !default;
+$success: #52DD7E !default;
+$info: #3BADEF !default;
+$danger: #DA3E51 !default;
+$transparent: transparent !default;
+$white: #FFF !default;
+$black: #000 !default;
+$theme-colors: (
+	"primary":       $primary,
+	"secondary":     $secondary,
+	"success":       $success,
+	"info":          $info,
+	"danger":        $danger
+);
+$primary-base: (
+	"primary-120": #7B6651,
+	"primary-100": $primary,
+	"primary-80": #AE9984,
+	"primary-60": #E1D1C2,
+	"primary-40": #F1EAE4,
+	"primary-10": #F7F2EE
+) !default;
+$success-base: (
+	"success-120": #299F65,
+	"success-100": $success,
+	"success-20": #BCFBBD,
+	"success-10": #E8FEE7
+) !default;
+$info-base: (
+	"info-120": #1D66AC,
+	"info-100": $info,
+	"info-20": #B1EFFD,
+	"info-10": #E6FBFE
+) !default;
+$danger-base: (
+	"danger-120": #C22538,
+	"danger-100": $danger,
+	"danger-20": #F5CCD1,
+	"danger-10": #FDECEF
+) !default;
+$gray-base: (
+	"gray-bg": $secondary,
+	"gray-100": $black,
+	"gray-80": #4B4B4B,
+	"gray-60": #909090,
+	"gray-40": #ECECEC,
+	"gray-10": #F9F9F9,
+	"gray-0": $white
+) !default;

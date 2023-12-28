@@ -1,0 +1,82 @@
+$utilities: map-merge(
+	$utilities,
+	(
+		"cursor": (
+			property: cursor,
+			class: cursor,
+			values: ( pointer, not-allowed )
+		),
+		"color": map-merge(
+			map-get($utilities, "color"),
+			(
+				state: hover,
+				values: map-merge(
+					map-get(map-get($utilities, "color"), "values"),
+					(
+						map-merge-multiple($primary-base, $success-base, $info-base, $danger-base, $gray-base)
+					)
+				)
+			)
+		),
+		"background-color": map-merge(
+			map-get($utilities, "background-color"),
+			( values: map-merge(
+				map-get(map-get($utilities, "background-color"), "values"),
+				(
+					map-merge-multiple($primary-base, $success-base, $info-base, $danger-base, $gray-base)
+				)
+			))
+		),
+		"border-top": map-merge(
+			map-get($utilities, "border-top"),
+			( responsive: true )
+		),
+		"border-end": map-merge(
+			map-get($utilities, "border-end"),
+			( responsive: true )
+		),
+		"border-bottom": map-merge(
+			map-get($utilities, "border-bottom"),
+			( responsive: true )
+		),
+		"border-start": map-merge(
+			map-get($utilities, "border-start"),
+			( responsive: true )
+		),
+		"border-color": map-merge(
+			map-get($utilities, "border-color"),
+			( responsive: true )
+		),
+		"width": map-merge(
+			map-get($utilities, "width"),
+			(
+				responsive: true
+			)
+		),
+		"display": map-merge(
+			map-get($utilities, "display"),
+			(
+				values: inline inline-block block grid table table-row table-cell flex inline-flex none table-header-group
+			)
+		),
+		"font-size": map-merge(
+			map-get($utilities, "font-size"),
+			(
+				responsive: true,
+				values: map-merge(
+					map-get(map-get($utilities, "font-size"), "values"),
+					(
+						1: $h1-font-size,
+						2: $h2-font-size,
+						3: $h3-font-size,
+						4: $h4-font-size,
+						5: $h5-font-size,
+						6: $h6-font-size,
+						sm: $font-size-sm,
+						tiny: $font-size-tiny
+					)
+				)
+			)
+		)
+	)
+)

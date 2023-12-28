@@ -1,0 +1,47 @@
+.btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 1rem 2rem;
+	font-weight: 600;
+	letter-spacing: 0.32px;
+
+	&:disabled {
+		color: map-get($gray-base, "gray-60") !important;
+		border-color: transparent;
+
+		&:hover, &:active, &.active, &:focus, &.active:focus, &:active:focus {
+			color: map-get($gray-base, "gray-60") !important;
+			border-color: transparent;
+		}
+	}
+
+	&.btn-primary:disabled {
+		background-color: transparent;
+	}
+
+	&.btn-outline-primary {
+		color: map-get($primary-base, "primary-120");
+
+		&:disabled {
+			border-color: map-get($gray-base, "gray-60");
+		}
+
+		&:hover, &:active, &.active, &:focus, &.active:focus, &:active:focus {
+			background-color: map-get($primary-base, "primary-10");
+		}
+	}
+
+	&.btn-ghost {
+		padding: 1rem;
+		color: $white;
+
+		&:hover, &:active, &.active, &:focus, &.active:focus, &:active:focus {
+			color: $primary;
+		}
+	}
+
+	&.btn-link {
+		padding: 0;
+	}
+}
