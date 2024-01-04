@@ -121,13 +121,21 @@
 		</div>
 		<h3 class="mb-3 pb-3 border-bottom">Icon</h3>
 		<div class="mb-5">
-			<h5 class="mb-3">Material Design Icons</h5>
+			<h5 class="mb-3">Material Design Icons Fill</h5>
 			<div class="mb-4">
 				<span class="material-symbols-outlined me-3">check</span>
 				<span class="material-symbols-outlined me-3">chevron_left</span>
 				<span class="material-symbols-outlined me-3">bed</span>
 				<span class="material-symbols-outlined me-3">person</span>
 				<span class="material-symbols-outlined me-3">close</span>
+			</div>
+			<h5 class="mb-3">Material Design Icons Not Fill</h5>
+			<div class="mb-4">
+				<span class="material-symbols-outlined fill-0 me-3">check</span>
+				<span class="material-symbols-outlined fill-0 me-3">chevron_left</span>
+				<span class="material-symbols-outlined fill-0 me-3">bed</span>
+				<span class="material-symbols-outlined fill-0 me-3">person</span>
+				<span class="material-symbols-outlined fill-0 me-3">close</span>
 			</div>
 			<h5 class="mb-3">Iconfy Icons</h5>
 			<div class="mb-4">
