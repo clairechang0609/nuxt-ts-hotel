@@ -34,7 +34,9 @@ export default defineNuxtConfig({
 		typeCheck: true
 	},
 	modules: [
-		'@nuxtjs/stylelint-module'
+		'@nuxtjs/stylelint-module',
+		'@pinia/nuxt',
+		'@pinia-plugin-persistedstate/nuxt'
 	],
 	stylelint: {
 		lintOnStart: false, // 專案啟動時不自動檢查所有相關檔案
