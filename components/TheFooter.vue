@@ -1,6 +1,6 @@
 <template>
 	<div class="bg-secondary">
-		<div class="container mt-0 text-white">
+		<div class="container text-white">
 			<div class="d-flex flex-column flex-md-row justify-content-between">
 				<div>
 					<NuxtLink to="/" title="享樂酒店｜Enjoyment Luxury Hotel" class="d-flex mb-5">
