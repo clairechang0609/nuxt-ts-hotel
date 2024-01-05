@@ -1,12 +1,25 @@
+import { User } from '@/types/user';
+
+const initialState = {
+	name: '',
+	id: ''
+};
+
 export const useMainStore = defineStore('main', () => {
-	// TODO: 等串接
-	const user = ref({
-		name: '',
-		id: ''
-	});
+	const user = reactive({ ...initialState });
+
+	const setUser = (info: User) => {
+		Object.assign(user, info);
+	};
+
+	const reset = () => {
+		Object.assign(user, initialState);
+	};
 
 	return {
-		user
+		user,
+		reset,
+		setUser
 	};
 }, {
 	persist: {
