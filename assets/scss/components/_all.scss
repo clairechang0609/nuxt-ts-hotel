@@ -25,6 +25,7 @@ a {
 
 // 全站共用的容器
 .container {
+	margin-top: 7.5rem;
 	padding: 2.5rem 0.75rem;
 	max-width: 1296px;
 
@@ -32,8 +33,9 @@ a {
 		padding: 5rem 1.5rem;
 	}
 
-	@include media-xl {
-		margin: 0 auto;
-		padding: 7.5rem 0;
+	@include media-xxl {
+		margin-right: auto;
+		margin-left: auto;
+		padding: 5rem 0;
 	}
 }

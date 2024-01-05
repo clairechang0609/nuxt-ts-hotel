@@ -15,7 +15,7 @@ module.exports = {
 		'stylelint-order'
 	],
 	rules: {
-		'unit-allowed-list': [ 'em', 'rem', 's', 'deg', 'px', '%', 'vh', 'vw' ],
+		'unit-allowed-list': [ 'em', 'rem', 's', 'deg', 'px', '%', 'vh', 'vw', 'fr' ],
 		'at-rule-no-unknown': [ true, {
 			ignoreAtRules: [ 'function', 'if', 'each', 'include', 'mixin', 'for', 'import' ]
 		}],
