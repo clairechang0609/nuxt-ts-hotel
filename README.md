@@ -18,3 +18,7 @@
 * 執行 npm install
 * 執行 npm run dev
 * vite 打包工具有時畫面更新較慢，重新 npm run dev 即可
+
+## TS 型別定義
+
+* 型別可以統一定義在 types 資料夾（參考影音課程『TS 型別模組化教學』這篇）
