@@ -1,6 +1,6 @@
 <template>
 	<div class="bg-primary-10">
-		<div class="container">
+		<div class="container container-with-navbar">
 			<h2 class="mb-5">我是預約房型頁</h2>
 			<div class="test">
 				<a href="/reservation/success" class="btn btn-success mb-5">點我看預約成功頁</a>
