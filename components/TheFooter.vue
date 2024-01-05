@@ -34,7 +34,7 @@
 					</li>
 					<li>
 						<label class="form-label d-block">WEB</label>
-						<NuxtLink to="www.elhhexschool.com.tw">www.elhhexschool.com.tw</NuxtLink>
+						<NuxtLink to="https://www.elhhexschool.com.tw" target="_blank">www.elhhexschool.com.tw</NuxtLink>
 					</li>
 				</ul>
 			</div>

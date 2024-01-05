@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<TheHeader :show-menu="false" />
-		<div class="main-container">
+		<div class="container p-0">
 			<h2 class="p-4">我是註冊頁</h2>
 			<a href="/login" class="btn btn-success m-4">點我看登入頁</a>
 		</div>
@@ -13,9 +13,3 @@ definePageMeta({
 	layout: false
 });
 </script>
-
-<style lang="scss" scoped>
-.main-container {
-	padding-top: $header-height;
-}
-</style>

@@ -25,12 +25,16 @@ a {
 
 // 全站共用的容器
 .container {
-	margin-top: 7.5rem;
+	margin-top: $header-height-sm;
 	padding: 2.5rem 0.75rem;
 	max-width: 1296px;
 
 	@include media-md {
 		padding: 5rem 1.5rem;
+
+		@include media-md {
+			margin-top: $header-height;
+		}
 	}
 
 	@include media-xxl {

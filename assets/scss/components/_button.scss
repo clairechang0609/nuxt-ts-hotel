@@ -38,6 +38,7 @@
 
 		&:hover, &:active, &.active, &:focus, &.active:focus, &:active:focus {
 			color: $primary;
+			border-color: transparent;
 		}
 	}
 
