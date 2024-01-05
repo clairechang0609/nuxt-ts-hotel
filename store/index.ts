@@ -2,7 +2,8 @@ import { type User } from '@/types/user';
 
 const initialState = {
 	name: '',
-	id: ''
+	id: '',
+	photo: ''
 };
 
 export const useMainStore = defineStore('main', () => {
