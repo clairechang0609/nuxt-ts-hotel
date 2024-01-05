@@ -38,7 +38,8 @@ export default defineNuxtConfig({
 	],
 	stylelint: {
 		lintOnStart: false, // 專案啟動時不自動檢查所有相關檔案
-		chokidar: true // 監聽文件異動進行檢核（文件未列出此選項）
+		chokidar: true, // 監聽文件異動進行檢核（文件未列出此選項）
+		cache: false
 	},
 	css: [
 		'@/assets/scss/app.scss'
