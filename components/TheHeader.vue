@@ -15,7 +15,7 @@
 					<div class="position-fixed start-0 top-0 end-0 bottom-0 bg-secondary" v-show="openMenu">
 						<div class="position-absolute top-50 start-50 translate-middle d-flex flex-column justify-content-center p-4 w-100">
 							<NuxtLink to="/all-rooms" class="btn btn-ghost mb-3">客房旅宿</NuxtLink>
-							<NuxtLink to="/login" class="btn btn-ghost mb-3" v-if="!isLogin">會員登入</NuxtLink>
+							<NuxtLink to="/login" class="btn btn-ghost mb-3" v-if="!$store.user.id">會員登入</NuxtLink>
 							<NuxtLink to="/member-info" class="btn btn-ghost mb-3" v-else>我的帳戶</NuxtLink>
 							<NuxtLink to="/reservation" class="btn btn-primary w-100">立即訂房</NuxtLink>
 						</div>
@@ -28,11 +28,17 @@
 			<!-- 電腦版 menu -->
 			<div class="d-none d-md-flex align-items-center">
 				<NuxtLink to="/all-rooms" class="btn btn-ghost me-3">客房旅宿</NuxtLink>
-				<NuxtLink to="/login" class="btn btn-ghost me-3" v-if="!isLogin">會員登入</NuxtLink>
-				<NuxtLink to="/member-info" class="btn btn-ghost me-3" v-else>
-					<span class="material-symbols-outlined fill-0 me-2">account_circle</span>
-					Jessica
-				</NuxtLink>
+				<NuxtLink to="/login" class="btn btn-ghost me-3" v-if="!$store.user.id">會員登入</NuxtLink>
+				<div class="dropdown" v-else>
+					<button class="btn btn-ghost me-3" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+						<span class="material-symbols-outlined fill-0 me-2">account_circle</span>
+						Jessica
+					</button>
+					<div class="dropdown-menu">
+						<NuxtLink to="/member-info" class="dropdown-item">我的帳戶</NuxtLink>
+						<NuxtLink to="/login" class="dropdown-item">登出</NuxtLink>
+					</div>
+				</div>
 				<NuxtLink to="/reservation" class="btn btn-primary">立即訂房</NuxtLink>
 				<!-- TODO: Guideline 按鈕要刪除 -->
 				<NuxtLink to="/guideline" class="btn btn-primary ms-3">Guideline</NuxtLink>
@@ -53,9 +59,9 @@ const props = defineProps({
 	}
 });
 const route = useRoute();
+const { $store } = useNuxtApp();
 
-const isLogin = ref(false); // TODO: 判斷是否登入
-
+// 控制 menu
 const openMenu = ref(false);
 watch(() => route.path, () => {
 	openMenu.value = false;

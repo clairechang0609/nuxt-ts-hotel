@@ -7,8 +7,8 @@ export default defineNuxtPlugin(_nuxtApp => {
 	return {
 		provide: {
 			bootstrap: {
-				modal: element => new Modal(element),
-				collapse: element => new Collapse(element)
+				modal: (element: string | Element) => new Modal(element),
+				collapse: (element: string | Element) => new Collapse(element)
 			}
 		}
 	};
