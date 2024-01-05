@@ -1,75 +1,20 @@
-# Nuxt 3 Minimal Starter
+# 基本規範
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+## 合併版控方式
 
-## Setup
+* 本機端從 main 開分支，命名規則參考 feature/{date}-{name}，EX: featute/20240105-login
+* 要併版前先合併最新 main 版本到自己的分支
+* 至 github 申請 pull request
+* 自己點 merge 即可
 
-Make sure to install the dependencies:
+## 開發注意事項
 
-```bash
-# npm
-npm install
+* 專案內有加入 .vscode/settings.json，開發時如果 js/css 有拋毛毛蟲可以先忽略，按下存檔會自行修正排版，如果沒有修正再手動排除
+* guideline system 見 /guideline 頁面
 
-# pnpm
-pnpm install
+## 開發環境與編譯方式
 
-# yarn
-yarn install
-
-# bun
-bun install
-```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm run dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm run build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+* node.js 版本：v18.12 以上
+* 執行 npm install
+* 執行 npm run dev
+* vite 打包工具有時畫面更新較慢，重新 npm run dev 即可
