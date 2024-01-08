@@ -9,6 +9,7 @@
 	&:disabled {
 		color: map-get($gray-base, "gray-60") !important;
 		border-color: transparent;
+		opacity: 1;
 
 		&:hover, &:active, &.active, &:focus, &.active:focus, &:active:focus {
 			color: map-get($gray-base, "gray-60") !important;
@@ -16,19 +17,28 @@
 		}
 	}
 
-	&.btn-primary:disabled {
-		background-color: transparent;
+	&.btn-primary {
+		&:disabled {
+			background-color: transparent;
+		}
+
+		&:hover, &:active, &.active, &:focus, &.active:focus, &:active:focus {
+			background-color: map-get($primary-base, "primary-120");
+			border-color: map-get($primary-base, "primary-120");
+		}
 	}
 
 	&.btn-outline-primary {
-		color: map-get($primary-base, "primary-120");
+		color: $primary;
 
 		&:disabled {
 			border-color: map-get($gray-base, "gray-60");
 		}
 
 		&:hover, &:active, &.active, &:focus, &.active:focus, &:active:focus {
+			color: map-get($primary-base, "primary-120");
 			background-color: map-get($primary-base, "primary-10");
+			border-color: map-get($primary-base, "primary-120");
 		}
 	}
 
