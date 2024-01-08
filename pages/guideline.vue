@@ -268,6 +268,23 @@
 				</label>
 			</div>
 		</div>
+		<h3 class="mb-3 pb-3 border-bottom">Tabs</h3>
+		<div class="mb-5 bg-gray-40 p-3">
+			<ul class="nav">
+				<li class="nav-item">
+					<a class="nav-link active" href="#">Active</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="#">Link</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="#">Link</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link disabled" aria-disabled="true">Disabled</a>
+				</li>
+			</ul>
+		</div>
 	</div>
 </template>
 
