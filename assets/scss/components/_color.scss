@@ -13,38 +13,63 @@ $theme-colors: (
 	"info":          $info,
 	"danger":        $danger
 );
+$primary-120: #7B6651;
+$primary-100: $primary;
+$primary-80: #D0B79F;
+$primary-60: #E1D1C2;
+$primary-40: #F1EAE4;
+$primary-10: #F7F2EE;
 $primary-base: (
-	"primary-120": #7B6651,
-	"primary-100": $primary,
-	"primary-80": #D0B79F,
-	"primary-60": #E1D1C2,
-	"primary-40": #F1EAE4,
-	"primary-10": #F7F2EE
+	"primary-120": $primary-120,
+	"primary-100": $primary-100,
+	"primary-80": $primary-80,
+	"primary-60": $primary-60,
+	"primary-40": $primary-40,
+	"primary-10": $primary-10
 ) !default;
+$success-120: #299F65;
+$success-100: $success;
+$success-20: #BCFBBD;
+$success-10: #E8FEE7;
 $success-base: (
-	"success-120": #299F65,
-	"success-100": $success,
-	"success-20": #BCFBBD,
-	"success-10": #E8FEE7
+	"success-120": $success-120,
+	"success-100": $success-100,
+	"success-20": $success-20,
+	"success-10": $success-10
 ) !default;
+$info-120: #1D66AC;
+$info-100: $info;
+$info-20: #B1EFFD;
+$info-10: #E6FBFE;
 $info-base: (
-	"info-120": #1D66AC,
-	"info-100": $info,
-	"info-20": #B1EFFD,
-	"info-10": #E6FBFE
+	"info-120": $info-120,
+	"info-100": $info-100,
+	"info-20": $info-20,
+	"info-10": $info-10
 ) !default;
+$danger-120: #C22538;
+$danger-100: $danger;
+$danger-20: #F5CCD1;
+$danger-10: #FDECEF;
 $danger-base: (
-	"danger-120": #C22538,
-	"danger-100": $danger,
-	"danger-20": #F5CCD1,
-	"danger-10": #FDECEF
+	"danger-120": $danger-120,
+	"danger-100": $danger-100,
+	"danger-20": $danger-20,
+	"danger-10": $danger-10
 ) !default;
+$gray-bg: $secondary;
+$gray-100: $black;
+$gray-80: #4B4B4B;
+$gray-60: #909090;
+$gray-40: #ECECEC;
+$gray-10: #F9F9F9;
+$gray-0: $white;
 $gray-base: (
-	"gray-bg": $secondary,
-	"gray-100": $black,
-	"gray-80": #4B4B4B,
-	"gray-60": #909090,
-	"gray-40": #ECECEC,
-	"gray-10": #F9F9F9,
-	"gray-0": $white
+	"gray-bg": $gray-bg,
+	"gray-100": $gray-100,
+	"gray-80": $gray-80,
+	"gray-60": $gray-60,
+	"gray-40": $gray-40,
+	"gray-10": $gray-10,
+	"gray-0": $gray-0
 ) !default;

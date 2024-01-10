@@ -7,24 +7,24 @@
 	letter-spacing: 0.32px;
 
 	&:disabled {
-		color: map-get($gray-base, "gray-60") !important;
+		color: $gray-60 !important;
 		border-color: transparent;
 		opacity: 1;
 
 		&:hover, &:active, &.active, &:focus, &.active:focus, &:active:focus {
-			color: map-get($gray-base, "gray-60") !important;
+			color: $gray-60 !important;
 			border-color: transparent;
 		}
 	}
 
 	&.btn-primary {
 		&:disabled {
-			background-color: transparent;
+			background-color: $gray-40;
 		}
 
 		&:hover, &:active, &.active, &:focus, &.active:focus, &:active:focus {
-			background-color: map-get($primary-base, "primary-120");
-			border-color: map-get($primary-base, "primary-120");
+			background-color: $primary-120;
+			border-color: $primary-120;
 		}
 	}
 
@@ -32,13 +32,13 @@
 		color: $primary;
 
 		&:disabled {
-			border-color: map-get($gray-base, "gray-60");
+			border-color: $gray-60;
 		}
 
 		&:hover, &:active, &.active, &:focus, &.active:focus, &:active:focus {
-			color: map-get($primary-base, "primary-120");
-			background-color: map-get($primary-base, "primary-10");
-			border-color: map-get($primary-base, "primary-120");
+			color: $primary-120;
+			background-color: $primary-10;
+			border-color: $primary-120;
 		}
 	}
 
@@ -60,7 +60,7 @@
 .dropdown {
 	.dropdown-menu {
 		overflow: hidden;
-		border-color: map-get($primary-base, "primary-10");
+		border-color: $primary-10;
 		border-radius: 1.25rem;
 	}
 
@@ -70,7 +70,7 @@
 
 		&:hover, &:active, &:focus {
 			color: $primary;
-			background-color: map-get($primary-base, "primary-10");
+			background-color: $primary-10;
 		}
 	}
 }
