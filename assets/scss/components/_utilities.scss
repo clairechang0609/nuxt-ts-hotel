@@ -1,3 +1,4 @@
+$all-colors: map-merge-multiple($primary-base, $success-base, $info-base, $danger-base, $gray-base);
 $utilities: map-merge(
 	$utilities,
 	(
@@ -13,7 +14,7 @@ $utilities: map-merge(
 				values: map-merge(
 					map-get(map-get($utilities, "color"), "values"),
 					(
-						map-merge-multiple($primary-base, $success-base, $info-base, $danger-base, $gray-base)
+						$all-colors
 					)
 				)
 			)
@@ -23,7 +24,7 @@ $utilities: map-merge(
 			( values: map-merge(
 				map-get(map-get($utilities, "background-color"), "values"),
 				(
-					map-merge-multiple($primary-base, $success-base, $info-base, $danger-base, $gray-base)
+					$all-colors
 				)
 			))
 		),

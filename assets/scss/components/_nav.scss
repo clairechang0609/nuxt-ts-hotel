@@ -1,0 +1,27 @@
+.nav {
+	.nav-link {
+		position: relative;
+		color: $white;
+
+		&::after {
+			position: absolute;
+			bottom: -2px;
+			left: 50%;
+			width: 2rem;
+			height: 0.25rem;
+			background-color: transparent;
+			border-radius: 10px;
+			content: '';
+			transform: translateX(-50%);
+		}
+
+		&:hover, &:active, &.active {
+			color: $primary;
+
+			&::after {
+				background-color: currentcolor;
+			}
+		}
+	}
+
+}
