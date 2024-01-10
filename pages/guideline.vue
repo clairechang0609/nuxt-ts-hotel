@@ -256,7 +256,7 @@
 				<h5 class="mb-3">InValid</h5>
 				<label for="example-invalid" class="form-label">Text</label>
 				<input type="email" class="form-control is-invalid" id="example-invalid" placeholder="Text">
-				<div class="form-text text-danger mt-2">錯誤提示訊息</div>
+				<span class="form-text text-danger mt-2">錯誤提示訊息</span>
 			</div>
 		</div>
 		<h3 class="mb-3 pb-3 border-bottom">Checkbox</h3>
@@ -267,6 +267,33 @@
 					checkbox
 				</label>
 			</div>
+		</div>
+		<h3 class="mb-3">Vee Validate</h3>
+		<div class="vee-wrap mb-5">
+			<VeeForm @submit="submitForm" v-slot="{ meta: globalMata }">
+				<div class="mb-4">
+					<label for="old_email" class="form-label">舊密碼</label>
+					<VeeField name="old_email" label="舊密碼" rules="required" v-model="form.old_password" v-slot="{ field, meta }">
+						<input type="password" id="old_email" class="form-control" placeholder="請輸入舊密碼" v-bind="field" :class="{ 'is-invalid': meta.errors.length }">
+					</VeeField>
+					<VeeErrorMessage name="old_email" class="form-text text-danger mt-2" />
+				</div>
+				<div class="mb-4">
+					<label for="new_email" class="form-label">新密碼</label>
+					<VeeField name="new_email" label="新密碼" rules="required" v-model="form.new_password" v-slot="{ field, meta }">
+						<input type="password" id="new_email" class="form-control" placeholder="請輸入新密碼" v-bind="field" :class="{ 'is-invalid': meta.errors.length }">
+					</VeeField>
+					<VeeErrorMessage name="new_email" class="form-text text-danger mt-2" />
+				</div>
+				<div class="mb-5">
+					<label for="confirm_email" class="form-label">確認新密碼</label>
+					<VeeField name="confirm_email" label="確認新密碼" rules="required" v-model="form.confirm_password" v-slot="{ field, meta }">
+						<input type="password" id="confirm_email" class="form-control" placeholder="請再輸入一次新密碼" v-bind="field" :class="{ 'is-invalid': meta.errors.length }">
+					</VeeField>
+					<VeeErrorMessage name="confirm_email" class="form-text text-danger mt-2" />
+				</div>
+				<button type="submit" class="btn btn-primary" :disabled="!globalMata.valid">儲存設定</button>
+			</VeeForm>
 		</div>
 		<h3 class="mb-3 pb-3 border-bottom">Tabs</h3>
 		<div class="mb-5 bg-gray-40 p-3">
@@ -289,7 +316,14 @@
 </template>
 
 <script setup>
-
+const submitForm = () => {
+	console.log('submit');
+};
+const form = ref({
+	old_password: '',
+	new_password: '',
+	confirm_password: ''
+});
 </script>
 
 <style lang="scss" scoped>
@@ -299,5 +333,9 @@
 	justify-content: center;
 	width: 10rem;
 	height: 5rem;
+}
+
+.vee-wrap .form-label {
+	color: $black;
 }
 </style>

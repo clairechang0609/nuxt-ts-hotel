@@ -36,8 +36,20 @@ export default defineNuxtConfig({
 	modules: [
 		'@nuxtjs/stylelint-module',
 		'@pinia/nuxt',
-		'@pinia-plugin-persistedstate/nuxt'
+		'@pinia-plugin-persistedstate/nuxt',
+		'@vee-validate/nuxt'
 	],
+	veeValidate: {
+		// 啟用 auto imports
+		autoImports: true,
+		// 更換 components 名稱
+		componentNames: {
+			Form: 'VeeForm',
+			Field: 'VeeField',
+			FieldArray: 'VeeFieldArray',
+			ErrorMessage: 'VeeErrorMessage'
+		}
+	},
 	stylelint: {
 		lintOnStart: false, // 專案啟動時不自動檢查所有相關檔案
 		chokidar: true, // 監聽文件異動進行檢核（文件未列出此選項）
