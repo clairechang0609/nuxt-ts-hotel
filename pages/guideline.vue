@@ -312,10 +312,29 @@
 				</li>
 			</ul>
 		</div>
+		<h3 class="mb-3 pb-3 border-bottom">API Fetch</h3>
+		<div class="mb-5">
+			<button type="button" class="btn btn-success mb-4" @click="getAllRooms()">點我發出請求</button>
+			<h5 class="mb-4">顯示所有房型</h5>
+			<pre>{{ rooms }}</pre>
+		</div>
 	</div>
 </template>
 
 <script setup>
+const { fetchData } = useApiFetcher();
+const rooms = ref([]);
+const getAllRooms = async () => {
+	const response = await fetchData({
+		url: '/api/v1/rooms',
+		method: 'GET'
+	});
+	if (!response) {
+		return;
+	}
+	rooms.value = response.result;
+};
+
 const submitForm = () => {
 	console.log('submit');
 };
