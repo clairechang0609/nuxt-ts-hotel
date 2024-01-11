@@ -1,5 +1,5 @@
 <template>
-	<Notifications group="" animation-name="v-fade-top" position="top center" :duration="5000">
+	<Notifications group="" animation-name="v-fade-top" position="top center" :duration="50000">
 		<template #body="props">
 			<div class="notify-card overflow-hidden bg-white m-4" :class="props.item.type">
 				<div class="notify-card-body d-flex align-items-start py-2 px-3">

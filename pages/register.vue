@@ -5,67 +5,101 @@
 			<h2 class="text-white fs-1 mb-3">立即註冊</h2>
 			<RegisterStep :currentStep="currentStep"></RegisterStep>
 			<div class="vee-wrap mt-5">
-				<VeeForm v-if="currentStep === 1" @submit="currentStep ++" v-slot="{ meta: globalMata }">
+				<VeeForm v-if="currentStep === 1" v-slot="{ meta: globalMata }">
 					<div class="mb-3">
 						<label for="email" class="form-label">電子信箱</label>
-						<VeeField name="email" label="電子信箱" rules="required" v-slot="{ field }">
+						<VeeField name="email" label="電子信箱" rules="required" v-model="form.email" v-slot="{ field }">
 							<input type="email" class="form-control" id="email" placeholder="hello@exsample.com" v-bind="field">
 						</VeeField>
 					</div>
 					<div class="mb-3">
 						<label for="password" class="form-label">密碼</label>
-						<VeeField name="password" label="密碼" rules="required" v-slot="{ field }">
+						<VeeField name="password" label="密碼" rules="required" v-model="form.password" v-slot="{ field }">
 							<input type="password" class="form-control" id="password" placeholder="請輸入密碼" v-bind="field">
 						</VeeField>
 					</div>
 					<div class="">
 						<label for="confirm-password" class="form-label">確認密碼</label>
-						<VeeField name="confirm-password" label="密碼" rules="required" v-slot="{ field }">
+						<VeeField name="confirm-password" label="密碼" rules="required" v-model="form.confirmPassword" v-slot="{ field }">
 							<input type="password" class="form-control" id="confirm-password" placeholder="請再輸入一次密碼" v-bind="field">
 						</VeeField>
 					</div>
-					<button class="w-100 btn btn-primary mt-5 mb-3" :disabled="!globalMata.valid" @click="currentStep ++">下一步</button>
+					<button type="button" class="w-100 btn btn-primary mt-5 mb-3" :disabled="!globalMata.valid" @click="submit('first')">下一步</button>
 				</VeeForm>
-				<VeeForm v-else @submit="" v-slot="{ meta: globalMata }">
+				<VeeForm v-else v-slot="{ meta: globalMata }">
 					<div class="mb-3">
 						<label for="name" class="form-label">姓名</label>
-						<VeeField name="name" label="姓名" rules="required" v-slot="{ field }">
+						<VeeField name="name" label="姓名" rules="required" v-model="form.name" v-slot="{ field }">
 							<input type="text" class="form-control" id="name" placeholder="請輸入姓名" v-bind="field">
 						</VeeField>
 					</div>
 					<div class="mb-3">
 						<label for="mobile" class="form-label">手機號碼</label>
-						<VeeField name="mobile" label="手機號碼" rules="required" v-slot="{ field }">
+						<VeeField name="mobile" label="手機號碼" rules="required" v-model="form.mobile" v-slot="{ field }">
 							<input type="text" class="form-control" id="mobile" placeholder="請輸入手機號碼" v-bind="field">
 						</VeeField>
 					</div>
 					<div class="mb-3 row">
 						<label for="birthday" class="form-label">生日</label>
 						<div class="col">
-							<VeeField name="year" label="年" rules="required" v-slot="{ field }">
+							<VeeField name="year" label="年" rules="required" v-model="form.year" v-slot="{ field }">
 								<select class="form-control" id="year" v-bind="field">
-									<option v-for="item in years" :value="item.value">{{ item.label }}</option>
+									<option value="" disabled selected>年</option>
+									<option v-for="item in years" :value="item.id">{{ item.name }}</option>
 								</select>
 							</VeeField>
 						</div>
 						<div class="col px-0">
-							<VeeField name="month" label="月" rules="required" v-slot="{ field }">
+							<VeeField name="month" label="月" rules="required" v-model="form.month" v-slot="{ field }">
 								<select class="form-control" id="month" v-bind="field">
-									<option v-for="item in months" :value="item.value">{{ item.label }}</option>
+									<option value="" disabled selected>月</option>
+									<option v-for="item in months" :value="item.id">{{ item.name }}</option>
 								</select>
 							</VeeField>
 						</div>
 						<div class="col">
-							<VeeField name="day" label="日" rules="required" v-slot="{ field }">
+							<VeeField name="day" label="日" rules="required" v-model="form.day" v-slot="{ field }">
 								<select class="form-control" id="day" v-bind="field">
-									<option v-for="item in days" :value="item.value">{{ item.label }}</option>
+									<option value="" disabled selected>日</option>
+									<option v-for="item in days" :value="item.id">{{ item.name }}</option>
 								</select>
 							</VeeField>
 						</div>
 					</div>
+					<div class="mb-3 row">
+						<label for="birthday" class="form-label">地址</label>
+						<div class="col-6 pe-0 mb-3">
+							<VeeField name="county" label="縣市" rules="required" v-model="form.county" v-slot="{ field }">
+								<select class="form-control" id="county" v-bind="field">
+									<option value="" disabled selected>縣市</option>
+									<option v-for="item in getCounties" :value="item.id">{{ item.name }}</option>
+								</select>
+							</VeeField>
+						</div>
+						<div class="col-6">
+							<VeeField name="distList" label="區域" rules="required" v-model="form.dist" v-slot="{ field }">
+								<select class="form-control" id="distList" v-bind="field">
+									<option value="" disabled selected>區域</option>
+									<option v-for="item in getDist(form.county)" :value="item.zipcode">{{ item.city }}</option>
+								</select>
+							</VeeField>
+						</div>
+						<div class="col-12">
+							<VeeField name="address" label="地址" rules="required" v-slot="{ field }">
+								<input type="text" class="form-control" id="address" placeholder="請輸入詳細地址" v-bind="field" v-model="form.address">
+							</VeeField>
+						</div>
+					</div>
+					<div class="form-check">
+						<input class="form-check-input" type="checkbox" :value="true" id="remember_account" v-model="form.isAgree">
+						<label class="form-check-label text-white" for="remember_account">
+							我已閱讀並同意本網站個資使用規範
+						</label>
+					</div>
+					<button type="button" class="w-100 btn btn-primary mt-5" :disabled="!globalMata.valid || !form.isAgree" @click="submit('second')">完成註冊</button>
 				</VeeForm>
 			</div>
-			<div class="d-flex align-items-center">
+			<div class="d-flex align-items-center mt-3">
 				<span class="text-white">已經有會員了嗎？</span>
 				<nuxt-link class="btn btn-link ms-2" to="/login">立即登入</nuxt-link>
 			</div>
@@ -73,29 +107,88 @@
 	</div>
 </template>
 
-<script lang="ts" setup>
+<script setup>
+const { getCounties, getDist } = useZipcode();
+const { $notify } = useNuxtApp();
+const { fetchData } = useApiFetcher();
+const router = useRouter();
+
 definePageMeta({
 	layout: 'login',
 });
-interface Dropdown {
-	label: string;
-	value: string;
-}
-	// 生成1971-2023年的陣列，且每個物件都符合Dropdown介面
-	const years: Dropdown[] = Array.from({ length: 53 }, (_, i) => ({
-		label: `${i + 1971}年`,
-		value: `${i + 1971}`,
-	}));
-	// 生成1-12月的陣列，且每個物件都符合Dropdown介面
-	const months: Dropdown[] = Array.from({ length: 12 }, (_, i) => ({
-		label: `${i + 1}月`,
-		value: `${i + 1}`,
-	}));
-	// 生成1-31日的陣列，且每個物件都符合Dropdown介面
-	const days: Dropdown[] = Array.from({ length: 31 }, (_, i) => ({
-		label: `${i + 1}日`,
-		value: `${i + 1}`,
-	}));
-let currentStep = ref(2);
 
+const currentStep = ref(1);
+// 生成1971-2023年的陣列，且每個物件都符合Dropdown介面
+const years = Array.from({ length: 53 }, (_, i) => ({
+	name: `${i + 1971}年`,
+	id: `${i + 1971}`,
+}));
+// 生成1-12月的陣列，且每個物件都符合Dropdown介面
+const months = Array.from({ length: 12 }, (_, i) => ({
+	name: `${i + 1}月`,
+	id: `${i + 1}`,
+}));
+// 生成1-31日的陣列，且每個物件都符合Dropdown介面
+const days = Array.from({ length: 31 }, (_, i) => ({
+	name: `${i + 1}日`,
+	id: `${i + 1}`,
+}));
+
+const form = ref({
+	email: '',
+	password: '',
+	confirmPassword: '',
+	name: '',
+	mobile: '',
+	year: '',
+	month: '',
+	day: '',
+	county: '',
+	dist: '',
+	address: '',
+	isAgree: false,
+});
+const checkPassword = () => {
+	if (form.value.password !== form.value.confirmPassword) {
+		$notify({
+			type: 'danger',
+			text: '密碼與確認密碼不相符'
+		});
+		return;
+	}
+};
+const register = async() => {
+	const configData = {
+		name: form.value.name,
+		email: form.value.email,
+		password: form.value.password,
+		phone: form.value.mobile,
+		birthday: `${form.value.year}/${form.value.month}/${form.value.day}`,
+		address: {
+			zipcode: form.value.dist,
+			detail: form.value.address,
+		}
+	}
+	const response = await fetchData({
+		url: '/api/v1/user/signup',
+		method: 'POST',
+		body: { ...configData }
+	})
+	if (!response) {
+		return;
+	}
+	useCookie('token', response.token);
+	router.push('/');
+}
+const submit = async(step) => {
+	switch(step) {
+		case 'first':
+			checkPassword();
+			currentStep.value = 2;
+			break;
+		case 'second':
+			register();
+			break;
+	}
+}
 </script>

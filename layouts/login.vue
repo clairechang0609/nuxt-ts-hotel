@@ -1,7 +1,7 @@
 <template>
 	<div class="">
 		<TheHeader :show-menu="false" />
-		<div class="d-flex w-100 min-vh-100">
+		<div class="main-container d-flex w-100 min-vh-100">
 			<div class="d-none d-md-flex col-6 background">
 			</div>
 			<div class="col-12 col-md-6 d-flex align-items-center justify-content-center bg-secondary wrap">
@@ -18,7 +18,7 @@
 }
 .wrap {
 	position: relative;
-	z-index: 1;
+	z-index: 9999;
 	&::before {
 		content: '';
 		position: absolute;
