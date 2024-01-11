@@ -2,8 +2,8 @@
 	<div class="bg-secondary">
 		<div class="container-with-navbar banner-wrap">
 			<div class="container d-flex flex-column flex-md-row align-items-md-center h-100 px-4">
-				<img :src="userPhoto" :alt="$store.user.name" class="user-photo rounded-circle me-4">
-				<h2 class="text-white fs-3 fs-md-1 mt-3 mt-md-0">Hello，{{ $store.user.name }}</h2>
+				<img :src="userPhoto" :alt="form.name" class="user-photo rounded-circle me-4">
+				<h2 class="text-white fs-3 fs-md-1 mt-3 mt-md-0">Hello，{{ form.name }}</h2>
 			</div>
 		</div>
 		<div class="container">
@@ -21,7 +21,7 @@
 							<h5 class="card-title mb-5">修改密碼</h5>
 							<div class="mb-4">
 								<label for="email" class="form-label">電子信箱</label>
-								<input type="email" id="email" class="form-control-plaintext" :value="$store.user.email" readonly>
+								<input type="email" id="email" class="form-control-plaintext" :value="form.email" readonly>
 							</div>
 							<div class="mb-4" v-if="!editPassword">
 								<label for="password" class="form-label">密碼</label>
@@ -42,7 +42,7 @@
 								</div>
 							</div>
 							<template v-else>
-								<VeeForm @submit="submitPassword" v-slot="{ meta: globalMata }">
+								<VeeForm v-slot="{ meta: globalMata }">
 									<div class="mb-4">
 										<label for="old_email" class="form-label">舊密碼</label>
 										<VeeField name="old_email" label="舊密碼" rules="required" v-model="form.old_password" v-slot="{ field, meta }">
@@ -64,7 +64,7 @@
 										</VeeField>
 										<VeeErrorMessage name="confirm_email" class="form-text text-danger mt-2" />
 									</div>
-									<button type="submit" class="btn btn-primary" :disabled="!globalMata.valid">儲存設定</button>
+									<button type="button" class="btn btn-primary" @click="submitPassword()" :disabled="!globalMata.valid">儲存設定</button>
 								</VeeForm>
 							</template>
 						</div>
@@ -128,7 +128,7 @@
 </template>
 
 <script setup>
-const { $store } = useNuxtApp();
+const { fetchData } = useApiFetcher();
 
 const tabs = ref([
 	{
@@ -142,20 +142,29 @@ const tabs = ref([
 ]);
 const selectedTab = ref('info');
 
-const userPhoto = computed(() => $store.user.photo || '/image/member.svg');
+const userPhoto = computed(() => form.photo || '/image/member.svg');
 
 const form = ref({
 	old_password: '',
 	new_password: '',
 	confirm_password: '',
+	email: 'Jessica@exsample.com',
 	name: 'Jessica Wang',
+	photo: '',
 	mobile: '0912345678',
 	birthday: '1990-08-15',
 	address: '高雄市新興區六角路 123 號'
 });
 const editPassword = ref(false);
-const submitPassword = () => {
-	console.log('submitPassword');
+const submitPassword = async () => {
+	const response = await fetchData({
+		url: '/api/v1/user',
+		method: 'GET'
+	});
+	if (!response) {
+		return;
+	}
+	console.log('submitPassword', response);
 };
 const editForm = ref(false);
 const submitForm = () => {
