@@ -1,5 +1,10 @@
 # 基本規範
 
+## 環境變數
+
+* 專案執行 cp .env.example .env（複製 .env.example 到 .env）
+
+
 ## 合併版控方式
 
 * 本機端從 main 開分支，命名規則參考 feature/{date}-{name}，EX: featute/20240105-login
