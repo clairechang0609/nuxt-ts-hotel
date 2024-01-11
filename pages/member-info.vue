@@ -2,8 +2,8 @@
 	<div class="bg-secondary">
 		<div class="container-with-navbar banner-wrap">
 			<div class="container d-flex flex-column flex-md-row align-items-md-center h-100 px-4">
-				<img :src="userPhoto" :alt="form.name" class="user-photo rounded-circle me-4">
-				<h2 class="text-white fs-3 fs-md-1 mt-3 mt-md-0">Hello，{{ form.name }}</h2>
+				<img src="/image/member.svg" :alt="userInfo.name" class="user-photo rounded-circle me-4">
+				<h2 class="text-white fs-3 fs-md-1 mt-3 mt-md-0">Hello，{{ userInfo.name }}</h2>
 			</div>
 		</div>
 		<div class="container">
@@ -21,7 +21,7 @@
 							<h5 class="card-title mb-5">修改密碼</h5>
 							<div class="mb-4">
 								<label for="email" class="form-label">電子信箱</label>
-								<input type="email" id="email" class="form-control-plaintext" :value="form.email" readonly>
+								<input type="email" id="email" class="form-control-plaintext" :value="userInfo.email" readonly>
 							</div>
 							<div class="mb-4" v-if="!editPassword">
 								<label for="password" class="form-label">密碼</label>
@@ -45,21 +45,21 @@
 								<VeeForm v-slot="{ meta: globalMata }">
 									<div class="mb-4">
 										<label for="old_email" class="form-label">舊密碼</label>
-										<VeeField name="old_email" label="舊密碼" rules="required" v-model="form.old_password" v-slot="{ field, meta }">
+										<VeeField name="old_email" label="舊密碼" rules="required" v-model="userPassword.oldPassword" v-slot="{ field, meta }">
 											<input type="password" id="old_email" class="form-control" placeholder="請輸入舊密碼" v-bind="field" :class="{ 'is-invalid': meta.errors.length }">
 										</VeeField>
 										<VeeErrorMessage name="old_email" class="form-text text-danger mt-2" />
 									</div>
 									<div class="mb-4">
 										<label for="new_email" class="form-label">新密碼</label>
-										<VeeField name="new_email" label="新密碼" rules="required" v-model="form.new_password" v-slot="{ field, meta }">
+										<VeeField name="new_email" label="新密碼" rules="required" v-model="userPassword.newPassword" v-slot="{ field, meta }">
 											<input type="password" id="new_email" class="form-control" placeholder="請輸入新密碼" v-bind="field" :class="{ 'is-invalid': meta.errors.length }">
 										</VeeField>
 										<VeeErrorMessage name="new_email" class="form-text text-danger mt-2" />
 									</div>
 									<div class="mb-5">
 										<label for="confirm_email" class="form-label">確認新密碼</label>
-										<VeeField name="confirm_email" label="確認新密碼" rules="required" v-model="form.confirm_password" v-slot="{ field, meta }">
+										<VeeField name="confirm_email" label="確認新密碼" rules="required" v-model="userPassword.confirmPassword" v-slot="{ field, meta }">
 											<input type="password" id="confirm_email" class="form-control" placeholder="請再輸入一次新密碼" v-bind="field" :class="{ 'is-invalid': meta.errors.length }">
 										</VeeField>
 										<VeeErrorMessage name="confirm_email" class="form-text text-danger mt-2" />
@@ -77,40 +77,43 @@
 							<template v-if="!editForm">
 								<div class="mb-4">
 									<label for="name" class="form-label">姓名</label>
-									<input type="text" id="name" class="form-control-plaintext" :value="form.name" readonly>
+									<input type="text" id="name" class="form-control-plaintext" :value="userInfo.name" readonly>
 								</div>
 								<div class="mb-4">
-									<label for="mobile" class="form-label">手機號碼</label>
-									<input type="text" id="mobile" class="form-control-plaintext" :value="form.mobile" readonly>
+									<label for="phone" class="form-label">手機號碼</label>
+									<input type="text" id="phone" class="form-control-plaintext" :value="userInfo.phone" readonly>
 								</div>
 								<div class="mb-4">
 									<label for="birthday" class="form-label">生日</label>
-									<input type="text" id="birthday" class="form-control-plaintext" :value="form.birthday" readonly>
+									<input type="text" id="birthday" class="form-control-plaintext" :value="userInfo.birthday.slice(0, 10)" readonly>
 								</div>
 								<div class="mb-4">
 									<label for="address" class="form-label">地址</label>
-									<input type="text" id="address" class="form-control-plaintext" :value="form.address" readonly>
+									<input type="text" id="address" class="form-control-plaintext" :value="userInfo.address?.detail" readonly>
 								</div>
+								<button type="button" class="btn btn-outline-primary" @click="editForm = true">編輯</button>
 							</template>
 							<template v-else>
 								<VeeForm @submit="submitForm" v-slot="{ meta: globalMata }">
 									<div class="mb-4">
-										<label for="old_email" class="form-label">舊密碼</label>
-										<VeeField name="old_email" label="舊密碼" rules="required" v-model="form.old_password" v-slot="{ field, meta }">
-											<input type="password" id="old_email" class="form-control" placeholder="請輸入舊密碼" v-bind="field" :class="{ 'is-invalid': meta.errors.length }">
+										<label for="name" class="form-label">姓名</label>
+										<VeeField name="name" label="姓名" rules="required" v-model="userInfo.name" v-slot="{ field, meta }">
+											<input type="password" id="name" class="form-control" placeholder="請輸入姓名" v-bind="field" :class="{ 'is-invalid': meta.errors.length }">
 										</VeeField>
-										<VeeErrorMessage name="old_email" class="form-text text-danger mt-2" />
+										<VeeErrorMessage name="name" class="form-text text-danger mt-2" />
 									</div>
 									<div class="mb-4">
-										<label for="new_email" class="form-label">新密碼</label>
-										<VeeField name="new_email" label="新密碼" rules="required" v-model="form.new_password" v-slot="{ field, meta }">
-											<input type="password" id="new_email" class="form-control" placeholder="請輸入新密碼" v-bind="field" :class="{ 'is-invalid': meta.errors.length }">
+										<label for="birthday" class="form-label">生日</label>
+										<VeeField name="birthday" label="生日" rules="required" v-model="editBirthday[0]" v-slot="{ field, meta }">
+											<select id="birthday" class="form-select" placeholder="請選擇年" v-bind="field" :class="{ 'is-invalid': meta.errors.length }">
+												<!-- <option v-for="" value=""></option> -->
+											</select>
 										</VeeField>
-										<VeeErrorMessage name="new_email" class="form-text text-danger mt-2" />
+										<VeeErrorMessage name="birthday" class="form-text text-danger mt-2" />
 									</div>
 									<div class="mb-5">
 										<label for="confirm_email" class="form-label">確認新密碼</label>
-										<VeeField name="confirm_email" label="確認新密碼" rules="required" v-model="form.confirm_password" v-slot="{ field, meta }">
+										<VeeField name="confirm_email" label="確認新密碼" rules="required" v-model="userInfo.confirmPassword" v-slot="{ field, meta }">
 											<input type="password" id="confirm_email" class="form-control" placeholder="請再輸入一次新密碼" v-bind="field" :class="{ 'is-invalid': meta.errors.length }">
 										</VeeField>
 										<VeeErrorMessage name="confirm_email" class="form-text text-danger mt-2" />
@@ -129,6 +132,7 @@
 
 <script setup>
 const { fetchData } = useApiFetcher();
+const { $notify } = useNuxtApp();
 
 const tabs = ref([
 	{
@@ -142,33 +146,81 @@ const tabs = ref([
 ]);
 const selectedTab = ref('info');
 
-const userPhoto = computed(() => form.photo || '/image/member.svg');
-
-const form = ref({
-	old_password: '',
-	new_password: '',
-	confirm_password: '',
-	email: 'Jessica@exsample.com',
-	name: 'Jessica Wang',
-	photo: '',
-	mobile: '0912345678',
-	birthday: '1990-08-15',
-	address: '高雄市新興區六角路 123 號'
-});
-const editPassword = ref(false);
-const submitPassword = async () => {
+// 取得會員資料
+const getUserInfo = async () => {
 	const response = await fetchData({
 		url: '/api/v1/user',
-		method: 'GET'
+		method: 'GET',
+		headers: {
+			Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTllMzkxOWVlNTI5MTIxY2E1NjE4YzEiLCJpYXQiOjE3MDQ5NDk2MDYsImV4cCI6MTcwNTU1NDQwNn0.VldXX3fTkhA143q0SC5iF6A5_rqM-s2jQ3Njw7Xx0Fo'
+		}
 	});
 	if (!response) {
 		return;
 	}
-	console.log('submitPassword', response);
+	Object.assign(userInfo, response.result);
 };
+onMounted(() => {
+	getUserInfo();
+});
+
+// 修改基本資料
+const userInfo = reactive({
+	email: '',
+	name: '',
+	phone: '',
+	birthday: '',
+	address: ''
+});
 const editForm = ref(false);
+const editBirthday = computed({
+	get() {
+		return userInfo.value.birthday.split('-');
+	},
+	set(val) {
+		console.log(val);
+	}
+});
 const submitForm = () => {
 	console.log('submitForm');
+};
+
+// 修改帳號資料
+const userPassword = reactive({
+	oldPassword: '',
+	newPassword: '',
+	confirmPassword: ''
+});
+const editPassword = ref(false);
+const checkPassword = computed(() => userPassword.newPassword === userPassword.confirmPassword);
+const submitPassword = async () => {
+	if (!checkPassword.value) {
+		$notify({
+			type: 'danger',
+			text: '新密碼不一致'
+		});
+		return;
+	}
+	const response = await fetchData({
+		url: '/api/v1/user',
+		method: 'PUT',
+		body: {
+			userId: userInfo._id,
+			oldPassword: userPassword.oldPassword,
+			newPassword: userPassword.newPassword
+		},
+		headers: {
+			Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTllMzkxOWVlNTI5MTIxY2E1NjE4YzEiLCJpYXQiOjE3MDQ5NDk2MDYsImV4cCI6MTcwNTU1NDQwNn0.VldXX3fTkhA143q0SC5iF6A5_rqM-s2jQ3Njw7Xx0Fo'
+		}
+	});
+	if (!response) {
+		return;
+	}
+	$notify({
+		type: 'success',
+		text: '編輯成功'
+	});
+	editPassword.value = false;
 };
 </script>
 
