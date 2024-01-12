@@ -3,7 +3,7 @@
 		<div class="container-with-navbar">
 			<span class="text-primary mb-2">享樂酒店，誠摯歡迎</span>
 			<h2 class="text-white fs-1 mb-3">立即註冊</h2>
-			<RegisterStep :currentStep="currentStep"></RegisterStep>
+			<RegisterStep :current-step="currentStep"></RegisterStep>
 			<div class="vee-wrap mt-5">
 				<VeeForm v-if="currentStep === 1" v-slot="{ meta: globalMata }">
 					<div class="mb-3">
@@ -45,7 +45,7 @@
 							<VeeField name="year" label="年" rules="required" v-model="form.year" v-slot="{ field }">
 								<select class="form-control" id="year" v-bind="field">
 									<option value="" disabled selected>年</option>
-									<option v-for="item in years" :value="item.id">{{ item.name }}</option>
+									<option v-for="(item, index) in years" :value="item.id" :key="index">{{ item.name }}</option>
 								</select>
 							</VeeField>
 						</div>
@@ -53,7 +53,7 @@
 							<VeeField name="month" label="月" rules="required" v-model="form.month" v-slot="{ field }">
 								<select class="form-control" id="month" v-bind="field">
 									<option value="" disabled selected>月</option>
-									<option v-for="item in months" :value="item.id">{{ item.name }}</option>
+									<option v-for="(item, index) in months" :value="item.id" :key="index">{{ item.name }}</option>
 								</select>
 							</VeeField>
 						</div>
@@ -61,7 +61,7 @@
 							<VeeField name="day" label="日" rules="required" v-model="form.day" v-slot="{ field }">
 								<select class="form-control" id="day" v-bind="field">
 									<option value="" disabled selected>日</option>
-									<option v-for="item in days" :value="item.id">{{ item.name }}</option>
+									<option v-for="(item, index) in days" :value="item.id" :key="index">{{ item.name }}</option>
 								</select>
 							</VeeField>
 						</div>
@@ -72,7 +72,7 @@
 							<VeeField name="county" label="縣市" rules="required" v-model="form.county" v-slot="{ field }">
 								<select class="form-control" id="county" v-bind="field">
 									<option value="" disabled selected>縣市</option>
-									<option v-for="item in getCounties" :value="item.id">{{ item.name }}</option>
+									<option v-for="(item, index) in getCounties" :value="item.id" :key="index">{{ item.name }}</option>
 								</select>
 							</VeeField>
 						</div>
@@ -80,7 +80,7 @@
 							<VeeField name="distList" label="區域" rules="required" v-model="form.dist" v-slot="{ field }">
 								<select class="form-control" id="distList" v-bind="field">
 									<option value="" disabled selected>區域</option>
-									<option v-for="item in getDist(form.county)" :value="item.zipcode">{{ item.city }}</option>
+									<option v-for="(item, index) in getDist(form.county)" :value="item.zipcode" :key="index">{{ item.city }}</option>
 								</select>
 							</VeeField>
 						</div>
@@ -112,26 +112,27 @@ const { getCounties, getDist } = useZipcode();
 const { $notify } = useNuxtApp();
 const { fetchData } = useApiFetcher();
 const router = useRouter();
+const { $store } = useNuxtApp();
 
 definePageMeta({
-	layout: 'login',
+	layout: 'login'
 });
 
 const currentStep = ref(1);
 // 生成1971-2023年的陣列，且每個物件都符合Dropdown介面
 const years = Array.from({ length: 53 }, (_, i) => ({
 	name: `${i + 1971}年`,
-	id: `${i + 1971}`,
+	id: `${i + 1971}`
 }));
 // 生成1-12月的陣列，且每個物件都符合Dropdown介面
 const months = Array.from({ length: 12 }, (_, i) => ({
 	name: `${i + 1}月`,
-	id: `${i + 1}`,
+	id: `${i + 1}`
 }));
 // 生成1-31日的陣列，且每個物件都符合Dropdown介面
 const days = Array.from({ length: 31 }, (_, i) => ({
 	name: `${i + 1}日`,
-	id: `${i + 1}`,
+	id: `${i + 1}`
 }));
 
 const form = ref({
@@ -146,9 +147,9 @@ const form = ref({
 	county: '',
 	dist: '',
 	address: '',
-	isAgree: false,
+	isAgree: false
 });
-const checkPassword = () => {
+const checkPassword = callback => {
 	if (form.value.password !== form.value.confirmPassword) {
 		$notify({
 			type: 'danger',
@@ -156,8 +157,40 @@ const checkPassword = () => {
 		});
 		return;
 	}
+	// 檢查密碼是否包含英文及數字
+	const regex = /^(?=.*[a-zA-Z])(?=.*\d).{8,}$/;
+	if (!regex.test(form.value.password)) {
+		$notify({
+			type: 'danger',
+			text: '密碼必須包含英文及數字，且長度需大於8'
+		});
+		return;
+	}
+	callback();
 };
-const register = async() => {
+
+const verifyEmail = async () => {
+	const configData = {
+		email: form.value.email
+	};
+	const response = await fetchData({
+		url: '/api/v1/verify/email',
+		method: 'POST',
+		body: { ...configData }
+	});
+	if (!response) {
+		return;
+	}
+	if (response.result.isEmailExists) {
+		$notify({
+			type: 'danger',
+			text: '此信箱已被註冊'
+		});
+		return;
+	}
+	currentStep.value = 2;
+};
+const register = async () => {
 	const configData = {
 		name: form.value.name,
 		email: form.value.email,
@@ -166,29 +199,29 @@ const register = async() => {
 		birthday: `${form.value.year}/${form.value.month}/${form.value.day}`,
 		address: {
 			zipcode: form.value.dist,
-			detail: form.value.address,
+			detail: form.value.address
 		}
-	}
+	};
 	const response = await fetchData({
 		url: '/api/v1/user/signup',
 		method: 'POST',
 		body: { ...configData }
-	})
+	});
 	if (!response) {
 		return;
 	}
 	useCookie('token', response.token);
+	$store.user.name = response.result.name;
 	router.push('/');
-}
-const submit = async(step) => {
-	switch(step) {
-		case 'first':
-			checkPassword();
-			currentStep.value = 2;
-			break;
-		case 'second':
-			register();
-			break;
+};
+const submit = step => {
+	switch (step) {
+	case 'first':
+		checkPassword(verifyEmail);
+		break;
+	case 'second':
+		register();
+		break;
 	}
-}
+};
 </script>
