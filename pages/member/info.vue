@@ -1,6 +1,6 @@
 <template>
-	<div class="info-wrap row">
-		<div class="col-lg-5 mb-4 mb-md-0">
+	<div class="row">
+		<div class="col-lg-5 mb-4 mb-lg-0">
 			<div class="card rounded-4">
 				<div class="card-body p-5">
 					<h5 class="card-title mb-5">修改密碼</h5>
@@ -147,7 +147,7 @@
 <script setup>
 const { getCounties, getDist, districts } = useZipcode();
 const { fetchData } = useApiFetcher();
-const { $notify } = useNuxtApp();
+const { $store, $notify } = useNuxtApp();
 
 // 年/月/日選單
 // 1971-2023年
@@ -192,6 +192,7 @@ const getUserInfo = async () => {
 	}
 	userInfo.value = response.result;
 	county.value = districts.find(item => item.zipcode === userInfo.value.address.zipcode)?.county;
+	$store.user.name = userInfo.value.name;
 };
 onMounted(() => {
 	getUserInfo();

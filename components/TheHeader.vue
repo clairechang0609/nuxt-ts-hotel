@@ -32,7 +32,7 @@
 				<div class="dropdown" v-else>
 					<button class="btn btn-ghost me-3" type="button" data-bs-toggle="dropdown" aria-expanded="false">
 						<span class="material-symbols-outlined fill-0 me-2">account_circle</span>
-						Jessica
+						{{ $store.user.name }}
 					</button>
 					<div class="dropdown-menu">
 						<NuxtLink to="/member" class="dropdown-item">我的帳戶</NuxtLink>

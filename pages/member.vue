@@ -2,8 +2,8 @@
 	<div class="bg-secondary">
 		<div class="container-with-navbar banner-wrap">
 			<div class="container d-flex flex-column flex-md-row align-items-md-center h-100 px-4">
-				<img src="/image/member.svg" :alt="userName" class="user-photo rounded-circle me-4">
-				<h2 class="text-white fs-3 fs-md-1 mt-3 mt-md-0">Hello，{{ userName }}</h2>
+				<img src="/image/member.svg" :alt="$store.user.name" class="user-photo rounded-circle me-4">
+				<h2 class="text-white fs-3 fs-md-1 mt-3 mt-md-0">Hello，{{ $store.user.name }}</h2>
 			</div>
 		</div>
 		<div class="container">
@@ -20,7 +20,8 @@
 	</div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
+const { $store } = useNuxtApp();
 const route = useRoute();
 const tabs = ref([
 	{
@@ -32,7 +33,6 @@ const tabs = ref([
 		name: '我的訂單'
 	}
 ]);
-const userName = ref('');
 </script>
 
 <style lang="scss" scoped>
