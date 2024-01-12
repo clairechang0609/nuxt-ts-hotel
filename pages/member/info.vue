@@ -148,6 +148,7 @@
 const { getCounties, getDist, districts } = useZipcode();
 const { fetchData } = useApiFetcher();
 const { $store, $notify } = useNuxtApp();
+const token = useCookie('token');
 
 // 年/月/日選單
 // 1971-2023年
@@ -184,7 +185,7 @@ const getUserInfo = async () => {
 		url: '/api/v1/user',
 		method: 'GET',
 		headers: {
-			Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTllMzkxOWVlNTI5MTIxY2E1NjE4YzEiLCJpYXQiOjE3MDQ5NDk2MDYsImV4cCI6MTcwNTU1NDQwNn0.VldXX3fTkhA143q0SC5iF6A5_rqM-s2jQ3Njw7Xx0Fo'
+			Authorization: `Bearer ${token.value}`
 		}
 	});
 	if (!response) {
@@ -218,7 +219,7 @@ const sendUserData = async body => {
 		method: 'PUT',
 		body,
 		headers: {
-			Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTllMzkxOWVlNTI5MTIxY2E1NjE4YzEiLCJpYXQiOjE3MDQ5NDk2MDYsImV4cCI6MTcwNTU1NDQwNn0.VldXX3fTkhA143q0SC5iF6A5_rqM-s2jQ3Njw7Xx0Fo'
+			Authorization: `Bearer ${token.value}`
 		}
 	});
 	return response;
