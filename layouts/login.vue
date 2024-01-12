@@ -17,19 +17,8 @@
 	background-size: cover;
 }
 .wrap {
-	position: relative;
-	z-index: 9999;
-	&::before {
-		content: '';
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		background: url('/image/desktop/line.png') no-repeat center center;
-		background-size: 200%;
-		transform: translate(0, -24%);
-		z-index: -1;
-	}
+	background: url('/image/desktop/line.png') no-repeat;
+	background-position: 0 15%;
+	background-size: 160%;
 }
 </style>
