@@ -16,7 +16,7 @@
 						<div class="position-absolute top-50 start-50 translate-middle d-flex flex-column justify-content-center p-4 w-100">
 							<NuxtLink to="/all-rooms" class="btn btn-ghost mb-3">客房旅宿</NuxtLink>
 							<NuxtLink to="/login" class="btn btn-ghost mb-3" v-if="!$store.user.name">會員登入</NuxtLink>
-							<NuxtLink to="/member-info" class="btn btn-ghost mb-3" v-else>我的帳戶</NuxtLink>
+							<NuxtLink to="/member" class="btn btn-ghost mb-3" v-else>我的帳戶</NuxtLink>
 							<NuxtLink to="/reservation" class="btn btn-primary w-100">立即訂房</NuxtLink>
 						</div>
 						<button type="button" class="btn btn-ghost position-absolute top-0 end-0" @click="openMenu = false">
@@ -35,7 +35,7 @@
 						Jessica
 					</button>
 					<div class="dropdown-menu">
-						<NuxtLink to="/member-info" class="dropdown-item">我的帳戶</NuxtLink>
+						<NuxtLink to="/member" class="dropdown-item">我的帳戶</NuxtLink>
 						<NuxtLink to="/login" class="dropdown-item">登出</NuxtLink>
 					</div>
 				</div>
