@@ -1,10 +1,7 @@
-import { type User } from '@/types/user';
+import type { User } from '@/types/user';
 
 const initialState = {
-	name: '',
-	id: '',
-	photo: '',
-	email: ''
+	name: ''
 };
 
 export const useMainStore = defineStore('main', () => {
