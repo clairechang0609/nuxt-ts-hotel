@@ -42,22 +42,15 @@
 </template>
 
 <script setup>
-const { fetchData } = useApiFetcher();
-const token = useCookie('token');
-
 const orders = ref([]);
 const newOrder = computed(() => orders.value[0]);
 
 // 取得訂單資料
 const getOrders = async () => {
-	const response = await fetchData({
-		url: '/api/v1/orders',
-		method: 'GET',
-		headers: {
-			Authorization: `Bearer ${token.value}`
-		}
+	const { response } = await useCustomFetch('/api/v1/orders', {
+		method: 'GET'
 	});
-	if (!response) {
+	if (!response.status) {
 		return;
 	}
 	orders.value = response.result.reverse();

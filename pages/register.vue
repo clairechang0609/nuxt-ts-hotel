@@ -110,7 +110,6 @@
 <script setup>
 const { getCounties, getDist } = useZipcode();
 const { $notify } = useNuxtApp();
-const { fetchData } = useApiFetcher();
 const router = useRouter();
 const { $store } = useNuxtApp();
 
@@ -173,12 +172,11 @@ const verifyEmail = async () => {
 	const configData = {
 		email: form.value.email
 	};
-	const response = await fetchData({
-		url: '/api/v1/verify/email',
+	const { response } = await useCustomFetch('/api/v1/verify/email', {
 		method: 'POST',
 		body: { ...configData }
 	});
-	if (!response) {
+	if (!response.status) {
 		return;
 	}
 	if (response.result.isEmailExists) {
@@ -202,12 +200,11 @@ const register = async () => {
 			detail: form.value.address
 		}
 	};
-	const response = await fetchData({
-		url: '/api/v1/user/signup',
+	const { response } = await useCustomFetch('/api/v1/user/signup', {
 		method: 'POST',
 		body: { ...configData }
 	});
-	if (!response) {
+	if (!response.status) {
 		return;
 	}
 	useCookie('token', response.token);
