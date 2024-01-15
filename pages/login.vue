@@ -45,6 +45,7 @@ definePageMeta({
 	layout: 'login'
 });
 
+// 記住帳號
 const storeAccount = useCookie('storeAccount');
 const isStoreAccount = computed({
 	get: () => {
@@ -58,11 +59,12 @@ const isStoreAccount = computed({
 		}
 	}
 });
+
 const form = ref({
 	email: '',
 	password: ''
 });
-
+// 登入
 const login = async () => {
 	const response = await fetchData({
 		method: 'POST',
