@@ -18,7 +18,6 @@
 						</VeeField>
 					</div>
 					<div class="d-flex justify-content-between align-items-center">
-						<span class="text-white">{{ storeAccount }}</span>
 						<div class="form-check">
 							<input class="form-check-input" type="checkbox" id="remember_account" :value="true" v-model="isStoreAccount">
 							<label class="form-check-label text-white" for="remember_account">
@@ -45,26 +44,26 @@ definePageMeta({
 	layout: 'login'
 });
 
+// 記住帳號
 const storeAccount = useCookie('storeAccount');
 const isStoreAccount = computed({
 	get: () => {
-		return storeAccount.value !== null;
+		return storeAccount.value !== undefined;
 	},
 	set: val => {
 		if (!val) {
-			storeAccount.value = null;
+			storeAccount.value = undefined;
 		} else {
 			storeAccount.value = form.value.email;
 		}
 	}
 });
+
 const form = ref({
 	email: '',
 	password: ''
 });
-if (process.client && isStoreAccount.value) {
-	form.value.email = window.localStorage.getItem('storeAccount');
-}
+// 登入
 const login = async () => {
 	const { response } = await useCustomFetch('/api/v1/user/login', {
 		method: 'POST',

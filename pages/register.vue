@@ -112,12 +112,12 @@ const { getCounties, getDist } = useZipcode();
 const { $notify } = useNuxtApp();
 const router = useRouter();
 const { $store } = useNuxtApp();
-
 definePageMeta({
 	layout: 'login'
 });
 
 const currentStep = ref(1);
+
 // 生成1971-2023年的陣列，且每個物件都符合Dropdown介面
 const years = Array.from({ length: 53 }, (_, i) => ({
 	name: `${i + 1971}年`,
@@ -148,6 +148,7 @@ const form = ref({
 	address: '',
 	isAgree: false
 });
+// 檢查密碼是否符合規則
 const checkPassword = callback => {
 	if (form.value.password !== form.value.confirmPassword) {
 		$notify({
@@ -167,7 +168,7 @@ const checkPassword = callback => {
 	}
 	callback();
 };
-
+// 檢查信箱是否已被註冊
 const verifyEmail = async () => {
 	const configData = {
 		email: form.value.email
@@ -188,6 +189,7 @@ const verifyEmail = async () => {
 	}
 	currentStep.value = 2;
 };
+// 註冊
 const register = async () => {
 	const configData = {
 		name: form.value.name,
@@ -211,6 +213,7 @@ const register = async () => {
 	$store.user.name = response.result.name;
 	router.push('/');
 };
+// 送出表單
 const submit = step => {
 	switch (step) {
 	case 'first':

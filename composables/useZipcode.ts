@@ -3,7 +3,7 @@ import districts from 'twzipcode-data/src/zh-tw/zipcodes.js';
 
 export default () => {
 	const getCounties = counties;
-	const getDist = county => {
+	const getDist = function(county: string) {
 		return districts.filter(item => item.county === county);
 	};
 	return {
