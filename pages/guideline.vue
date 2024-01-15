@@ -321,15 +321,21 @@
 	</div>
 </template>
 
-<script setup>
-const { fetchData } = useApiFetcher();
-const rooms = ref([]);
+<script lang="ts" setup>
+const rooms = ref<Array<{ name: string; age: number; }>>([]);
+
+interface Response {
+	status: boolean;
+	result: Array<{
+    name: string;
+    age: number;
+  }>;
+}
 const getAllRooms = async () => {
-	const response = await fetchData({
-		url: '/api/v1/rooms',
+	const { response } = await useCustomFetch<Response>('/api/v1/rooms', {
 		method: 'GET'
 	});
-	if (!response) {
+	if (!response.status) {
 		return;
 	}
 	rooms.value = response.result;

@@ -144,11 +144,9 @@
 	</div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 const { getCounties, getDist, districts } = useZipcode();
-const { fetchData } = useApiFetcher();
 const { $store, $notify } = useNuxtApp();
-const token = useCookie('token');
 
 // 年/月/日選單
 // 1971-2023年
@@ -176,28 +174,40 @@ const userInfo = ref({
 	address: {
 		detail: '',
 		zipcode: ''
-	}
+	},
+	_id: ''
 });
+
+interface Response { // TODO: 整理進 types
+	status: boolean;
+	result: {
+		email: '',
+		name: '',
+		phone: '',
+		birthday: '',
+		address: {
+			detail: '',
+			zipcode: ''
+		},
+		_id: ''
+	}
+}
+
 const county = ref('');
 // 取得會員資料
 const getUserInfo = async () => {
-	const response = await fetchData({
-		url: '/api/v1/user',
-		method: 'GET',
-		headers: {
-			Authorization: `Bearer ${token.value}`
-		}
+	const { response } = await useCustomFetch<Response>('/api/v1/user', {
+		method: 'GET'
 	});
-	if (!response) {
+	if (!response.status) {
 		return;
 	}
 	userInfo.value = response.result;
-	county.value = districts.find(item => item.zipcode === userInfo.value.address.zipcode)?.county;
+	county.value = districts.find((item: { zipcode: string; }) => item.zipcode === userInfo.value.address.zipcode)?.county;
 	$store.user.name = userInfo.value.name;
 };
-onMounted(() => {
-	getUserInfo();
-});
+getUserInfo();
+
 const editForm = ref(false);
 const editBirthday = computed({
 	get() {
@@ -208,19 +218,15 @@ const editBirthday = computed({
 	}
 });
 const addressDetail = computed(() => {
-	const result = districts.find(item => item.zipcode === userInfo.value.address.zipcode);
+	const result = districts.find((item: { zipcode: string; }) => item.zipcode === userInfo.value.address.zipcode);
 	return `${result?.county}${result?.city}${userInfo.value.address.detail}`;
 });
 
 // 傳送使用者資料
-const sendUserData = async body => {
-	const response = await fetchData({
-		url: '/api/v1/user',
+const sendUserData = async (body: object) => {
+	const { response } = await useCustomFetch('/api/v1/user', {
 		method: 'PUT',
-		body,
-		headers: {
-			Authorization: `Bearer ${token.value}`
-		}
+		body
 	});
 	return response;
 };
@@ -231,7 +237,7 @@ const submitForm = async () => {
 		userId: userInfo.value._id,
 		...userInfo.value
 	});
-	if (!response) {
+	if (!response.status) {
 		return;
 	}
 	$notify({
@@ -263,7 +269,7 @@ const submitPassword = async () => {
 		userId: userInfo.value._id,
 		...userPassword
 	});
-	if (!response) {
+	if (!response.status) {
 		return;
 	}
 	$notify({
