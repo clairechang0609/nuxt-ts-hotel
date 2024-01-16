@@ -273,22 +273,22 @@
 			<VeeForm @submit="submitForm" v-slot="{ meta: globalMata }">
 				<div class="mb-4">
 					<label for="old_email" class="form-label">舊密碼</label>
-					<VeeField name="old_email" label="舊密碼" rules="required" v-model="form.old_password" v-slot="{ field, meta }">
-						<input type="password" id="old_email" class="form-control" placeholder="請輸入舊密碼" v-bind="field" :class="{ 'is-invalid': meta.errors.length }">
+					<VeeField name="old_email" label="舊密碼" rules="required" v-model="form.old_password" v-slot="{ field, errors }">
+						<input type="password" id="old_email" class="form-control" placeholder="請輸入舊密碼" v-bind="field" :class="{ 'is-invalid': errors.length }">
 					</VeeField>
 					<VeeErrorMessage name="old_email" class="form-text text-danger mt-2" />
 				</div>
 				<div class="mb-4">
 					<label for="new_email" class="form-label">新密碼</label>
-					<VeeField name="new_email" label="新密碼" rules="required" v-model="form.new_password" v-slot="{ field, meta }">
-						<input type="password" id="new_email" class="form-control" placeholder="請輸入新密碼" v-bind="field" :class="{ 'is-invalid': meta.errors.length }">
+					<VeeField name="new_email" label="新密碼" rules="required" v-model="form.new_password" v-slot="{ field, errors }">
+						<input type="password" id="new_email" class="form-control" placeholder="請輸入新密碼" v-bind="field" :class="{ 'is-invalid': errors.length }">
 					</VeeField>
 					<VeeErrorMessage name="new_email" class="form-text text-danger mt-2" />
 				</div>
 				<div class="mb-5">
 					<label for="confirm_email" class="form-label">確認新密碼</label>
-					<VeeField name="confirm_email" label="確認新密碼" rules="required" v-model="form.confirm_password" v-slot="{ field, meta }">
-						<input type="password" id="confirm_email" class="form-control" placeholder="請再輸入一次新密碼" v-bind="field" :class="{ 'is-invalid': meta.errors.length }">
+					<VeeField name="confirm_email" label="確認新密碼" rules="required" v-model="form.confirm_password" v-slot="{ field, errors }">
+						<input type="password" id="confirm_email" class="form-control" placeholder="請再輸入一次新密碼" v-bind="field" :class="{ 'is-invalid': errors.length }">
 					</VeeField>
 					<VeeErrorMessage name="confirm_email" class="form-text text-danger mt-2" />
 				</div>

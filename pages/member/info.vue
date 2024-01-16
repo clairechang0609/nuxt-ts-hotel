@@ -19,22 +19,22 @@
 						<VeeForm v-slot="{ meta: globalMata }">
 							<div class="mb-4">
 								<label for="old_email" class="form-label">舊密碼</label>
-								<VeeField name="old_email" label="舊密碼" rules="required" v-model="userPassword.oldPassword" v-slot="{ field, meta }">
-									<input type="password" id="old_email" class="form-control" placeholder="請輸入舊密碼" v-bind="field" :class="{ 'is-invalid': meta.errors.length }">
+								<VeeField name="old_email" label="舊密碼" rules="required|min:8" v-model="userPassword.oldPassword" v-slot="{ field, errors }">
+									<input type="password" id="old_email" class="form-control" placeholder="請輸入舊密碼" v-bind="field" :class="{ 'is-invalid': errors.length }">
 								</VeeField>
 								<VeeErrorMessage name="old_email" class="form-text text-danger mt-2" />
 							</div>
 							<div class="mb-4">
 								<label for="new_email" class="form-label">新密碼</label>
-								<VeeField name="new_email" label="新密碼" rules="required" v-model="userPassword.newPassword" v-slot="{ field, meta }">
-									<input type="password" id="new_email" class="form-control" placeholder="請輸入新密碼" v-bind="field" :class="{ 'is-invalid': meta.errors.length }">
+								<VeeField name="new_email" label="新密碼" rules="required|min:8" v-model="userPassword.newPassword" v-slot="{ field, errors }">
+									<input type="password" id="new_email" class="form-control" placeholder="請輸入新密碼" v-bind="field" :class="{ 'is-invalid': errors.length }">
 								</VeeField>
 								<VeeErrorMessage name="new_email" class="form-text text-danger mt-2" />
 							</div>
 							<div class="mb-5">
 								<label for="confirm_email" class="form-label">確認新密碼</label>
-								<VeeField name="confirm_email" label="確認新密碼" rules="required" v-model="userPassword.confirmPassword" v-slot="{ field, meta }">
-									<input type="password" id="confirm_email" class="form-control" placeholder="請再輸入一次新密碼" v-bind="field" :class="{ 'is-invalid': meta.errors.length }">
+								<VeeField name="confirm_email" label="確認新密碼" rules="required|min:8" v-model="userPassword.confirmPassword" v-slot="{ field, errors }">
+									<input type="password" id="confirm_email" class="form-control" placeholder="請再輸入一次新密碼" v-bind="field" :class="{ 'is-invalid': errors.length }">
 								</VeeField>
 								<VeeErrorMessage name="confirm_email" class="form-text text-danger mt-2" />
 							</div>
@@ -71,39 +71,39 @@
 						<VeeForm @submit="submitForm" v-slot="{ meta: globalMata }">
 							<div class="mb-4">
 								<label for="name" class="form-label">姓名</label>
-								<VeeField name="name" label="姓名" rules="required" v-model="userInfo.name" v-slot="{ field, meta }">
-									<input type="text" id="name" class="form-control" placeholder="請輸入姓名" v-bind="field" :class="{ 'is-invalid': meta.errors.length }">
+								<VeeField name="name" label="姓名" rules="required" v-model="userInfo.name" v-slot="{ field, errors }">
+									<input type="text" id="name" class="form-control" placeholder="請輸入姓名" v-bind="field" :class="{ 'is-invalid': errors.length }">
 								</VeeField>
 								<VeeErrorMessage name="name" class="form-text text-danger mt-2" />
 							</div>
 							<div class="mb-4">
 								<label for="phone" class="form-label">手機號碼</label>
-								<VeeField name="phone" label="手機號碼" rules="required" v-model="userInfo.phone" v-slot="{ field, meta }">
-									<input type="text" id="name" class="form-control" placeholder="請輸入手機號碼" v-bind="field" :class="{ 'is-invalid': meta.errors.length }">
+								<VeeField name="phone" label="手機號碼" rules="required" v-model="userInfo.phone" v-slot="{ field, errors }">
+									<input type="text" id="name" class="form-control" placeholder="請輸入手機號碼" v-bind="field" :class="{ 'is-invalid': errors.length }">
 								</VeeField>
 								<VeeErrorMessage name="phone" class="form-text text-danger mt-2" />
 							</div>
 							<div class="mb-4 row gx-2">
 								<label for="birthday" class="form-label">生日</label>
 								<div class="col">
-									<VeeField name="year" label="年" rules="required" v-model="editBirthday[0]" @change="editBirthday = editBirthday" v-slot="{ field, meta }">
-										<select class="form-select" id="year" v-bind="field" :class="{ 'is-invalid': meta.errors.length }">
+									<VeeField name="year" label="年" rules="required" v-model="editBirthday[0]" @change="editBirthday = editBirthday" v-slot="{ field, errors }">
+										<select class="form-select" id="year" v-bind="field" :class="{ 'is-invalid': errors.length }">
 											<option value="" disabled selected>年</option>
 											<option v-for="item in years" :value="item.id" :key="item.id">{{ item.name }}</option>
 										</select>
 									</VeeField>
 								</div>
 								<div class="col">
-									<VeeField name="month" label="月" rules="required" v-model="editBirthday[1]" @change="editBirthday = editBirthday" v-slot="{ field, meta }">
-										<select class="form-select" id="month" v-bind="field" :class="{ 'is-invalid': meta.errors.length }">
+									<VeeField name="month" label="月" rules="required" v-model="editBirthday[1]" @change="editBirthday = editBirthday" v-slot="{ field, errors }">
+										<select class="form-select" id="month" v-bind="field" :class="{ 'is-invalid': errors.length }">
 											<option value="" disabled selected>月</option>
 											<option v-for="item in months" :value="item.id" :key="item.id">{{ item.name }}</option>
 										</select>
 									</VeeField>
 								</div>
 								<div class="col">
-									<VeeField name="day" label="日" rules="required" v-model="editBirthday[2]" @change="editBirthday = editBirthday" v-slot="{ field, meta }">
-										<select class="form-select" id="day" v-bind="field" :class="{ 'is-invalid': meta.errors.length }">
+									<VeeField name="day" label="日" rules="required" v-model="editBirthday[2]" @change="editBirthday = editBirthday" v-slot="{ field, errors }">
+										<select class="form-select" id="day" v-bind="field" :class="{ 'is-invalid': errors.length }">
 											<option value="" disabled selected>日</option>
 											<option v-for="item in days" :value="item.id" :key="item.id">{{ item.name }}</option>
 										</select>
@@ -113,24 +113,24 @@
 							<div class="mb-5 row gx-2">
 								<label for="confirm_email" class="form-label">地址</label>
 								<div class="col-6 pe-0 mb-3">
-									<VeeField name="county" label="縣市" rules="required" v-model="county" @change="userInfo.address.zipcode = ''" v-slot="{ field, meta }">
-										<select class="form-select" id="county" v-bind="field" :class="{ 'is-invalid': meta.errors.length }">
+									<VeeField name="county" label="縣市" rules="required" v-model="county" @change="userInfo.address.zipcode = ''" v-slot="{ field, errors }">
+										<select class="form-select" id="county" v-bind="field" :class="{ 'is-invalid': errors.length }">
 											<option value="" :selected="county === ''" disabled>縣市</option>
 											<option v-for="item in getCounties" :value="item.id" :key="item.id">{{ item.name }}</option>
 										</select>
 									</VeeField>
 								</div>
 								<div class="col-6">
-									<VeeField name="distList" label="區域" rules="required" v-model="userInfo.address.zipcode" v-slot="{ field, meta }">
-										<select class="form-select" id="distList" v-bind="field" :class="{ 'is-invalid': meta.errors.length }">
+									<VeeField name="distList" label="區域" rules="required" v-model="userInfo.address.zipcode" v-slot="{ field, errors }">
+										<select class="form-select" id="distList" v-bind="field" :class="{ 'is-invalid': errors.length }">
 											<option value="" :selected="userInfo.address.zipcode === ''" disabled>區域</option>
 											<option v-for="item in getDist(county)" :value="item.zipcode" :key="item.id">{{ item.city }}</option>
 										</select>
 									</VeeField>
 								</div>
 								<div class="col-12">
-									<VeeField name="address" label="地址" rules="required" v-model="userInfo.address.detail" v-slot="{ field, meta }">
-										<input type="text" class="form-control" id="address" placeholder="請輸入詳細地址" v-bind="field" :class="{ 'is-invalid': meta.errors.length }">
+									<VeeField name="address" label="地址" rules="required" v-model="userInfo.address.detail" v-slot="{ field, errors }">
+										<input type="text" class="form-control" id="address" placeholder="請輸入詳細地址" v-bind="field" :class="{ 'is-invalid': errors.length }">
 									</VeeField>
 									<VeeErrorMessage name="address" class="form-text text-danger mt-2" />
 								</div>
@@ -178,32 +178,31 @@ const userInfo = ref({
 	_id: ''
 });
 
-interface Response { // TODO: 整理進 types
+interface GetUserRes { // TODO: 整理進 types
 	status: boolean;
 	result: {
-		email: '',
-		name: '',
-		phone: '',
-		birthday: '',
+		email: string,
+		name: string,
+		phone: string,
+		birthday: string,
 		address: {
-			detail: '',
-			zipcode: ''
+			detail: string,
+			zipcode: string
 		},
-		_id: ''
+		_id: string
 	}
 }
-
-const county = ref('');
+const county = ref();
 // 取得會員資料
 const getUserInfo = async () => {
-	const { response } = await useCustomFetch<Response>('/api/v1/user', {
+	const { response } = await useCustomFetch<GetUserRes>('/api/v1/user', {
 		method: 'GET'
 	});
 	if (!response.status) {
 		return;
 	}
 	userInfo.value = response.result;
-	county.value = districts.find((item: { zipcode: string; }) => item.zipcode === userInfo.value.address.zipcode)?.county;
+	county.value = districts.find(item => String(item.zipcode) === userInfo.value.address.zipcode)?.county;
 	$store.user.name = userInfo.value.name;
 };
 getUserInfo();
@@ -218,13 +217,27 @@ const editBirthday = computed({
 	}
 });
 const addressDetail = computed(() => {
-	const result = districts.find((item: { zipcode: string; }) => item.zipcode === userInfo.value.address.zipcode);
+	const result = districts.find(item => String(item.zipcode) === userInfo.value.address.zipcode);
 	return `${result?.county}${result?.city}${userInfo.value.address.detail}`;
 });
 
+interface SendUserRes { // TODO: 整理進 types
+	status: boolean;
+	result: {
+		email: '',
+		name: '',
+		phone: '',
+		birthday: '',
+		address: {
+			detail: '',
+			zipcode: ''
+		},
+		userId: ''
+	}
+}
 // 傳送使用者資料
 const sendUserData = async (body: object) => {
-	const { response } = await useCustomFetch('/api/v1/user', {
+	const { response } = await useCustomFetch<SendUserRes>('/api/v1/user', {
 		method: 'PUT',
 		body
 	});
