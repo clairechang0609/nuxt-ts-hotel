@@ -1,6 +1,6 @@
 <template>
 	<div class="row text-white">
-		<!-- <pre>{{ orders }}</pre> -->
+		<pre>{{ orders }}</pre>
 		<div class="col-lg-7 mb-4 mb-lg-0">
 			<div class="card rounded-4">
 				<div class="card-body p-5">
@@ -21,15 +21,25 @@
 						<div class="my-5 border-bottom"></div>
 						<div class="subtitle mb-4">房內設備</div>
 						<div class="border p-4 rounded-3 mb-5">
-							123
+							<ul class="row row-cols-5 list-unstyled">
+								<li class="col d-flex align-items-center" v-for="(item, index) in filterItems(newOrder.roomId.facilityInfo)" :key="`facility_${index}`">
+									<span class="material-symbols-outlined text-primary me-2">check</span>
+									{{ item.title }}
+								</li>
+							</ul>
 						</div>
 						<div class="subtitle mb-4">備品提供</div>
 						<div class="border p-4 rounded-3 mb-5">
-							123
+							<ul class="row row-cols-5 list-unstyled">
+								<li class="col d-flex align-items-center" v-for="(item, index) in filterItems(newOrder.roomId.amenityInfo)" :key="`amenity_${index}`">
+									<span class="material-symbols-outlined text-primary me-2">check</span>
+									{{ item.title }}
+								</li>
+							</ul>
 						</div>
 						<div class="d-flex">
 							<button type="button" class="btn btn-outline-primary w-100 me-2">取消預訂</button>
-							<a :href="`/room/${newOrder.roomId._id}`" class="btn btn-primary w-100 ms-2">查看詳情</a>
+							<NuxtLink :href="`/room/${newOrder.roomId._id}`" target="_blank" class="btn btn-primary w-100 ms-2">查看詳情</NuxtLink>
 						</div>
 					</div>
 				</div>
@@ -55,9 +65,7 @@ const getOrders = async () => {
 	}
 	orders.value = response.result.reverse();
 };
-onMounted(() => {
-	getOrders();
-});
+getOrders();
 
 const checkDateRange = (startDate, endDate) => {
 	const timeDifference = new Date(endDate) - new Date(startDate);
@@ -70,6 +78,10 @@ const transferDate = dateString => {
 	const month = date.getUTCMonth() + 1;
 	const day = date.getUTCDate();
 	return `${month} 月 ${day} 日 ${daysOfWeek[dayIndex]}`;
+};
+
+const filterItems = items => {
+	return items.filter(item => item.isProvide);
 };
 </script>
 

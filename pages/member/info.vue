@@ -218,7 +218,7 @@ const editBirthday = computed({
 });
 const addressDetail = computed(() => {
 	const result = districts.find(item => String(item.zipcode) === userInfo.value.address.zipcode);
-	return `${result?.county}${result?.city}${userInfo.value.address.detail}`;
+	return `${result?.county || ''}${result?.city || ''}${userInfo.value.address.detail || ''}`;
 });
 
 interface SendUserRes { // TODO: 整理進 types
