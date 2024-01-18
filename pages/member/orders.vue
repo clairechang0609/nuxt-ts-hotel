@@ -1,7 +1,6 @@
 <template>
 	<div>
 		<div class="row text-white">
-			<pre>{{ orders }}</pre>
 			<!-- 最新一筆訂單 -->
 			<div class="col-lg-7 mb-4 mb-lg-0">
 				<div class="card rounded-4">
