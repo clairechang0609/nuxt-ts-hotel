@@ -1,8 +1,7 @@
 <template>
 	<div>
 		<div class="row text-white">
-			<!-- TODO: 要刪掉 -->
-			<!-- <pre>{{ orders }}</pre> -->
+			<pre>{{ orders }}</pre>
 			<!-- 最新一筆訂單 -->
 			<div class="col-lg-7 mb-4 mb-lg-0">
 				<div class="card rounded-4">
@@ -93,28 +92,29 @@
 	</div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
+import type { ProvideItems, Order } from '@/types/member-orders';
 const { $notify } = useNuxtApp();
 
 // 是否顯示所有訂單
 const isShowAll = ref(false);
 
 // 取得訂單資料
-const orders = computed(() => JSON.parse(JSON.stringify(ordersRes.value.result)).reverse().filter(item => item.status !== -1));
+const orders = computed(() => JSON.parse(JSON.stringify(ordersRes.value?.result)).reverse().filter((item: Order) => item.status !== -1));
 const newOrder = computed(() => orders.value[0]);
 const oldOders = computed(() => isShowAll.value ? orders.value.slice(1) : orders.value.slice(1, 4));
-const { response: ordersRes, refresh: getOrders } = await useCustomFetch('/api/v1/orders', {
+const { response: ordersRes, refresh: getOrders } = await useCustomFetch<Order[]>('/api/v1/orders', {
 	method: 'GET'
 });
 
 // 取得預約天數
-const getDays = (startDate, endDate) => {
-	const timeDifference = new Date(endDate) - new Date(startDate);
+const getDays = (startDate: Date, endDate: Date): number => {
+	const timeDifference = new Date(endDate).valueOf() - new Date(startDate).valueOf();
 	return timeDifference / (1000 * 60 * 60 * 24);
 };
 
 // 轉換日期
-const transferDate = dateString => {
+const transferDate = (dateString: Date): string => {
 	const date = new Date(dateString);
 	const daysOfWeek = [ '星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六' ];
 	const dayIndex = date.getUTCDay();
@@ -124,7 +124,7 @@ const transferDate = dateString => {
 };
 
 // 篩選有提供的備品
-const filterProvideItems = items => {
+const filterProvideItems = (items: ProvideItems[]) => {
 	return items.filter(item => item.isProvide);
 };
 
@@ -133,7 +133,7 @@ const cancelReservation = async () => {
 	const { response } = await useCustomFetch(`/api/v1/orders/${newOrder.value._id}`, {
 		method: 'DELETE'
 	});
-	if (!response.value.status) {
+	if (!response.value?.status) {
 		return;
 	}
 	$notify({

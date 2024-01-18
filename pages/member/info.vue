@@ -145,6 +145,7 @@
 </template>
 
 <script lang="ts" setup>
+import type { GetUserRes } from '@/types/member-info';
 const { getCounties, getDist, districts } = useZipcode();
 const { $store, $notify } = useNuxtApp();
 
@@ -166,17 +167,6 @@ const days = Array.from({ length: 31 }, (_, i) => ({
 }));
 
 // 會員基本資料
-interface GetUserRes { // TODO: 整理進 types
-	email: string,
-	name: string,
-	phone: string,
-	birthday: string,
-	address: {
-		detail: string,
-		zipcode: string
-	},
-	_id: string
-}
 const defaultUserInfo: GetUserRes = {
 	email: '',
 	name: '',

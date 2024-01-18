@@ -373,6 +373,8 @@
 </template>
 
 <script lang="ts" setup>
+import type { roomRes } from '@/types/guideline';
+
 // Bootstrap Modal
 const { $bootstrap } = useNuxtApp();
 const modalRef = ref();
@@ -389,13 +391,9 @@ onBeforeUnmount(() => {
 });
 
 // API Fetch
-interface Response {
-	name: string;
-  age: number;
-}
-const rooms = ref<Response[]>([]);
+const rooms = ref<roomRes[]>([]);
 const getAllRooms = async () => {
-	const { response } = await useCustomFetch<Response[]>('/api/v1/rooms', {
+	const { response } = await useCustomFetch<roomRes[]>('/api/v1/rooms', {
 		method: 'GET'
 	});
 	if (!response.value?.status) {
