@@ -177,10 +177,10 @@ const verifyEmail = async () => {
 		method: 'POST',
 		body: { ...configData }
 	});
-	if (!response.status) {
+	if (!response.value?.status) {
 		return;
 	}
-	if (response.result.isEmailExists) {
+	if (response.value.result.isEmailExists) {
 		$notify({
 			type: 'danger',
 			text: '此信箱已被註冊'
@@ -206,10 +206,11 @@ const register = async () => {
 		method: 'POST',
 		body: { ...configData }
 	});
-	if (!response.status) {
+	if (!response.value?.status) {
 		return;
 	}
-	useCookie('token', response.token);
+	const token = useCookie('token');
+	token.value = response.value.token;
 	$store.user.name = response.result.name;
 	router.push('/');
 };

@@ -1,12 +1,18 @@
 import type { UseFetchOptions } from '#app';
 import { defu } from 'defu';
 
-export async function useCustomFetch<T>(url: string, options?: UseFetchOptions<T>) {
+interface UseFetchResponse<K> {
+	status: boolean,
+	token?: string,
+	result: K
+}
+
+export async function useCustomFetch<T>(url: string, options?: UseFetchOptions<UseFetchResponse<T>>) {
 	const config = useRuntimeConfig();
 	const token = useCookie('token');
 	const { $notify } = useNuxtApp();
 
-	const defaults: UseFetchOptions<T> = {
+	const defaults: UseFetchOptions<UseFetchResponse<T>> = {
 		baseURL: config.public.apiBase as string,
 		key: url,
 		headers: token.value ? { Authorization: `Bearer ${token.value}` } : {},
@@ -30,9 +36,7 @@ export async function useCustomFetch<T>(url: string, options?: UseFetchOptions<T
 	};
 
 	const params = defu(options, defaults);
-	const { data, refresh } = await useFetch(url, params);
-	return {
-		response: data.value as T,
-		refresh
-	};
+	const { data: response, refresh } = await useFetch(url, params);
+
+	return { response, refresh };
 }

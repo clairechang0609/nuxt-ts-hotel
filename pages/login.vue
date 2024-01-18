@@ -71,15 +71,15 @@ const login = async () => {
 			...form.value
 		}
 	});
-	if (!response.status) {
+	if (!response.value?.status) {
 		return;
 	}
 	if (isStoreAccount.value) {
 		storeAccount.value = form.value.email;
 	}
 	const token = useCookie('token');
-	token.value = response.token;
-	$store.user.name = response.result.name;
+	token.value = response.value.token;
+	$store.user.name = response.value.result.name;
 	router.push('/');
 };
 </script>
