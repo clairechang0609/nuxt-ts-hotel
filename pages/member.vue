@@ -61,7 +61,11 @@ const tabs = ref([
 }
 
 .nav {
-	margin-bottom: 80px;
+	margin-bottom: 40px;
+
+	@include media-md {
+		margin-bottom: 80px;
+	}
 }
 
 .bg-line {
