@@ -2,7 +2,7 @@
 	<div class="row">
 		<div class="col-lg-5 mb-4 mb-lg-0">
 			<div class="card rounded-4">
-				<div class="card-body p-5">
+				<div class="card-body p-4 p-md-5">
 					<h5 class="card-title mb-5">修改密碼</h5>
 					<div class="mb-4">
 						<label for="email" class="form-label">電子信箱</label>
@@ -46,7 +46,7 @@
 		</div>
 		<div class="col-lg-7">
 			<div class="card rounded-4">
-				<div class="card-body p-5">
+				<div class="card-body p-4 p-md-5">
 					<h5 class="card-title mb-5">基本資料</h5>
 					<template v-if="!editForm">
 						<div class="mb-4">
