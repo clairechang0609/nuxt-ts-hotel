@@ -46,3 +46,15 @@ a {
 		margin-top: $header-height;
 	}
 }
+
+// backdrop
+.modal-backdrop, .offcanvas-backdrop {
+	background-color: rgb($black, 0.5);
+	opacity: 1 !important;
+	backdrop-filter: blur(10px);
+}
+
+.modal-dialog-end {
+	align-items: end;
+	margin-bottom: 0 !important;
+}

@@ -110,7 +110,6 @@
 <script setup>
 const { getCounties, getDist } = useZipcode();
 const { $notify } = useNuxtApp();
-const { fetchData } = useApiFetcher();
 const router = useRouter();
 const { $store } = useNuxtApp();
 definePageMeta({
@@ -174,15 +173,14 @@ const verifyEmail = async () => {
 	const configData = {
 		email: form.value.email
 	};
-	const response = await fetchData({
-		url: '/api/v1/verify/email',
+	const { response } = await useCustomFetch('/api/v1/verify/email', {
 		method: 'POST',
 		body: { ...configData }
 	});
-	if (!response) {
+	if (!response.value?.status) {
 		return;
 	}
-	if (response.result.isEmailExists) {
+	if (response.value.result.isEmailExists) {
 		$notify({
 			type: 'danger',
 			text: '此信箱已被註冊'
@@ -204,15 +202,15 @@ const register = async () => {
 			detail: form.value.address
 		}
 	};
-	const response = await fetchData({
-		url: '/api/v1/user/signup',
+	const { response } = await useCustomFetch('/api/v1/user/signup', {
 		method: 'POST',
 		body: { ...configData }
 	});
-	if (!response) {
+	if (!response.value?.status) {
 		return;
 	}
-	useCookie('token', response.token);
+	const token = useCookie('token');
+	token.value = response.value.token;
 	$store.user.name = response.result.name;
 	router.push('/');
 };

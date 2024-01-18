@@ -38,7 +38,6 @@
 </template>
 
 <script setup>
-const { fetchData } = useApiFetcher();
 const router = useRouter();
 const { $store } = useNuxtApp();
 definePageMeta({
@@ -66,22 +65,21 @@ const form = ref({
 });
 // 登入
 const login = async () => {
-	const response = await fetchData({
+	const { response } = await useCustomFetch('/api/v1/user/login', {
 		method: 'POST',
-		url: '/api/v1/user/login',
 		body: {
 			...form.value
 		}
 	});
-	if (!response) {
+	if (!response.value?.status) {
 		return;
 	}
 	if (isStoreAccount.value) {
 		storeAccount.value = form.value.email;
 	}
 	const token = useCookie('token');
-	token.value = response.token;
-	$store.user.name = response.result.name;
+	token.value = response.value.token;
+	$store.user.name = response.value.result.name;
 	router.push('/');
 };
 </script>
