@@ -166,7 +166,18 @@ const days = Array.from({ length: 31 }, (_, i) => ({
 }));
 
 // 會員基本資料
-const userInfo = ref({
+interface GetUserRes { // TODO: 整理進 types
+	email: string,
+	name: string,
+	phone: string,
+	birthday: string,
+	address: {
+		detail: string,
+		zipcode: string
+	},
+	_id: string
+}
+const defaultUserInfo: GetUserRes = {
 	email: '',
 	name: '',
 	phone: '',
@@ -176,81 +187,54 @@ const userInfo = ref({
 		zipcode: ''
 	},
 	_id: ''
+};
+
+// 取得會員資料
+const { response: memberInfo, refresh: getUserInfo } = await useCustomFetch<GetUserRes>('/api/v1/user', {
+	method: 'GET'
+});
+const userInfo = computed(() => memberInfo.value?.result || defaultUserInfo);
+const county = ref('');
+watch(userInfo, () => {
+	$store.user.name = userInfo.value.name;
+	county.value = districts.find(item => String(item.zipcode) === String(userInfo.value.address.zipcode))?.county || '';
+}, {
+	immediate: true
+});
+const addressDetail = computed(() => {
+	const result = districts.find(item => String(item.zipcode) === String(userInfo.value.address.zipcode));
+	return `${result?.county || ''}${result?.city || ''}${userInfo.value?.address.detail || ''}`;
 });
 
-interface GetUserRes { // TODO: 整理進 types
-	status: boolean;
-	result: {
-		email: string,
-		name: string,
-		phone: string,
-		birthday: string,
-		address: {
-			detail: string,
-			zipcode: string
-		},
-		_id: string
-	}
-}
-const county = ref();
-// 取得會員資料
-const getUserInfo = async () => {
-	const { response } = await useCustomFetch<GetUserRes>('/api/v1/user', {
-		method: 'GET'
-	});
-	if (!response.status) {
-		return;
-	}
-	userInfo.value = response.result;
-	county.value = districts.find(item => String(item.zipcode) === userInfo.value.address.zipcode)?.county;
-	$store.user.name = userInfo.value.name;
-};
-getUserInfo();
-
+// 編輯表單
 const editForm = ref(false);
 const editBirthday = computed({
 	get() {
-		return userInfo.value.birthday.slice(0, 10).split('-').map(item => String(Number(item)));
+		return userInfo.value?.birthday.slice(0, 10).split('-').map(item => String(Number(item)));
 	},
 	set(val) {
-		userInfo.value.birthday = val.join('-');
+		if (userInfo.value) {
+			userInfo.value.birthday = val ? val.join('-') : '';
+		}
 	}
-});
-const addressDetail = computed(() => {
-	const result = districts.find(item => String(item.zipcode) === userInfo.value.address.zipcode);
-	return `${result?.county || ''}${result?.city || ''}${userInfo.value.address.detail || ''}`;
 });
 
-interface SendUserRes { // TODO: 整理進 types
-	status: boolean;
-	result: {
-		email: '',
-		name: '',
-		phone: '',
-		birthday: '',
-		address: {
-			detail: '',
-			zipcode: ''
-		},
-		userId: ''
-	}
-}
 // 傳送使用者資料
 const sendUserData = async (body: object) => {
-	const { response } = await useCustomFetch<SendUserRes>('/api/v1/user', {
+	const { response } = await useCustomFetch('/api/v1/user', {
 		method: 'PUT',
 		body
 	});
-	return response;
+	return response.value;
 };
 
 // 修改基本資料
 const submitForm = async () => {
 	const response = await sendUserData({
-		userId: userInfo.value._id,
+		userId: userInfo.value?._id,
 		...userInfo.value
 	});
-	if (!response.status) {
+	if (!response?.status) {
 		return;
 	}
 	$notify({
@@ -279,10 +263,10 @@ const submitPassword = async () => {
 		return;
 	}
 	const response = await sendUserData({
-		userId: userInfo.value._id,
+		userId: userInfo.value?._id,
 		...userPassword
 	});
-	if (!response.status) {
+	if (!response?.status) {
 		return;
 	}
 	$notify({

@@ -11,9 +11,9 @@
 		<div class="container">
 			<ul class="nav">
 				<li class="nav-item" v-for="item in tabs" :key="item.id">
-					<a class="nav-link" :href="`/member/${item.id}`" :class="{ 'active': route.href === `/member/${item.id}` }">
+					<NuxtLink class="nav-link" :href="`/member/${item.id}`" :class="{ 'active': route.href === `/member/${item.id}` }">
 						{{ item.name }}
-					</a>
+					</NuxtLink>
 				</li>
 			</ul>
 			<NuxtPage />
