@@ -2,7 +2,7 @@
 	<div class="row">
 		<div class="col-lg-5 mb-4 mb-lg-0">
 			<div class="card rounded-4">
-				<div class="card-body p-5">
+				<div class="card-body p-4 p-md-5">
 					<h5 class="card-title mb-5">修改密碼</h5>
 					<div class="mb-4">
 						<label for="email" class="form-label">電子信箱</label>
@@ -46,7 +46,7 @@
 		</div>
 		<div class="col-lg-7">
 			<div class="card rounded-4">
-				<div class="card-body p-5">
+				<div class="card-body p-4 p-md-5">
 					<h5 class="card-title mb-5">基本資料</h5>
 					<template v-if="!editForm">
 						<div class="mb-4">
@@ -145,6 +145,7 @@
 </template>
 
 <script lang="ts" setup>
+import type { GetUserRes } from '@/types/member-info';
 const { getCounties, getDist, districts } = useZipcode();
 const { $store, $notify } = useNuxtApp();
 
@@ -166,17 +167,6 @@ const days = Array.from({ length: 31 }, (_, i) => ({
 }));
 
 // 會員基本資料
-interface GetUserRes { // TODO: 整理進 types
-	email: string,
-	name: string,
-	phone: string,
-	birthday: string,
-	address: {
-		detail: string,
-		zipcode: string
-	},
-	_id: string
-}
 const defaultUserInfo: GetUserRes = {
 	email: '',
 	name: '',
