@@ -1,7 +1,36 @@
 <template>
-	<div class="p-5">
+	<div class="container-with-navbar p-5">
 		<h1 class="mb-5 pb-3 border-bottom">Guideline</h1>
-		<h3 class="mb-3 pb-3 border-bottom">Color System</h3>
+		<ul class="nav mb-5 pb-5 border-bottom">
+			<li class="nav-item mb-2">
+				<NuxtLink class="nav-link active" href="#color-system">Color System</NuxtLink>
+			</li>
+			<li class="nav-item mb-2">
+				<NuxtLink class="nav-link active" href="#icon">Icon</NuxtLink>
+			</li>
+			<li class="nav-item mb-2">
+				<NuxtLink class="nav-link active" href="#button">Button</NuxtLink>
+			</li>
+			<li class="nav-item mb-2">
+				<NuxtLink class="nav-link active" href="#input">Input</NuxtLink>
+			</li>
+			<li class="nav-item mb-2">
+				<NuxtLink class="nav-link active" href="#checkbox">Checkbox</NuxtLink>
+			</li>
+			<li class="nav-item mb-2">
+				<NuxtLink class="nav-link active" href="#vee-validate">Vee Validate</NuxtLink>
+			</li>
+			<li class="nav-item mb-2">
+				<NuxtLink class="nav-link active" href="#tabs">Tabs</NuxtLink>
+			</li>
+			<li class="nav-item mb-2">
+				<NuxtLink class="nav-link active" href="#bootstrap-modal">Bootstrap Modal</NuxtLink>
+			</li>
+			<li class="nav-item mb-2">
+				<NuxtLink class="nav-link active" href="#api-fetch">API Fetch</NuxtLink>
+			</li>
+		</ul>
+		<h3 class="mb-3 pb-3 border-bottom" id="color-system">Color System</h3>
 		<div class="mb-5">
 			<h5 class="mb-3">Primary</h5>
 			<div class="d-flex mb-4">
@@ -119,7 +148,7 @@
 				</div>
 			</div>
 		</div>
-		<h3 class="mb-3 pb-3 border-bottom">Icon</h3>
+		<h3 class="mb-3 pb-3 border-bottom" id="icon">Icon</h3>
 		<div class="mb-5">
 			<h5 class="mb-3">Material Design Icons Fill</h5>
 			<div class="mb-4">
@@ -146,7 +175,7 @@
 				<img src="/image/ic_train.svg" alt="ic_train" class="me-3" />
 			</div>
 		</div>
-		<h3 class="mb-3 pb-3 border-bottom">Button</h3>
+		<h3 class="mb-3 pb-3 border-bottom" id="button">Button</h3>
 		<div class="mb-5">
 			<h5 class="mb-3">Primary</h5>
 			<div class="d-flex mb-4">
@@ -245,7 +274,7 @@
 				</div>
 			</div>
 		</div>
-		<h3 class="mb-3 pb-3 border-bottom">Input</h3>
+		<h3 class="mb-3 pb-3 border-bottom" id="input">Input</h3>
 		<div class="mb-5 bg-gray-40">
 			<div class="mb-3 p-3">
 				<h5 class="mb-3">Initial</h5>
@@ -259,7 +288,7 @@
 				<span class="form-text text-danger mt-2">錯誤提示訊息</span>
 			</div>
 		</div>
-		<h3 class="mb-3 pb-3 border-bottom">Checkbox</h3>
+		<h3 class="mb-3 pb-3 border-bottom" id="checkbox">Checkbox</h3>
 		<div class="mb-5 bg-gray-40 p-3">
 			<div class="form-check">
 				<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
@@ -268,7 +297,7 @@
 				</label>
 			</div>
 		</div>
-		<h3 class="mb-3">Vee Validate</h3>
+		<h3 class="mb-3 pb-3 border-bottom" id="vee-validate">Vee Validate</h3>
 		<div class="vee-wrap mb-5">
 			<VeeForm @submit="submitForm" v-slot="{ meta: globalMata }">
 				<div class="mb-4">
@@ -295,7 +324,7 @@
 				<button type="submit" class="btn btn-primary" :disabled="!globalMata.valid">儲存設定</button>
 			</VeeForm>
 		</div>
-		<h3 class="mb-3 pb-3 border-bottom">Tabs</h3>
+		<h3 class="mb-3 pb-3 border-bottom" id="tabs">Tabs</h3>
 		<div class="mb-5 bg-gray-40 p-3">
 			<ul class="nav">
 				<li class="nav-item">
@@ -312,7 +341,29 @@
 				</li>
 			</ul>
 		</div>
-		<h3 class="mb-3 pb-3 border-bottom">API Fetch</h3>
+		<h3 class="mb-3 pb-3 border-bottom" id="bootstrap-modal">Bootstrap Modal</h3>
+		<div class="mb-5">
+			<div class="modal fade" tabindex="-1" data-bs-backdrop="static" ref="modalRef">
+				<div class="modal-dialog modal-lg">
+					<div class="modal-content border-white">
+						<div class="modal-header">
+							<h5 class="fs-3 text-black">Modal Title</h5>
+							<button type="button" class="btn-close fs-7" data-bs-dismiss="modal" aria-label="Close"></button>
+						</div>
+						<div class="modal-body">
+							Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptas quidem similique doloribus pariatur culpa aliquid quibusdam eos magnam mollitia earum nostrum explicabo aperiam, sit velit. Nesciunt ab explicabo eos repudiandae!
+							Quod tempore quae dicta nesciunt aperiam hic quidem dignissimos in vitae porro ab, sunt neque? Deleniti excepturi delectus voluptatem sed et iste aperiam praesentium nihil est accusamus, vero, impedit temporibus.
+							Sunt sint reprehenderit mollitia dolores maxime cupiditate iure tempora quia asperiores ullam, eligendi ratione iste debitis perferendis placeat dicta possimus cumque vitae ducimus, illo enim totam eos. Sapiente, earum nam!
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-outline-primary px-5 me-2" data-bs-dismiss="modal">close</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<button type="button" class="btn btn-success" @click="showModal">開啟 Modal</button>
+		</div>
+		<h3 class="mb-3 pb-3 border-bottom" id="api-fetch">API Fetch</h3>
 		<div class="mb-5">
 			<button type="button" class="btn btn-success mb-4" @click="getAllRooms()">點我發出請求</button>
 			<h5 class="mb-4">顯示所有房型</h5>
@@ -322,25 +373,38 @@
 </template>
 
 <script lang="ts" setup>
-const rooms = ref<Array<{ name: string; age: number; }>>([]);
+// Bootstrap Modal
+const { $bootstrap } = useNuxtApp();
+const modalRef = ref();
+let modal: bootstrap.Modal;
+const showModal = () => {
+	modal.show();
+};
+onMounted(() => {
+	modal = $bootstrap.modal(modalRef.value);
+});
+onBeforeUnmount(() => {
+	// 記得加上 dispose，避免切換頁面時或是 HMR 看到殘留畫面
+	modal.dispose();
+});
 
+// API Fetch
 interface Response {
-	status: boolean;
-	result: Array<{
-    name: string;
-    age: number;
-  }>;
+	name: string;
+  age: number;
 }
+const rooms = ref<Response[]>([]);
 const getAllRooms = async () => {
-	const { response } = await useCustomFetch<Response>('/api/v1/rooms', {
+	const { response } = await useCustomFetch<Response[]>('/api/v1/rooms', {
 		method: 'GET'
 	});
-	if (!response.status) {
+	if (!response.value?.status) {
 		return;
 	}
-	rooms.value = response.result;
+	rooms.value = response.value.result;
 };
 
+// vee-validate
 const submitForm = () => {
 	console.log('submit');
 };
