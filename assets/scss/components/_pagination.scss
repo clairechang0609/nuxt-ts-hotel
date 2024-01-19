@@ -1,0 +1,23 @@
+.swiper-pagination-horizontal {
+	bottom: 16px !important;
+	display: flex; 
+	justify-content: center;
+	gap: 8px;
+
+	.my-swiper-pagination-bullet {
+		display: inline-block;
+		width: 32px;
+		height: 4px;
+		background-color: $primary-40;
+		border-radius: 100px;
+	}
+
+	.my-swiper-pagination-bullet-active {
+		width: 60px;
+		background-color: $primary;
+	}
+}
+
+.swiper-button-prev, .swiper-button-next {
+	color: $gray-80;
+}

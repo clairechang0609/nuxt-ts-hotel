@@ -37,7 +37,8 @@ export default defineNuxtConfig({
 		'@nuxtjs/stylelint-module',
 		'@pinia/nuxt',
 		'@pinia-plugin-persistedstate/nuxt',
-		'@vee-validate/nuxt'
+		'@vee-validate/nuxt',
+		'nuxt-swiper'
 	],
 	veeValidate: {
 		// 啟用 auto imports
@@ -50,13 +51,19 @@ export default defineNuxtConfig({
 			ErrorMessage: 'VeeErrorMessage'
 		}
 	},
+	swiper: {
+		modules: [ 
+			'pagination',
+			'navigation'	
+		]
+	},
 	stylelint: {
 		lintOnStart: false, // 專案啟動時不自動檢查所有相關檔案
 		chokidar: true, // 監聽文件異動進行檢核（文件未列出此選項）
 		cache: false
 	},
 	css: [
-		'@/assets/scss/app.scss'
+		'@/assets/scss/app.scss',
 	],
 	vite: {
 		css: {
