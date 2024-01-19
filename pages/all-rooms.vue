@@ -125,20 +125,20 @@ const images = ref([
 	'https://github.com/hexschool/2022-web-layout-training/blob/main/typescript-hotel/%E6%A1%8C%E6%A9%9F%E7%89%88/room2-3.png?raw=true'
 ])
 
-const getAllRooms = async () => {
-	const { response } = await useCustomFetch<Response>('/api/v1/rooms', {
-		method: 'GET'
-	});
-	if (!response.status) {
-		return;
-	}
-	console.log('res:', response);
+// const getAllRooms = async () => {
+// 	const { response } = await useCustomFetch<Response>('/api/v1/rooms', {
+// 		method: 'GET'
+// 	});
+// 	if (!response.status) {
+// 		return;
+// 	}
+// 	console.log('res:', response);
 	
-	images.value = response.result.reverse();
-};
-onMounted(() => {
-	getAllRooms();
-});
+// 	images.value = response.result.reverse();
+// };
+// onMounted(() => {
+// 	getAllRooms();
+// });
 
 </script>
 
@@ -155,14 +155,6 @@ onMounted(() => {
 	background-size: cover;
 	background-blend-mode: multiply;
 }
-
-// .swiper {
-// 	.swiper-pagination {
-// 		.swiper-pagination-bullet-active {
-// 			background: $primary !important;
-// 		}
-// 	}
-// }
 
 .title-wrap {
 	top: 50%;

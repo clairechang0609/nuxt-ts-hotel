@@ -38,12 +38,12 @@
 				</div>
 			</div>
 			<div class="mb-3">房間格局</div>
-			<ul class="bg-white p-4 d-flex gap-4 rounded">
+			<!-- <ul class="bg-white p-4 d-flex gap-4 rounded">
 				<li>市景</li>
 				<li>獨立衛浴</li>
 				<li>客廳</li>
 				<li>書房</li>
-			</ul>
+			</ul> -->
 		</div>
 	</div>
 </template>
@@ -58,13 +58,6 @@ const images = ref([
 </script>
 
 <style lang="scss" scoped>
-.banner {
-	background-image: url('/image/mobile/banner.png');;
-	height: 251px;
-	background-position: center;
-	background-size: cover;
-	background-blend-mode: multiply;
-}
 
 .room-swiper {
 	margin-top: 72px;
@@ -73,6 +66,7 @@ const images = ref([
 	@include media-md {
 		// display: none;
 		margin-top: 120px;
+		height: 600px;
 	}
 
 	.room-pic {
