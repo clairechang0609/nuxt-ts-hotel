@@ -3,49 +3,13 @@
 		<div class="row text-white">
 			<!-- 最新一筆訂單 -->
 			<div class="col-lg-7 mb-4 mb-lg-0">
-				<div class="card rounded-4">
-					<div class="card-body text-gray-80 p-3 p-md-5">
-						<p class="fs-sm fs-md-normal mb-2">預訂參考編號：{{ newOrder?._id }}</p>
-						<h5 class="card-title text-black fs-normal fs-md-5 mb-4 mb-md-5">即將來的行程</h5>
-						<div class="fw-bold" v-if="newOrder">
-							<div class="new-image-wrap rounded-3 overflow-hidden mb-4 mb-md-5">
-								<img :src="newOrder.roomId.imageUrl" :alt="newOrder.roomId.imageUrl" class="object-fit-cover bg-gray-10 w-100 h-100">
-							</div>
-							<h6 class="fs-normal fs-md-6 mb-4">
-								{{ newOrder.roomId.name }}，{{ getDays(newOrder.checkInDate, newOrder.checkOutDate) }} 晚
-								｜
-								住宿人數：{{ newOrder.peopleNum }} 位
-							</h6>
-							<div class="subtitle fs-normal fs-md-6 mb-2">入住：{{ transferDate(newOrder.checkInDate) }}，15:00 可入住</div>
-							<div class="subtitle subtitle-gray fs-normal fs-md-6 mb-4">退房：{{ transferDate(newOrder.checkOutDate) }}，12:00 前退房</div>
-							<p>NT$ {{ toThousands(newOrder.roomId.price) }}</p>
-							<div class="border-bottom my-4 my-md-5"></div>
-							<div class="subtitle text-black mb-4">房內設備</div>
-							<div class="border py-3 px-4 rounded-3 mb-4 mb-md-5">
-								<ul class="row row-cols-2 row-cols-md-5 list-unstyled">
-									<li class="col d-flex align-items-center my-2" v-for="(item, index) in filterProvideItems(newOrder.roomId.facilityInfo)" :key="`facility_${index}`">
-										<span class="material-symbols-outlined text-primary me-2">check</span>
-										{{ item.title }}
-									</li>
-								</ul>
-							</div>
-							<div class="subtitle text-black mb-4">備品提供</div>
-							<div class="border py-3 px-4 rounded-3 mb-4 mb-md-5">
-								<ul class="row row-cols-2 row-cols-md-5 list-unstyled">
-									<li class="col d-flex align-items-center my-2" v-for="(item, index) in filterProvideItems(newOrder.roomId.amenityInfo)" :key="`amenity_${index}`">
-										<span class="material-symbols-outlined text-primary me-2">check</span>
-										{{ item.title }}
-									</li>
-								</ul>
-							</div>
-							<div class="d-flex">
-								<button type="button" class="btn btn-outline-primary w-100 me-2 d-none d-md-inline" data-bs-toggle="modal" data-bs-target="#modal">取消預訂</button>
-								<button type="button" class="btn btn-outline-primary w-100 me-2 d-md-none" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">取消預訂</button>
-								<NuxtLink :href="`/room/${newOrder.roomId._id}`" target="_blank" class="btn btn-primary w-100">查看詳情</NuxtLink>
-							</div>
-						</div>
+				<OrderUpcomingOrderCard :order="upcomingOrder" provide-items-row-cols="row-cols-md-5">
+					<div class="d-flex mt-4 mt-md-5">
+						<button type="button" class="btn btn-outline-primary w-100 me-2 d-none d-md-inline" data-bs-toggle="modal" data-bs-target="#modal">取消預訂</button>
+						<button type="button" class="btn btn-outline-primary w-100 me-2 d-md-none" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">取消預訂</button>
+						<NuxtLink :to="`/room/${upcomingOrder.roomId._id}`" target="_blank" class="btn btn-primary w-100">查看詳情</NuxtLink>
 					</div>
-				</div>
+				</OrderUpcomingOrderCard>
 			</div>
 			<!-- 歷史訂單 -->
 			<div class="col-lg-5">
@@ -53,17 +17,17 @@
 					<div class="card-body text-gray-80 p-3 p-md-5">
 						<h5 class="card-title fs-normal fs-md-5 mb-5 mb-4 mb-md-5">歷史訂單</h5>
 						<ul class="list-unstyled mb-5">
-							<li v-for="(item, index) in oldOders" :key="item._id" class="d-md-flex" :class="{ 'border-bottom pb-4 mb-4 pb-md-5 mb-md-5': index + 1 !== oldOders.length }">
+							<li v-for="(item, index) in oldOrders" :key="item._id" class="d-md-flex" :class="{ 'border-bottom pb-4 mb-4 pb-md-5 mb-md-5': index + 1 !== oldOrders.length }">
 								<div class="old-image-wrap rounded-3 overflow-hidden flex-shrink-0 mb-4 me-4">
 									<img :src="item.roomId.imageUrl" :alt="item.roomId.imageUrl" class="object-fit-cover bg-gray-10 w-100 h-100">
 								</div>
 								<div>
 									<p class="fs-sm fs-md-normal text-gray-80 mb-3">預訂參考編號：<span class="fs-sm">{{ item?._id }}</span></p>
 									<h6 class="fs-normal fs-md-6 mb-3">{{ item.roomId.name }}</h6>
-									<div class="fs-sm fs-md-normal mb-2">住宿天數：{{ getDays(item.checkInDate, item.checkOutDate) }} 晚</div>
+									<div class="fs-sm fs-md-normal mb-2">住宿天數：{{ getNumberOfDays(item.checkInDate, item.checkOutDate) }} 晚</div>
 									<div class="fs-sm fs-md-normal mb-3">住宿人數：{{ item.peopleNum }} 位</div>
-									<div class="subtitle fs-sm fs-md-normal mb-2">入住：{{ transferDate(item.checkInDate) }}</div>
-									<div class="subtitle fs-sm fs-md-normal subtitle-gray mb-3">退房：{{ transferDate(item.checkOutDate) }}</div>
+									<div class="subtitle fs-sm fs-md-normal mb-2">入住：{{ transferDateToStr(item.checkInDate) }}</div>
+									<div class="subtitle fs-sm fs-md-normal subtitle-gray mb-3">退房：{{ transferDateToStr(item.checkOutDate) }}</div>
 									<p class="fw-bold">NT$ {{ toThousands(item.roomId.price) }}</p>
 								</div>
 							</li>
@@ -110,7 +74,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { ProvideItems, Order } from '@/types/member-orders';
+import type { Order } from '@/types/member-orders';
 const { $notify } = useNuxtApp();
 
 // 是否顯示所有訂單
@@ -118,36 +82,15 @@ const isShowAll = ref(false);
 
 // 取得訂單資料
 const orders = computed(() => JSON.parse(JSON.stringify(ordersRes.value?.result)).reverse().filter((item: Order) => item.status !== -1));
-const newOrder = computed(() => orders.value[0]);
-const oldOders = computed(() => isShowAll.value ? orders.value.slice(1) : orders.value.slice(1, 4));
+const upcomingOrder = computed(() => orders.value[0]);
+const oldOrders = computed(() => isShowAll.value ? orders.value.slice(1) : orders.value.slice(1, 4));
 const { response: ordersRes, refresh: getOrders } = await useCustomFetch<Order[]>('/api/v1/orders', {
 	method: 'GET'
 });
 
-// 取得預約天數
-const getDays = (startDate: Date, endDate: Date): number => {
-	const timeDifference = new Date(endDate).valueOf() - new Date(startDate).valueOf();
-	return timeDifference / (1000 * 60 * 60 * 24);
-};
-
-// 轉換日期
-const transferDate = (dateString: Date): string => {
-	const date = new Date(dateString);
-	const daysOfWeek = [ '星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六' ];
-	const dayIndex = date.getUTCDay();
-	const month = date.getUTCMonth() + 1;
-	const day = date.getUTCDate();
-	return `${month} 月 ${day} 日 ${daysOfWeek[dayIndex]}`;
-};
-
-// 篩選有提供的備品
-const filterProvideItems = (items: ProvideItems[]) => {
-	return items.filter(item => item.isProvide);
-};
-
 // 取消預約
 const cancelReservation = async () => {
-	const { response } = await useCustomFetch(`/api/v1/orders/${newOrder.value._id}`, {
+	const { response } = await useCustomFetch(`/api/v1/orders/${upcomingOrder.value._id}`, {
 		method: 'DELETE'
 	});
 	if (!response.value?.status) {
@@ -162,15 +105,6 @@ const cancelReservation = async () => {
 </script>
 
 <style lang="scss" scoped>
-.new-image-wrap {
-	height: 240px;
-}
-
-.old-image-wrap {
-	width: 120px;
-	height: 80px;
-}
-
 .subtitle {
 	position: relative;
 	padding-left: 1rem;
@@ -190,6 +124,11 @@ const cancelReservation = async () => {
 	&.subtitle-gray::before {
 		background-color: $gray-60;
 	}
+}
+
+.old-image-wrap {
+	width: 120px;
+	height: 80px;
 }
 
 .offcanvas-bottom {

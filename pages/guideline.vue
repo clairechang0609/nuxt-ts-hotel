@@ -3,31 +3,31 @@
 		<h1 class="mb-5 pb-3 border-bottom">Guideline</h1>
 		<ul class="nav mb-5 pb-5 border-bottom">
 			<li class="nav-item mb-2">
-				<NuxtLink class="nav-link active" href="#color-system">Color System</NuxtLink>
+				<NuxtLink class="nav-link active" to="#color-system">Color System</NuxtLink>
 			</li>
 			<li class="nav-item mb-2">
-				<NuxtLink class="nav-link active" href="#icon">Icon</NuxtLink>
+				<NuxtLink class="nav-link active" to="#icon">Icon</NuxtLink>
 			</li>
 			<li class="nav-item mb-2">
-				<NuxtLink class="nav-link active" href="#button">Button</NuxtLink>
+				<NuxtLink class="nav-link active" to="#button">Button</NuxtLink>
 			</li>
 			<li class="nav-item mb-2">
-				<NuxtLink class="nav-link active" href="#input">Input</NuxtLink>
+				<NuxtLink class="nav-link active" to="#input">Input</NuxtLink>
 			</li>
 			<li class="nav-item mb-2">
-				<NuxtLink class="nav-link active" href="#checkbox">Checkbox</NuxtLink>
+				<NuxtLink class="nav-link active" to="#checkbox">Checkbox</NuxtLink>
 			</li>
 			<li class="nav-item mb-2">
-				<NuxtLink class="nav-link active" href="#vee-validate">Vee Validate</NuxtLink>
+				<NuxtLink class="nav-link active" to="#vee-validate">Vee Validate</NuxtLink>
 			</li>
 			<li class="nav-item mb-2">
-				<NuxtLink class="nav-link active" href="#tabs">Tabs</NuxtLink>
+				<NuxtLink class="nav-link active" to="#tabs">Tabs</NuxtLink>
 			</li>
 			<li class="nav-item mb-2">
-				<NuxtLink class="nav-link active" href="#bootstrap-modal">Bootstrap Modal</NuxtLink>
+				<NuxtLink class="nav-link active" to="#bootstrap-modal">Bootstrap Modal</NuxtLink>
 			</li>
 			<li class="nav-item mb-2">
-				<NuxtLink class="nav-link active" href="#api-fetch">API Fetch</NuxtLink>
+				<NuxtLink class="nav-link active" to="#api-fetch">API Fetch</NuxtLink>
 			</li>
 		</ul>
 		<h3 class="mb-3 pb-3 border-bottom" id="color-system">Color System</h3>
