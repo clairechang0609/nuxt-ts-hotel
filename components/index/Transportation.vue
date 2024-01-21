@@ -78,13 +78,11 @@
 
 .wave {
 	@include media-md {
+		height: 200px;
 		background-image: url('/image/desktop/line.png');
-		background-position: center;
-		background-repeat: no-repeat;
-		background-size: cover;
 	}
 
-	height: 200px;
+	height: 85px;
 	background-image: url('/image/mobile/line.png');
 	background-position: center;
 	background-repeat: no-repeat;

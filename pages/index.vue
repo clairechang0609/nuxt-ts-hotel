@@ -4,6 +4,9 @@
 		<div class="container">
 			<h2>我是首頁</h2>
 		</div>
+		<IndexNews />
+		<IndexAboutUs />
+		<IndexCulinaryDelights />
 		<IndexTransportation />
 	</div>
 </template>

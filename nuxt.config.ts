@@ -37,7 +37,8 @@ export default defineNuxtConfig({
 		'@nuxtjs/stylelint-module',
 		'@pinia/nuxt',
 		'@pinia-plugin-persistedstate/nuxt',
-		'@vee-validate/nuxt'
+		'@vee-validate/nuxt',
+		'nuxt-swiper'
 	],
 	veeValidate: {
 		// 啟用 auto imports
