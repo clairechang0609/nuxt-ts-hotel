@@ -10,6 +10,7 @@ export default defineNuxtConfig({
 			htmlAttrs: {
 				lang: 'zh-TW'
 			},
+			title: '享樂酒店｜Enjoyment Luxury Hotel',
 			meta: [
 				{ charset: 'utf-8' },
 				{ name: 'viewport', content: 'width=device-width, initial-scale=1, viewport-fit=cover' }
