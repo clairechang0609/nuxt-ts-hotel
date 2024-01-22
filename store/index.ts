@@ -1,6 +1,8 @@
-import type { User } from '@/types/user';
+type User = {
+	name: string
+}
 
-const initialState = {
+const initialState: User = {
 	name: ''
 };
 
