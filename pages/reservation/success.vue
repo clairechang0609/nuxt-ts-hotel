@@ -3,8 +3,8 @@
 		<div class="container container-with-navbar">
 			<div class="row gx-5 text-white">
 				<div class="col-lg-7 pe-md-5 mb-4 mb-lg-0">
-					<div class="d-flex align-items-center mb-5">
-						<div class="check-icon bg-success rounded-circle d-flex align-items-center justify-content-center me-5">
+					<div class="d-flex flex-column flex-md-row align-items-md-center mb-5">
+						<div class="check-icon bg-success rounded-circle d-flex align-items-center justify-content-center me-5 mb-3 mb-md-0">
 							<span class="material-symbols-outlined text-white fs-2">check</span>
 						</div>
 						<h2 class="fs-1 lh-sm">
@@ -14,8 +14,8 @@
 					</div>
 					<p>我們已發送訂房資訊及詳細內容至你的電子信箱，入住時需向櫃檯人員出示訂房人證件。</p>
 					<div class="divider border-bottom"></div>
-					<h5 class="mb-5">立即查看您的訂單紀錄</h5>
-					<NuxtLink to="/member/orders" class="order-link btn btn-primary">前往我的訂單</NuxtLink>
+					<h5 class="fs-normal fs-md-5 mb-5">立即查看您的訂單紀錄</h5>
+					<NuxtLink to="/member/orders" class="order-link btn btn-primary w-100 w-sm-auto">前往我的訂單</NuxtLink>
 					<div class="divider border-bottom"></div>
 					<h5 class="mb-5">訂房人資訊</h5>
 					<div class="mb-4">
@@ -36,6 +36,7 @@
 				</div>
 			</div>
 		</div>
+		<OrderBottomLine />
 	</div>
 </template>
 
@@ -67,8 +68,13 @@ watch(() => response, () => {
 }
 
 .divider {
-	margin-top: 5rem;
-	margin-bottom: 5rem;
+	margin-top: 2.5rem;
+	margin-bottom: 2.5rem;
+
+	@include media-md {
+		margin-top: 5rem;
+		margin-bottom: 5rem;
+	}
 }
 
 .order-link {

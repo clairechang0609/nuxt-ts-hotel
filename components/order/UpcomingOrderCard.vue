@@ -59,7 +59,11 @@ defineProps({
 
 <style lang="scss" scoped>
 .image-wrap {
-	height: 240px;
+	height: 150px;
+
+	@include media-md {
+		height: 240px;
+	}
 }
 
 .subtitle {
