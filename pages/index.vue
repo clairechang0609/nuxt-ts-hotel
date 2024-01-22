@@ -4,10 +4,15 @@
 		<div class="container">
 			<h2>我是首頁</h2>
 		</div>
+		<IndexNews />
+		<IndexAboutUs />
+		<IndexRoomInfo />
+		<IndexCulinaryDelights />
+		<IndexTransportation />
 	</div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 definePageMeta({
 	layout: 'main'
 });
