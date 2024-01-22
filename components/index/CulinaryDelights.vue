@@ -30,7 +30,7 @@ const swiperConfig = {
 
 const culinary = ref<GetCulinaryRes[]>([]);
 const getCulinary = async () => {
-	const { response } = await useCustomFetch<GetCulinaryRes[]>('/api/v1/admin/culinary', {
+	const { response } = await useCustomFetch<GetCulinaryRes[]>('/api/v1/home/culinary', {
 		method: 'GET'
 	});
 	if (!response.value?.status) {
