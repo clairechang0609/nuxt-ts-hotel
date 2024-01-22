@@ -1,4 +1,7 @@
-# 基本規範
+# 說明
+
+## DEMO
+https://nuxt-ts-hotel-fsfo.vercel.app/
 
 ## 環境變數
 
