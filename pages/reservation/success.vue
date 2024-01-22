@@ -40,7 +40,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { Order } from '@/types/member-orders';
+import type { Order } from '@/types/order';
 
 const route = useRoute();
 const apiUrl = computed(() => `/api/v1/orders/${route.query?.id}`);

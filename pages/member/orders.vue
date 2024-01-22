@@ -74,7 +74,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { Order } from '@/types/member-orders';
+import type { Order } from '@/types/order';
 const { $notify } = useNuxtApp();
 
 // 是否顯示所有訂單

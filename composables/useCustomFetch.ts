@@ -1,11 +1,6 @@
 import type { UseFetchOptions } from '#app';
 import { defu } from 'defu';
-
-interface UseFetchResponse<K> {
-	status: boolean,
-	token?: string,
-	result: K
-}
+import type { UseFetchResponse } from '@/types/fetch';
 
 export async function useCustomFetch<T>(url: string, options?: UseFetchOptions<UseFetchResponse<T>>) {
 	const config = useRuntimeConfig();

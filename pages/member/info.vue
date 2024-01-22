@@ -145,7 +145,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { GetUserRes } from '@/types/member-info';
+import type { User } from '@/types/user';
 const { getCounties, getDist, districts } = useZipcode();
 const { $store, $notify } = useNuxtApp();
 
@@ -167,20 +167,20 @@ const days = Array.from({ length: 31 }, (_, i) => ({
 }));
 
 // 會員基本資料
-const defaultUserInfo: GetUserRes = {
-	email: '',
-	name: '',
-	phone: '',
-	birthday: '',
+const defaultUserInfo: User = {
 	address: {
 		detail: '',
 		zipcode: ''
 	},
-	_id: ''
+	_id: '',
+	name: '',
+	email: '',
+	phone: '',
+	birthday: ''
 };
 
 // 取得會員資料
-const { response: memberInfo, refresh: getUserInfo } = await useCustomFetch<GetUserRes>('/api/v1/user', {
+const { response: memberInfo, refresh: getUserInfo } = await useCustomFetch<User>('/api/v1/user', {
 	method: 'GET'
 });
 const userInfo = computed(() => memberInfo.value?.result || defaultUserInfo);
