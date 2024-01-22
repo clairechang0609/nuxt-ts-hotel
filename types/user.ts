@@ -1,7 +1,7 @@
 export interface User {
 	address: {
 		zipcode: string;
-		detail: string
+		detail: string;
 	},
 	_id: string;
 	name: string;
