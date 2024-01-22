@@ -1,4 +1,4 @@
-import { GetRoomRes } from './rooms';
+import type { GetRoomRes } from './rooms';
 
 export interface Order {
 	userInfo: {
