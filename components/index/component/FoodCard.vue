@@ -22,7 +22,6 @@ const props = defineProps({
 <style lang="scss" scoped>
 .food-card {
 	@include media-md {
-		background-image: v-bind("`url('/image/desktop/food${props.cardInfo.id}.png')`");
 		min-height: 600px;
 	}
 
@@ -30,7 +29,7 @@ const props = defineProps({
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: cover;
-	background-image: v-bind("`url('/image/mobile/food${props.cardInfo.id}.png')`");
+	background-image: v-bind("`url('${props.cardInfo.image}')`");
 	border-radius: 8px;
 }
 
