@@ -1,7 +1,7 @@
 # 說明
 
 ## DEMO
-https://nuxt-ts-hotel-fsfo.vercel.app/
+https://nuxt-ts-hotel.vercel.app/
 
 ## 環境變數
 
