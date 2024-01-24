@@ -33,7 +33,7 @@
 							</div>
 							<div class="mb-5">
 								<label for="confirm_email" class="form-label">確認新密碼</label>
-								<VeeField name="confirm_email" label="確認新密碼" rules="required|min:8" v-model="userPassword.confirmPassword" v-slot="{ field, errors }">
+								<VeeField name="confirm_email" label="確認新密碼" :rules="{ is: userPassword.newPassword }" v-model="userPassword.confirmPassword" v-slot="{ field, errors }">
 									<input type="password" id="confirm_email" class="form-control" placeholder="請再輸入一次新密碼" v-bind="field" :class="{ 'is-invalid': errors.length }">
 								</VeeField>
 								<VeeErrorMessage name="confirm_email" class="form-text text-danger mt-2" />
@@ -179,13 +179,14 @@ const defaultUserInfo: User = {
 	birthday: ''
 };
 
+const userInfo = ref<User>(defaultUserInfo);
+const county = ref('');
 // 取得會員資料
-const { response: memberInfo, refresh: getUserInfo } = await useCustomFetch<User>('/api/v1/user', {
+const { response: memberInfo } = await useCustomFetch<User>('/api/v1/user', {
 	method: 'GET'
 });
-const userInfo = computed(() => memberInfo.value?.result || defaultUserInfo);
-const county = ref('');
-watch(userInfo, () => {
+watch(() => memberInfo, () => {
+	userInfo.value = memberInfo.value?.result || userInfo.value;
 	$store.user.name = userInfo.value.name;
 	county.value = districts.find(item => String(item.zipcode) === String(userInfo.value.address.zipcode))?.county || '';
 }, {
@@ -196,7 +197,26 @@ const addressDetail = computed(() => {
 	return `${result?.county || ''}${result?.city || ''}${userInfo.value?.address.detail || ''}`;
 });
 
-// 編輯表單
+// 傳送使用者資料
+const sendUserData = async (params: object) => {
+	const { response } = await useCustomFetch<User>('/api/v1/user', {
+		method: 'PUT',
+		body: {
+			userId: userInfo.value?._id,
+			...JSON.parse(JSON.stringify(params))
+		}
+	});
+	if (!response.value?.status) {
+		return;
+	}
+	$notify({
+		type: 'success',
+		text: '編輯成功'
+	});
+	return response.value.result;
+};
+
+// 編輯基本資料
 const editForm = ref(false);
 const editBirthday = computed({
 	get() {
@@ -208,61 +228,29 @@ const editBirthday = computed({
 		}
 	}
 });
-
-// 傳送使用者資料
-const sendUserData = async (body: object) => {
-	const { response } = await useCustomFetch('/api/v1/user', {
-		method: 'PUT',
-		body
-	});
-	return response.value;
-};
-
 // 修改基本資料
 const submitForm = async () => {
-	const response = await sendUserData({
-		userId: userInfo.value?._id,
-		...userInfo.value
-	});
-	if (!response?.status) {
+	const result = await sendUserData(userInfo.value);
+	if (!result) {
 		return;
 	}
-	$notify({
-		type: 'success',
-		text: '編輯成功'
-	});
 	editForm.value = false;
-	getUserInfo();
+	userInfo.value = result;
 };
 
-// 帳號資料
+// 編輯密碼
+const editPassword = ref(false);
 const userPassword = reactive({
 	oldPassword: '',
 	newPassword: '',
 	confirmPassword: ''
 });
-const editPassword = ref(false);
-const checkPassword = computed(() => userPassword.newPassword === userPassword.confirmPassword);
-// 修改帳號資料
+// 修改密碼
 const submitPassword = async () => {
-	if (!checkPassword.value) {
-		$notify({
-			type: 'danger',
-			text: '新密碼不一致'
-		});
+	const result = await sendUserData(userPassword);
+	if (!result) {
 		return;
 	}
-	const response = await sendUserData({
-		userId: userInfo.value?._id,
-		...userPassword
-	});
-	if (!response?.status) {
-		return;
-	}
-	$notify({
-		type: 'success',
-		text: '編輯成功'
-	});
 	editPassword.value = false;
 };
 </script>
