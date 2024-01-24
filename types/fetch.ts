@@ -1,5 +1,5 @@
-export interface UseFetchResponse<K> {
+export interface UseFetchResponse<T> {
 	status: boolean;
 	token?: string;
-	result: K;
+	result: T;
 }
