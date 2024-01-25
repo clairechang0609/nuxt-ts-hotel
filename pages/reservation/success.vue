@@ -42,19 +42,21 @@
 
 <script lang="ts" setup>
 import type { Order } from '@/types/order';
-
 const route = useRoute();
+
+const order = ref<Order>();
 const apiUrl = computed(() => `/api/v1/orders/${route.query?.id}`);
-const order = computed(() => response.value?.result);
 const { response } = await useCustomFetch<Order>(apiUrl.value, {
 	method: 'GET'
 });
-// 當預約不存在，直接導回預約頁
+
 watch(() => response, () => {
 	const { status, result } = response.value!;
+	// 當預約不存在，直接導回預約頁
 	if (!status || result.status === -1) {
 		navigateTo('/reservation');
 	}
+	order.value = result;
 }, {
 	immediate: true
 });
