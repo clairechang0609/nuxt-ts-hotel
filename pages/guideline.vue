@@ -373,8 +373,6 @@
 </template>
 
 <script lang="ts" setup>
-import type { Room } from '@/types/guideline';
-
 // Bootstrap Modal
 const { $bootstrap } = useNuxtApp();
 const modalRef = ref();
@@ -390,6 +388,9 @@ onBeforeUnmount(() => {
 	modal.dispose();
 });
 
+interface Room {
+	name: string;
+}
 // API Fetch
 const rooms = ref<Room[]>([]);
 const getAllRooms = async () => {
