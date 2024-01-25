@@ -182,16 +182,19 @@ const defaultUserInfo: User = {
 const userInfo = ref<User>(defaultUserInfo);
 const county = ref('');
 // 取得會員資料
-const { response: memberInfo } = await useCustomFetch<User>('/api/v1/user', {
-	method: 'GET'
+const { response: memberInfo, refresh: getUserInfo } = await useCustomFetch<User>('/api/v1/user', {
+	method: 'GET',
+	immediate: false
 });
-watch(() => memberInfo, () => {
+onMounted(async () => {
+	await getUserInfo();
+	setUserInfo();
+});
+const setUserInfo = () => {
 	userInfo.value = memberInfo.value?.result || userInfo.value;
 	$store.user.name = userInfo.value.name;
 	county.value = districts.find(item => String(item.zipcode) === String(userInfo.value.address.zipcode))?.county || '';
-}, {
-	immediate: true
-});
+};
 const addressDetail = computed(() => {
 	const result = districts.find(item => String(item.zipcode) === String(userInfo.value.address.zipcode));
 	return `${result?.county || ''}${result?.city || ''}${userInfo.value?.address.detail || ''}`;
