@@ -39,7 +39,7 @@
 						</button>
 						<div class="dropdown-menu">
 							<NuxtLink to="/member" class="dropdown-item">我的帳戶</NuxtLink>
-							<NuxtLink to="/login" class="dropdown-item">登出</NuxtLink>
+							<a href="#" @click.prevent="logout()" class="dropdown-item">登出</a>
 						</div>
 					</div>
 				</ClientOnly>
@@ -75,6 +75,13 @@ watch(() => openMenu.value, val => {
 	const event = val ? 'add' : 'remove';
 	document.body.classList[event]('overflow-hidden');
 });
+
+// 登出
+const logout = () => {
+	const token = useCookie('token');
+	token.value = null;
+	navigateTo('/login');
+};
 </script>
 
 <style lang="scss" scoped>
