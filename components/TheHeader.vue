@@ -44,14 +44,15 @@
 					</div>
 				</ClientOnly>
 				<NuxtLink to="/reservation" class="btn btn-primary">立即訂房</NuxtLink>
-				<!-- TODO: Guideline 按鈕要刪除 -->
-				<NuxtLink to="/guideline" class="btn btn-primary ms-3">Guideline</NuxtLink>
+				<!-- Guideline 按鈕僅限開發環境 -->
+				<NuxtLink to="/guideline" class="btn btn-primary ms-3" v-if="isDevEnv">Guideline</NuxtLink>
 			</div>
 		</template>
 	</nav>
 </template>
 
 <script lang="ts" setup>
+const isDevEnv = computed(() => process.env.NODE_ENV === 'development');
 const props = defineProps({
 	bgColor: {
 		type: String,

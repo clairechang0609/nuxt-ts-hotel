@@ -81,11 +81,18 @@ const { $notify } = useNuxtApp();
 const isShowAll = ref(false);
 
 // 取得訂單資料
-const orders = computed(() => JSON.parse(JSON.stringify(ordersRes.value?.result)).reverse().filter((item: Order) => item.status !== -1));
+const orders = ref<Order[]>([]);
 const upcomingOrder = computed(() => orders.value[0]);
 const oldOrders = computed(() => isShowAll.value ? orders.value.slice(1) : orders.value.slice(1, 4));
-const { response: ordersRes, refresh: getOrders } = await useCustomFetch<Order[]>('/api/v1/orders', {
+const { response: ordersRes } = await useCustomFetch<Order[]>('/api/v1/orders', {
 	method: 'GET'
+});
+watch(() => ordersRes, () => {
+	if (ordersRes.value?.result) {
+		orders.value = ordersRes.value?.result.reverse().filter((item: Order) => item.status !== -1);
+	}
+}, {
+	immediate: true
 });
 
 // 取消預約
@@ -100,7 +107,7 @@ const cancelReservation = async () => {
 		type: 'success',
 		text: '取消成功'
 	});
-	getOrders();
+	orders.value.shift();
 };
 </script>
 

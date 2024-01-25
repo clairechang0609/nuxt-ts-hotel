@@ -13,6 +13,7 @@ https://nuxt-ts-hotel.vercel.app/
 * 本機端從 main 開分支，命名規則參考 feature/{date}-{name}，EX: featute/20240105-login
 * 要併版前先合併最新 main 版本到自己的分支
 * 至 github 申請 pull request
+* 如有衝突與檢核失敗，需先在本機修正
 * 自己點 merge 即可
 
 ## 開發注意事項
