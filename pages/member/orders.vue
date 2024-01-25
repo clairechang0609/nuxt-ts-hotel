@@ -84,16 +84,19 @@ const isShowAll = ref(false);
 const orders = ref<Order[]>([]);
 const upcomingOrder = computed(() => orders.value[0]);
 const oldOrders = computed(() => isShowAll.value ? orders.value.slice(1) : orders.value.slice(1, 4));
-const { response: ordersRes } = await useCustomFetch<Order[]>('/api/v1/orders', {
-	method: 'GET'
+const { response: ordersRes, refresh: getOrders } = await useCustomFetch<Order[]>('/api/v1/orders', {
+	method: 'GET',
+	immediate: false
 });
-watch(() => ordersRes, () => {
+onMounted(async () => {
+	await getOrders();
+	setOrders();
+});
+const setOrders = () => {
 	if (ordersRes.value?.result) {
 		orders.value = ordersRes.value?.result.reverse().filter((item: Order) => item.status !== -1);
 	}
-}, {
-	immediate: true
-});
+};
 
 // 取消預約
 const cancelReservation = async () => {
@@ -107,6 +110,10 @@ const cancelReservation = async () => {
 		type: 'success',
 		text: '取消成功'
 	});
+	shiftOrders();
+};
+// 移除第一筆訂單
+const shiftOrders = () => {
 	orders.value.shift();
 };
 </script>
