@@ -80,6 +80,7 @@ watch(() => openMenu.value, val => {
 const logout = () => {
 	const token = useCookie('token');
 	token.value = null;
+	$store.user.name = '';
 	navigateTo('/login');
 };
 </script>
