@@ -1,33 +1,34 @@
 <template>
-	<div class="bg-black text-white">
-		<div class="wrap">
-			<Swiper class="position-relative me-0" id="room-swiper" v-bind="swiperConfig">
-				<SwiperSlide v-for="item in roomList" :key="item._id" class="d-flex flex-column flex-md-row">
-					<div class="col-12 col-md-6">
-						<IndexComponentPicSwiper :pic-list="item.imageUrlList"></IndexComponentPicSwiper>
-					</div>
-					<div class="wave col-12 col-md-6 d-flex flex-column justify-content-end">
-						<div class="room-info">
-							<div class="content">
-								<div class="mb-4 mb-md-5">
-									<h3 class="fs-2 fw-bold mb-3">{{ item.name }}</h3>
-									<p>{{ item.description }}</p>
-								</div>
-								<p class="fs-3 fw-bold mb-4 mb-md-5">NT$ {{ toThousands(item.price) }}</p>
-							</div>
+	<div class="info-bg bg-black text-white">
+		<div class="wrap d-flex align-items-end flex-column flex-md-row">
+			<div class="col-12 col-md-6">
+				<IndexComponentPicSwiper :pic-list="currentRoom.imageUrlList"></IndexComponentPicSwiper>
+			</div>
+			<div class="col-12 col-md-6 room-info">
+				<div class="col-12 col-md-8 d-flex flex-column">
+					<div class="content">
+						<div class="mb-4 mb-md-5">
+							<h3 class="fs-2 fw-bold mb-3">{{ currentRoom.name }}</h3>
+							<p>{{ currentRoom.description }}</p>
 						</div>
+						<p class="fs-3 fw-bold mb-4 mb-md-5">NT$ {{ toThousands(currentRoom.price) }}</p>
 					</div>
-				</SwiperSlide>
-				<div class="col-12 col-md-6 sticky-btn">
-					<nuxt-link class="w-100 btn viewmore-btn p-4 p-md-5 mb-4" to="/">
+					<nuxt-link class="btn viewmore-btn p-4 p-md-5 mb-4" to="/">
 						<span class="col-9 text-end">
 							查看更多
 						</span>
 						<span class="col bar fs-5 fw-bold ms-3"></span>
 					</nuxt-link>
-					<IndexComponentSwiperController />
+					<div class="d-flex justify-content-end">
+						<button class="btn py-0 px-3 border-0" @click="currentRoomIndex --" :disabled="currentRoomIndex <= 0">
+							<img src="/image/ic_ArrowLeft.svg" alt="">
+						</button>
+						<button class="btn py-0 px-3 border-0" @click="currentRoomIndex ++" :disabled="currentRoomIndex === roomList.length - 1">
+							<img src="/image/ic_ArrowRight.svg" alt="">
+						</button>
+					</div>
 				</div>
-			</Swiper>
+			</div>
 		</div>
 	</div>
 </template>
@@ -35,111 +36,81 @@
 <script lang="ts" setup>
 import type { GetRoomRes } from '~/types/rooms';
 
-const swiperConfig = {
-	modules: [
-		SwiperNavigation
-	],
-	slidesPerView: 1,
-	spaceBetween: 24,
-	loop: true,
-	allowTouchMove: false,
-	breakpoints: {
-		768: {
-			slidesPerView: 1,
-			spaceBetween: 24
-		}
-	}
-};
-
-const roomList = ref<GetRoomRes[]>([]);
 const getRoomList = async () => {
 	const { response } = await useCustomFetch<GetRoomRes[]>('/api/v1/rooms', {
 		method: 'GET'
 	});
-	if (!response.value?.status) {
-		return;
-	}
-	roomList.value = response.value.result;
+	return response.value?.result || [];
+	// console.log(roomList.value);
 };
+const roomList:GetRoomRes[] = await getRoomList();
 getRoomList();
+const currentRoomIndex = ref(0);
+const currentRoom = computed(() => {
+	return roomList[currentRoomIndex.value];
+});
+
 </script>
 
 <style lang="scss" scoped>
-
-.wrap {
+.info-bg {
 	position: relative;
-	margin-right: auto;
-	padding: 10rem 0 5rem;
-
-	@include media-md {
-		padding: 0 0 7.5rem;
-	}
+	z-index: 2;
 
 	&::before {
+		@include media-md {
+			background-image: url('/image/desktop/line.png');
+		}
+
 		position: absolute;
 		top: 5%;
-		left: 13%;
-		width: 87%;
+		left: 0;
+		width: 100%;
 		height: 100%;
-		background-position: top;
+		background-position: 80% 0;
 		background-repeat: no-repeat;
-		background-size: 200%;
+		background-size: contain;
 		content: "";
 		background-image: url('/image/mobile/line.png');
 		z-index: 1;
 	}
+
+	&::after {
+		@include media-md {
+			top: 10%;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background-image: url('/image/desktop/bg.png');
+		}
+
+		position: absolute;
+		top: 13%;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background-position: center;
+		background-repeat: no-repeat;
+		background-size: contain;
+		content: "";
+		background-image: url('/image/mobile/bg.png');
+		z-index: -1;
+	}
 }
 
-.wave {
-	position: relative;
+.wrap {
+	margin-right: auto;
+	padding: 10rem 0.75rem 5rem;
+	z-index: 99;
 
-	&::before {
-		@include media-md {
-			position: absolute;
-			top: 0;
-			left: -20%;
-			width: 120%;
-			height: 100%;
-			background-position: top;
-			background-repeat: no-repeat;
-			background-size: 100%;
-			content: "";
-			background-image: url('/image/mobile/line.png');
-			z-index: 1;
-		}
+	@include media-md {
+		padding: 0 0 7.5rem;
 	}
 }
 
 .room-info {
-	@include media-md {
-		bottom: 10.5rem;
-		padding-top: 5rem;
-	}
-
 	position: relative;
-	z-index: 1;
-
-	&::after {
-		@include media-md {
-			top: -20%;
-			left: -100%;
-			width: 200%;
-			height: 200%;
-			background-image: url('/image/mobile/bg.png');
-		}
-
-		position: absolute;
-		top: -55%;
-		left: -35%;
-		width: 150%;
-		height: 200%;
-		background-position: center;
-		background-repeat: no-repeat;
-		background-size: 100%;
-		content: "";
-		background-image: url('/image/desktop/bg.png');
-		z-index: -1;
-	}
+	z-index: 99;
 
 	.content {
 		@include media-md {
@@ -148,19 +119,6 @@ getRoomList();
 
 		padding: 0 0.75rem;
 	}
-}
-
-.sticky-btn {
-	@include media-md {
-		position: absolute;
-		bottom: 0;
-		right: 0;
-		margin-right: calc((100vw - 1297px) * 0.5);
-		padding-left: 5rem;
-	}
-
-	padding: 0 0.75rem;
-	z-index: 99;
 }
 
 .viewmore-btn {

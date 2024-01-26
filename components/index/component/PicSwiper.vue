@@ -7,9 +7,6 @@
 </template>
 
 <script setup>
-import 'swiper/css';
-
-import 'swiper/css/pagination';
 import { Pagination } from 'swiper/modules';
 
 const props = defineProps({
@@ -50,7 +47,6 @@ const picSwiperConfig = {
 
 	overflow: hidden;
 	margin: 0 auto 1.5rem;
-	padding: 0 0.75rem;
 	border-radius: 0 0.5rem 0.5rem 0;
 	z-index: 9999;
 
@@ -70,11 +66,16 @@ const picSwiperConfig = {
 }
 
 .bg {
-	padding-bottom: 100%;
+	@include media-md {
+		min-height: 700px;
+	}
+
 	width: 100%;
+	min-height: 300px;
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: cover;
+
 }
 
 </style>
