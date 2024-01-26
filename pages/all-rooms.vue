@@ -1,5 +1,6 @@
 <template>
 	<div class="bg-primary-10">
+		<!-- Banner -->
 		<div class="position-relative">
 			<Swiper
 				:modules="[ SwiperPagination ]"
@@ -10,10 +11,9 @@
 				}"
 				:loop="true"
 			>
-				<SwiperSlide><div class="banner bg-gray-60"></div></SwiperSlide>
-				<SwiperSlide><div class="banner bg-gray-60"></div></SwiperSlide>
-				<SwiperSlide><div class="banner bg-gray-60"></div></SwiperSlide>
-				<SwiperSlide><div class="banner bg-gray-60"></div></SwiperSlide>
+				<SwiperSlide v-for="(item, index) in bannerImages" :key="`banner_${index}`">
+					<div class="banner bg-gray-60" :style="{backgroundImage: `url(${item})`}"></div>
+				</SwiperSlide>
 			</Swiper>
 			<div class="title-wrap position-absolute d-flex flex-column flex-md-row align-items-center">
 				<div class="titles border-bottom-1 flex-md-shrink-0 d-flex flex-column align-items-center align-items-md-start">
@@ -28,9 +28,9 @@
 			<div class="fs-5">房型選擇</div>
 			<h2 class="mb-5 display-5 text-primary">各種房型，任您挑選</h2>
 			<div class="room-wrap d-flex flex-column">
-				<div class="room-card row">
+				<div class="room-card row g-0" v-for="(item, roomIndex) in roomData" :key="`room_${roomIndex}`">
 					<Swiper
-						class="room-swiper col-md-8 rounded-start"
+						class="room-swiper col-md-8 rounded-top"
 						navigation
 						:loop="true"
 						:modules="[ SwiperPagination, SwiperNavigation ]"
@@ -40,75 +40,35 @@
 							bulletActiveClass: 'my-swiper-pagination-bullet-active'
 						}"
 					>
-						<SwiperSlide v-for="(item, index) in images" :key="index">
-							<img class="room-pic" :src="item" :alt="`room${index+1}`">
+						<SwiperSlide v-for="(image, indexPic) in item.imageUrlList" :key="`room_pic_${indexPic}`">
+							<!-- <template v-for="(image, indexPic) in item.imageUrlList" :key="`room_pic_${indexPic}`"> -->
+							<img :src="image" class="room-pic" :alt="`room_${indexPic}`">
+							<!-- </template> -->
 						</SwiperSlide>
 					</Swiper>
 					<div class="room-details col-md-4 bg-white rounded-end d-flex flex-column">
-						<h2 class="mb-2">尊爵雙人房</h2>
-						<span>享受高級的住宿體驗，尊爵雙人房提供給您舒適寬敞的空間和精緻的裝潢。</span>
+						<h2 class="mb-2">{{ item.name }}</h2>
+						<span>{{ item.description }}</span>
 						<div class="room-info-wrap d-flex gap-3">
 							<div class="room-info border border-1 border-primary-40 p-3 rounded d-flex flex-column justify-content-center gap-2">
 								<img src="/image/ic_Size.svg" alt="" class="icon">
-								<span>24坪</span>
+								<span>{{ item.areaInfo }}</span>
 							</div>
 							<div class="room-info border border-1 border-primary-40 p-3 rounded d-flex flex-column justify-content-center gap-2">
-								<img src="/image/ic_Size.svg" alt="" class="icon">
-								<span>1張大床</span>
+								<img src="/image/Group.svg" alt="" class="icon">
+								<span>{{ item.bedInfo }}</span>
 							</div>
 							<div class="room-info border border-1 border-primary-40 p-3 rounded d-flex flex-column justify-content-center gap-2">
-								<img src="/image/ic_Size.svg" alt="" class="icon">
-								<span>2-4人</span>
+								<img src="/image/ic_Person.svg" alt="" class="icon">
+								<span>{{ item.maxPeople }}</span>
 							</div>
 						</div>
 						<hr>
 						<div class="d-flex justify-content-between py-3">
-							<div class="text-primary">NT$ 10,000</div>
-							<a href="/room/1">
+							<div class="text-primary">NT$ {{ toThousands(item.price) }}</div>
+							<NuxtLink :to="`/room/${item._id}`">
 								<img src="/image/ic_ArrowRight.svg" alt="icon">
-							</a>
-						</div>
-					</div>
-				</div>
-				<div class="room-card row">
-					<Swiper
-						class="room-swiper col-md-8 rounded-start"
-						:modules="[ SwiperPagination, SwiperNavigation ]"
-						:pagination="{
-							clickable: true,
-							bulletClass: 'my-swiper-pagination-bullet',
-							bulletActiveClass: 'my-swiper-pagination-bullet-active'
-						}"
-						navigation
-						:loop="true"
-					>
-						<SwiperSlide v-for="(item, index) in images" :key="index">
-							<img class="room-pic" :src="item" :alt="`room${index+1}`">
-						</SwiperSlide>
-					</Swiper>
-					<div class="room-details col-md-4 bg-white rounded-end d-flex flex-column">
-						<h2 class="mb-2">尊爵雙人房</h2>
-						<span>享受高級的住宿體驗，尊爵雙人房提供給您舒適寬敞的空間和精緻的裝潢。</span>
-						<div class="room-info-wrap d-flex gap-3">
-							<div class="room-info border border-1 border-primary-40 p-3 rounded d-flex flex-column justify-content-center gap-2">
-								<img src="/image/ic_Size.svg" alt="" class="icon">
-								<span>24坪</span>
-							</div>
-							<div class="room-info border border-1 border-primary-40 p-3 rounded d-flex flex-column justify-content-center gap-2">
-								<img src="/image/ic_Size.svg" alt="" class="icon">
-								<span>1張大床</span>
-							</div>
-							<div class="room-info border border-1 border-primary-40 p-3 rounded d-flex flex-column justify-content-center gap-2">
-								<img src="/image/ic_Size.svg" alt="" class="icon">
-								<span>2-4人</span>
-							</div>
-						</div>
-						<hr>
-						<div class="d-flex justify-content-between py-3">
-							<div class="text-primary">NT$ 10,000</div>
-							<a href="/room/1">
-								<img src="/image/ic_ArrowRight.svg" alt="icon">
-							</a>
+							</NuxtLink>
 						</div>
 					</div>
 				</div>
@@ -117,28 +77,20 @@
 	</div>
 </template>
 
-<script setup>
-// const images = ref([]);
-const images = ref([
-	'https://github.com/hexschool/2022-web-layout-training/blob/main/typescript-hotel/%E6%A1%8C%E6%A9%9F%E7%89%88/room2-1.png?raw=true',
-	'https://github.com/hexschool/2022-web-layout-training/blob/main/typescript-hotel/%E6%A1%8C%E6%A9%9F%E7%89%88/room2-2.png?raw=true',
-	'https://github.com/hexschool/2022-web-layout-training/blob/main/typescript-hotel/%E6%A1%8C%E6%A9%9F%E7%89%88/room2-3.png?raw=true'
+<script lang="ts" setup>
+import type { GetRoomRes } from '@/types/rooms';
+
+const bannerImages = ref([
+	'/image/desktop/banner.png',
+	'/image/desktop/room2-1.png',
+	'/image/desktop/room3-1.png',
+	'/image/desktop/room4-1.png'
 ]);
 
-// const getAllRooms = async () => {
-// 	const { response } = await useCustomFetch<Response>('/api/v1/rooms', {
-// 		method: 'GET'
-// 	});
-// 	if (!response.status) {
-// 		return;
-// 	}
-// 	console.log('res:', response);
-
-// 	images.value = response.result.reverse();
-// };
-// onMounted(() => {
-// 	getAllRooms();
-// });
+const roomData = computed(() => JSON.parse(JSON.stringify(roomRes.value?.result)));
+const { response: roomRes, refresh: getRooms } = await useCustomFetch<GetRoomRes[]>('/api/v1/rooms', {
+	method: 'GET'
+});
 
 </script>
 
@@ -149,7 +101,6 @@ const images = ref([
 }
 
 .banner {
-	background-image: url('/image/desktop/banner.png');;
 	height: 100vh;
 	background-position: center;
 	background-size: cover;
@@ -192,18 +143,21 @@ const images = ref([
 }
 
 .room-card {
+	// height: 351px;
+	height: 100%;
+
 	@include media-md {
 		height: 457px;
 	}
 
 	.room-swiper {
-		height: 351px;
+		height: 200px;
 
 		@include media-md {
 			height: 457px;
 		}
 
-		.room-pic {
+		.room-pic{
 			width: 100%;
 			height: 100%;
 			object-fit: cover;
@@ -212,6 +166,7 @@ const images = ref([
 
 	.room-details {
 		padding: 16px;
+		height: 100%;
 
 		@include media-md {
 			padding: 40px;
