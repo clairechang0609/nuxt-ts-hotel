@@ -39,19 +39,20 @@
 						</button>
 						<div class="dropdown-menu">
 							<NuxtLink to="/member" class="dropdown-item">我的帳戶</NuxtLink>
-							<NuxtLink to="/login" class="dropdown-item">登出</NuxtLink>
+							<a href="#" @click.prevent="logout()" class="dropdown-item">登出</a>
 						</div>
 					</div>
 				</ClientOnly>
 				<NuxtLink to="/reservation" class="btn btn-primary">立即訂房</NuxtLink>
-				<!-- TODO: Guideline 按鈕要刪除 -->
-				<NuxtLink to="/guideline" class="btn btn-primary ms-3">Guideline</NuxtLink>
+				<!-- Guideline 按鈕僅限開發環境 -->
+				<NuxtLink to="/guideline" class="btn btn-primary ms-3" v-if="isDevEnv">Guideline</NuxtLink>
 			</div>
 		</template>
 	</nav>
 </template>
 
 <script lang="ts" setup>
+const isDevEnv = computed(() => process.env.NODE_ENV === 'development');
 const props = defineProps({
 	bgColor: {
 		type: String,
@@ -74,6 +75,14 @@ watch(() => openMenu.value, val => {
 	const event = val ? 'add' : 'remove';
 	document.body.classList[event]('overflow-hidden');
 });
+
+// 登出
+const logout = () => {
+	const token = useCookie('token');
+	token.value = null;
+	$store.user.name = '';
+	navigateTo('/login');
+};
 </script>
 
 <style lang="scss" scoped>

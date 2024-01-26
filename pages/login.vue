@@ -7,15 +7,17 @@
 				<VeeForm v-slot="{ meta: globalMata }">
 					<div class="mb-3">
 						<label for="email" class="form-label">電子信箱</label>
-						<VeeField name="email" label="電子信箱" rules="required" v-model="form.email" v-slot="{ field }">
-							<input type="email" class="form-control" id="email" placeholder="hello@exsample.com" v-bind="field">
+						<VeeField name="email" label="電子信箱" rules="required|email" v-model="form.email" v-slot="{ field, errors }">
+							<input type="email" class="form-control" id="email" placeholder="hello@exsample.com" v-bind="field" :class="{ 'is-invalid': errors.length }">
 						</VeeField>
+						<VeeErrorMessage name="email" class="form-text text-danger mt-2" />
 					</div>
 					<div class="mb-3">
 						<label for="password" class="form-label">密碼</label>
-						<VeeField name="password" label="密碼" rules="required" v-model="form.password" v-slot="{ field }">
-							<input type="password" class="form-control" id="password" placeholder="請輸入密碼" v-bind="field">
+						<VeeField name="password" label="密碼" rules="required" v-model="form.password" v-slot="{ field, errors }">
+							<input type="password" class="form-control" id="password" placeholder="請輸入密碼" v-bind="field" :class="{ 'is-invalid': errors.length }">
 						</VeeField>
+						<VeeErrorMessage name="password" class="form-text text-danger mt-2" />
 					</div>
 					<div class="d-flex justify-content-between align-items-center">
 						<div class="form-check">
