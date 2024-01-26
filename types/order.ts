@@ -12,8 +12,8 @@ export interface Order {
 	},
 	_id: string;
 	roomId: GetRoomRes;
-	checkInDate: string;
-	checkOutDate: string;
+	checkInDate: Date;
+	checkOutDate: Date;
 	peopleNum: number;
 	orderUserId: string;
 	status: number;

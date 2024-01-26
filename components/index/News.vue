@@ -1,5 +1,5 @@
 <template>
-	<div class="container d-flex flex-column flex-md-row">
+	<div class="news-bg container d-flex flex-column flex-md-row">
 		<div class="d-flex flex-column align-items-start me-5 mb-5">
 			<h2 class="fs-1 text-primary mb-4 mb-5">最新<br>消息</h2>
 			<span class="bar"></span>
@@ -16,7 +16,6 @@
 import type { GetNewsRes } from '@/types/news';
 
 // 最新消息
-const newsList = ref<GetNewsRes[]>([]);
 const getNews = async () => {
 	const { response } = await useCustomFetch<GetNewsRes[]>('/api/v1/home/news', {
 		method: 'GET'
@@ -24,12 +23,36 @@ const getNews = async () => {
 	if (!response.value?.status) {
 		return;
 	}
-	newsList.value = response.value.result;
+	return response.value.result;
 };
-getNews();
+const newsList = await getNews();
 </script>
 
 <style lang="scss" scoped>
+.news-bg {
+	position: relative;
+	z-index: 1;
+
+	&::before {
+		@include media-md {
+			top: 5%;
+			right: -10%;
+			width: 12.5rem;
+			height: 12.5rem;
+			background: url('/image/desktop/dot.png') no-repeat center center;
+		}
+
+		content: '';
+		position: absolute;
+		top: 2%;
+		right: 5%;
+		width: 6.25rem;
+		height: 6.25rem;
+		background: url('/image/mobile/dot.png') no-repeat center center;
+		background-size: cover;
+		z-index: 0;
+	}
+}
 
 .bar {
 	display: block;

@@ -1,12 +1,12 @@
 <template>
 	<div class="wrap">
-		<div class="container pb-0">
+		<div class="container py-0">
 			<div class="title d-flex align-items-center">
 				<h2 class="fs-1 text-primary">佳餚<br>美饌</h2>
 				<span class="bar ms-5"></span>
 			</div>
 		</div>
-		<Swiper class="me-0" v-bind="swiperConfig">
+		<Swiper class="me-0" v-bind="culinarySwiperConfig">
 			<SwiperSlide v-for="item in culinary" :key="item._id">
 				<IndexComponentFoodCard :card-info="item" />
 			</SwiperSlide>
@@ -17,9 +17,10 @@
 <script lang="ts" setup>
 import type { GetCulinaryRes } from '~/types/culinary';
 
-const swiperConfig = {
-	slidesPerView: 1.1,
+const culinarySwiperConfig = {
+	slidesPerView: 1,
 	spaceBetween: 24,
+	loop: true,
 	breakpoints: {
 		768: {
 			slidesPerView: 3.5,
@@ -28,7 +29,6 @@ const swiperConfig = {
 	}
 };
 
-const culinary = ref<GetCulinaryRes[]>([]);
 const getCulinary = async () => {
 	const { response } = await useCustomFetch<GetCulinaryRes[]>('/api/v1/home/culinary', {
 		method: 'GET'
@@ -36,9 +36,9 @@ const getCulinary = async () => {
 	if (!response.value?.status) {
 		return;
 	}
-	culinary.value = response.value.result;
+	return response.value.result;
 };
-getCulinary();
+const culinary = await getCulinary();
 </script>
 
 <style lang="scss" scoped>
@@ -56,6 +56,18 @@ getCulinary();
 	@include media-md {
 		position: relative;
 		padding: 7.5rem 0;
+
+		&::before {
+			position: absolute;
+			top: -5%;
+			right: 5%;
+			width: 12.5rem;
+			height: 12.5rem;
+			background: url('/image/desktop/dot.png') no-repeat center center;
+			background-size: cover;
+			z-index: 3;
+			content: '';
+		}
 
 		&::after {
 			position: absolute;

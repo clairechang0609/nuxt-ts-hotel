@@ -48,13 +48,23 @@ a {
 }
 
 // backdrop
-.modal-backdrop, .offcanvas-backdrop {
+.backdrop, .modal-backdrop, .offcanvas-backdrop {
+	--bs-backdrop-zindex: 1050;
+
 	background-color: rgb($black, 0.5);
 	opacity: 1 !important;
 	backdrop-filter: blur(10px);
+	z-index: var(--bs-backdrop-zindex);
 }
 
 .modal-dialog-end {
 	align-items: end;
 	margin-bottom: 0 !important;
+}
+
+// spinner
+.spinner-border {
+	--bs-spinner-width: 4rem;
+	--bs-spinner-height: 4rem;
+	--bs-spinner-border-width: 0.35em;
 }

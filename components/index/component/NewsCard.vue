@@ -1,5 +1,5 @@
 <template>
-	<div class="d-flex flex-column flex-md-row align-items-center">
+	<div class="d-flex flex-column flex-md-row align-items-center" :id="props.newsInfo._id">
 		<img class="new-bg col-12 col-md-5 me-md-4 mb-4 mb-md-0" :src="props.newsInfo.image" :alt="props.newsInfo.title">
 		<div class="text-black col">
 			<h3 class="fs-4 fs-md-3 fw-bold mb-2 mb-md-4">{{ props.newsInfo.title }}</h3>

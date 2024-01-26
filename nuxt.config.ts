@@ -10,6 +10,7 @@ export default defineNuxtConfig({
 			htmlAttrs: {
 				lang: 'zh-TW'
 			},
+			title: '享樂酒店｜Enjoyment Luxury Hotel',
 			meta: [
 				{ charset: 'utf-8' },
 				{ name: 'viewport', content: 'width=device-width, initial-scale=1, viewport-fit=cover' }
@@ -56,7 +57,8 @@ export default defineNuxtConfig({
 		modules: [
 			'pagination',
 			'navigation'
-		]
+		],
+		prefix: 'Swiper'
 	},
 	stylelint: {
 		lintOnStart: false, // 專案啟動時不自動檢查所有相關檔案

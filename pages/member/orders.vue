@@ -3,11 +3,14 @@
 		<div class="row text-white">
 			<!-- 最新一筆訂單 -->
 			<div class="col-lg-7 mb-4 mb-lg-0">
-				<OrderUpcomingOrderCard :order="upcomingOrder" provide-items-row-cols="row-cols-md-5">
+				<OrderUpcomingOrderCard :order="upcomingOrders[currentPage - 1]" provide-items-row-cols="row-cols-md-5">
 					<div class="d-flex mt-4 mt-md-5">
 						<button type="button" class="btn btn-outline-primary w-100 me-2 d-none d-md-inline" data-bs-toggle="modal" data-bs-target="#modal">取消預訂</button>
 						<button type="button" class="btn btn-outline-primary w-100 me-2 d-md-none" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">取消預訂</button>
-						<NuxtLink :to="`/room/${upcomingOrder.roomId._id}`" target="_blank" class="btn btn-primary w-100">查看詳情</NuxtLink>
+						<NuxtLink :to="`/room/${upcomingOrders[currentPage - 1].roomId._id}`" target="_blank" class="btn btn-primary w-100">查看詳情</NuxtLink>
+					</div>
+					<div class="d-flex align-items-center justify-content-center mt-4 mt-md-5">
+						<ThePagination v-model:current-page="currentPage" :total-pages="upcomingOrders.length" />
 					</div>
 				</OrderUpcomingOrderCard>
 			</div>
@@ -16,26 +19,31 @@
 				<div class="card rounded-4">
 					<div class="card-body text-gray-80 p-3 p-md-5">
 						<h5 class="card-title fs-normal fs-md-5 mb-5 mb-4 mb-md-5">歷史訂單</h5>
-						<ul class="list-unstyled mb-5">
-							<li v-for="(item, index) in oldOrders" :key="item._id" class="d-md-flex" :class="{ 'border-bottom pb-4 mb-4 pb-md-5 mb-md-5': index + 1 !== oldOrders.length }">
-								<div class="old-image-wrap rounded-3 overflow-hidden flex-shrink-0 mb-4 me-4">
-									<img :src="item.roomId.imageUrl" :alt="item.roomId.imageUrl" class="object-fit-cover bg-gray-10 w-100 h-100">
-								</div>
-								<div>
-									<p class="fs-sm fs-md-normal text-gray-80 mb-3">預訂參考編號：<span class="fs-sm">{{ item?._id }}</span></p>
-									<h6 class="fs-normal fs-md-6 mb-3">{{ item.roomId.name }}</h6>
-									<div class="fs-sm fs-md-normal mb-2">住宿天數：{{ getNumberOfDays(item.checkInDate, item.checkOutDate) }} 晚</div>
-									<div class="fs-sm fs-md-normal mb-3">住宿人數：{{ item.peopleNum }} 位</div>
-									<div class="subtitle fs-sm fs-md-normal mb-2">入住：{{ transferDateToStr(item.checkInDate) }}</div>
-									<div class="subtitle fs-sm fs-md-normal subtitle-gray mb-3">退房：{{ transferDateToStr(item.checkOutDate) }}</div>
-									<p class="fw-bold">NT$ {{ toThousands(item.roomId.price) }}</p>
-								</div>
-							</li>
-						</ul>
-						<button type="button" class="btn btn-outline-primary w-100" @click="isShowAll = !isShowAll" v-if="orders.length > 4">
-							{{ !isShowAll ? '查看更多': '顯示較少' }}
-							<span class="material-symbols-outlined ms-1">{{ !isShowAll ? 'expand_more': 'expand_less' }}</span>
-						</button>
+						<template v-if="showOldOrders.length">
+							<ul class="list-unstyled mb-5">
+								<li v-for="(item, index) in showOldOrders" :key="item._id" class="d-md-flex" :class="{ 'border-bottom pb-4 mb-4 pb-md-5 mb-md-5': index + 1 !== showOldOrders.length }">
+									<div class="old-image-wrap rounded-3 overflow-hidden flex-shrink-0 mb-4 me-4">
+										<img :src="item.roomId.imageUrl" :alt="item.roomId.imageUrl" class="object-fit-cover bg-gray-10 w-100 h-100">
+									</div>
+									<div>
+										<p class="fs-sm fs-md-normal text-gray-80 mb-3">預訂參考編號：<span class="fs-sm">{{ item?._id }}</span></p>
+										<h6 class="fs-normal fs-md-6 mb-3">{{ item.roomId.name }}</h6>
+										<div class="fs-sm fs-md-normal mb-2">住宿天數：{{ getNumberOfDays(item.checkInDate, item.checkOutDate) }} 晚</div>
+										<div class="fs-sm fs-md-normal mb-3">住宿人數：{{ item.peopleNum }} 位</div>
+										<div class="subtitle fs-sm fs-md-normal mb-2">入住：{{ transferDateToStr(item.checkInDate) }}</div>
+										<div class="subtitle fs-sm fs-md-normal subtitle-gray mb-3">退房：{{ transferDateToStr(item.checkOutDate) }}</div>
+										<p class="fw-bold">NT$ {{ toThousands(item.roomId.price) }}</p>
+									</div>
+								</li>
+							</ul>
+							<button type="button" class="btn btn-outline-primary w-100" @click="isShowAll = !isShowAll" v-if="oldOrders.length > 4">
+								{{ !isShowAll ? '查看更多': '顯示較少' }}
+								<span class="material-symbols-outlined ms-1">{{ !isShowAll ? 'expand_more': 'expand_less' }}</span>
+							</button>
+						</template>
+						<div class="my-5 d-flex flex-column align-items-center justify-content-center" v-else>
+							<h6 class="text-gray-60">沒有歷史訂單</h6>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -81,16 +89,37 @@ const { $notify } = useNuxtApp();
 const isShowAll = ref(false);
 
 // 取得訂單資料
-const orders = computed(() => JSON.parse(JSON.stringify(ordersRes.value?.result)).reverse().filter((item: Order) => item.status !== -1));
-const upcomingOrder = computed(() => orders.value[0]);
-const oldOrders = computed(() => isShowAll.value ? orders.value.slice(1) : orders.value.slice(1, 4));
-const { response: ordersRes, refresh: getOrders } = await useCustomFetch<Order[]>('/api/v1/orders', {
-	method: 'GET'
+const currentPage = ref(1);
+const upcomingOrders = ref<Order[]>([]);
+const oldOrders = ref<Order[]>([]);
+const showOldOrders = computed(() => isShowAll.value ? oldOrders.value.slice(1) : oldOrders.value.slice(1, 4));
+const { response: ordersRes, refresh: fetchOrders } = await useCustomFetch<Order[]>('/api/v1/orders', {
+	method: 'GET',
+	immediate: false
 });
+const getOrders = async () => {
+	await fetchOrders();
+	setOrders();
+};
+onMounted(() => {
+	getOrders();
+});
+const setOrders = () => {
+	if (ordersRes.value?.result) {
+		ordersRes.value?.result.forEach((item: Order) => {
+			const checkInDate = new Date(item.checkInDate);
+			const today = new Date();
+			today.setHours(0, 0, 0, 0);
+			item.status !== -1 && checkInDate >= today
+				? upcomingOrders.value.push(item)
+				: oldOrders.value.push(item);
+		});
+	}
+};
 
 // 取消預約
 const cancelReservation = async () => {
-	const { response } = await useCustomFetch(`/api/v1/orders/${upcomingOrder.value._id}`, {
+	const { response } = await useCustomFetch(`/api/v1/orders/${upcomingOrders.value?.[currentPage.value]._id}`, {
 		method: 'DELETE'
 	});
 	if (!response.value?.status) {
