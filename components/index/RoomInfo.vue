@@ -13,7 +13,7 @@
 						</div>
 						<p class="fs-3 fw-bold mb-4 mb-md-5">NT$ {{ toThousands(currentRoom.price) }}</p>
 					</div>
-					<nuxt-link class="btn viewmore-btn p-4 p-md-5 mb-4" to="/">
+					<nuxt-link class="btn viewmore-btn p-4 p-md-5 mb-4" :to="`/room/${currentRoom._id}`">
 						<span class="col-9 text-end">
 							查看更多
 						</span>

@@ -16,7 +16,7 @@
 								<h2 class="banner-title mb-4 text-nowrap">高雄<br>豪華住宿之選</h2>
 								<p class="fs-3 text-md-nowrap ">我們致力於為您提供無與倫比的奢華體驗與優質服務</p>
 							</div>
-							<nuxt-link class="w-100 btn viewmore-btn p-4 p-md-5 mb-4" to="/">
+							<nuxt-link class="w-100 btn viewmore-btn p-4 p-md-5 mb-4" to="/reservation">
 								<span class="col-7 col-md-8 fs-5 text-end">
 									立即訂房
 								</span>
@@ -52,8 +52,13 @@ const bannerSwiperConfig = {
 <style lang="scss" scoped>
 
 .banner-wrap {
+	@include media-md {
+		padding: 12.25rem 0 7.25rem;
+		background-image: url('/image/desktop/banner.png');
+	}
+
 	position: relative;
-	padding: 12.25rem 0 7.25rem;
+	padding: 2.5rem 1.25rem ;
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: cover;
