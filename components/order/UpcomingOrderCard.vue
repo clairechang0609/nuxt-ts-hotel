@@ -1,7 +1,7 @@
 <template>
 	<div class="card rounded-4">
 		<div class="card-body text-gray-80 p-3 p-md-5">
-			<p class="fs-sm fs-md-normal mb-2">預訂參考編號：{{ order?._id }}</p>
+			<p class="fs-sm fs-md-normal mb-2" v-if="order">預訂參考編號：{{ order?._id }}</p>
 			<h5 class="card-title text-black fs-normal fs-md-5 mb-4 mb-md-5">即將來的行程</h5>
 			<div class="fw-bold" v-if="order">
 				<div class="image-wrap rounded-3 overflow-hidden mb-4 mb-md-5">
@@ -39,6 +39,10 @@
 					</ul>
 				</div>
 				<slot />
+			</div>
+			<div class="my-5 d-flex flex-column align-items-center justify-content-center" v-else>
+				<h6 class="text-gray-60 mb-4">目前沒有行程</h6>
+				<a href="/all-rooms" class="btn btn-primary px-5">快速預約</a>
 			</div>
 		</div>
 	</div>
