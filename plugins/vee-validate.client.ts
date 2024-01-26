@@ -8,6 +8,14 @@ Object.keys(allRules).forEach(ruleKey => {
 	defineRule(ruleKey, (allRules as any)[ruleKey]);
 });
 
+// 自訂密碼驗證
+defineRule('password', (value: string) => {
+	if (!/^(?=.*[a-zA-Z])(?=.*\d).{8,}$/.test(value)) {
+		return '密碼需包含英文及數字';
+	}
+	return true;
+});
+
 // 配置訊息
 configure({
 	generateMessage: localize({ zh_TW: zhTW }),

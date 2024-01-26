@@ -8,20 +8,23 @@
 				<VeeForm v-if="currentStep === 1" v-slot="{ meta: globalMata }">
 					<div class="mb-3">
 						<label for="email" class="form-label">電子信箱</label>
-						<VeeField name="email" label="電子信箱" rules="required" v-model="form.email" v-slot="{ field }">
-							<input type="email" class="form-control" id="email" placeholder="hello@exsample.com" v-bind="field">
+						<VeeField name="email" label="電子信箱" rules="required|email" v-model="form.email" v-slot="{ field, errors }">
+							<input type="email" class="form-control" id="email" placeholder="hello@exsample.com" v-bind="field" :class="{ 'is-invalid': errors.length }">
+							<VeeErrorMessage name="email" class="form-text text-danger mt-2" />
 						</VeeField>
 					</div>
 					<div class="mb-3">
 						<label for="password" class="form-label">密碼</label>
-						<VeeField name="password" label="密碼" rules="required" v-model="form.password" v-slot="{ field }">
-							<input type="password" class="form-control" id="password" placeholder="請輸入密碼" v-bind="field">
+						<VeeField name="password" label="密碼" rules="required|min:8|password" v-model="form.password" v-slot="{ field, errors }">
+							<input type="password" class="form-control" id="password" placeholder="請輸入密碼" v-bind="field" :class="{ 'is-invalid': errors.length }">
+							<VeeErrorMessage name="password" class="form-text text-danger mt-2" />
 						</VeeField>
 					</div>
 					<div class="">
 						<label for="confirm-password" class="form-label">確認密碼</label>
-						<VeeField name="confirm-password" label="密碼" rules="required" v-model="form.confirmPassword" v-slot="{ field }">
-							<input type="password" class="form-control" id="confirm-password" placeholder="請再輸入一次密碼" v-bind="field">
+						<VeeField name="confirm-password" label="密碼" :rules="{ required: true, is: form.password }" v-model="form.confirmPassword" v-slot="{ field, errors }">
+							<input type="password" class="form-control" id="confirm-password" placeholder="請再輸入一次密碼" v-bind="field" :class="{ 'is-invalid': errors.length }">
+							<VeeErrorMessage name="confirm-password" class="form-text text-danger mt-2" />
 						</VeeField>
 					</div>
 					<button type="button" class="w-100 btn btn-primary mt-5 mb-3" :disabled="!globalMata.valid" @click="submit('first')">下一步</button>
@@ -29,65 +32,73 @@
 				<VeeForm v-else v-slot="{ meta: globalMata }">
 					<div class="mb-3">
 						<label for="name" class="form-label">姓名</label>
-						<VeeField name="name" label="姓名" rules="required" v-model="form.name" v-slot="{ field }">
-							<input type="text" class="form-control" id="name" placeholder="請輸入姓名" v-bind="field">
+						<VeeField name="name" label="姓名" rules="required" v-model="form.name" v-slot="{ field, errors }">
+							<input type="text" class="form-control" id="name" placeholder="請輸入姓名" v-bind="field" :class="{ 'is-invalid': errors.length }">
+							<VeeErrorMessage name="name" class="form-text text-danger mt-2" />
 						</VeeField>
 					</div>
 					<div class="mb-3">
 						<label for="mobile" class="form-label">手機號碼</label>
-						<VeeField name="mobile" label="手機號碼" rules="required" v-model="form.mobile" v-slot="{ field }">
-							<input type="text" class="form-control" id="mobile" placeholder="請輸入手機號碼" v-bind="field">
+						<VeeField name="mobile" label="手機號碼" rules="required" v-model="form.mobile" v-slot="{ field, errors }">
+							<input type="text" class="form-control" id="mobile" placeholder="請輸入手機號碼" v-bind="field" :class="{ 'is-invalid': errors.length }">
+							<VeeErrorMessage name="mobile" class="form-text text-danger mt-2" />
 						</VeeField>
 					</div>
 					<div class="mb-3 row">
 						<label for="birthday" class="form-label">生日</label>
 						<div class="col">
-							<VeeField name="year" label="年" rules="required" v-model="form.year" v-slot="{ field }">
-								<select class="form-control" id="year" v-bind="field">
+							<VeeField name="year" label="年" rules="required" v-model="form.year" v-slot="{ field, errors }">
+								<select class="form-control" id="year" v-bind="field" :class="{ 'is-invalid': errors.length }">
 									<option value="" disabled selected>年</option>
 									<option v-for="(item, index) in years" :value="item.id" :key="index">{{ item.name }}</option>
 								</select>
+								<VeeErrorMessage name="year" class="form-text text-danger mt-2" />
 							</VeeField>
 						</div>
 						<div class="col px-0">
-							<VeeField name="month" label="月" rules="required" v-model="form.month" v-slot="{ field }">
-								<select class="form-control" id="month" v-bind="field">
+							<VeeField name="month" label="月" rules="required" v-model="form.month" v-slot="{ field, errors }">
+								<select class="form-control" id="month" v-bind="field" :class="{ 'is-invalid': errors.length }">
 									<option value="" disabled selected>月</option>
 									<option v-for="(item, index) in months" :value="item.id" :key="index">{{ item.name }}</option>
 								</select>
+								<VeeErrorMessage name="month" class="form-text text-danger mt-2" />
 							</VeeField>
 						</div>
 						<div class="col">
-							<VeeField name="day" label="日" rules="required" v-model="form.day" v-slot="{ field }">
-								<select class="form-control" id="day" v-bind="field">
+							<VeeField name="day" label="日" rules="required" v-model="form.day" v-slot="{ field, errors }">
+								<select class="form-control" id="day" v-bind="field" :class="{ 'is-invalid': errors.length }">
 									<option value="" disabled selected>日</option>
 									<option v-for="(item, index) in days" :value="item.id" :key="index">{{ item.name }}</option>
 								</select>
+								<VeeErrorMessage name="day" class="form-text text-danger mt-2" />
 							</VeeField>
 						</div>
 					</div>
 					<div class="mb-3 row">
 						<label for="birthday" class="form-label">地址</label>
 						<div class="col-6 pe-0 mb-3">
-							<VeeField name="county" label="縣市" rules="required" v-model="form.county" v-slot="{ field }">
-								<select class="form-control" id="county" v-bind="field">
+							<VeeField name="county" label="縣市" rules="required" v-model="form.county" v-slot="{ field, errors }">
+								<select class="form-control" id="county" v-bind="field" :class="{ 'is-invalid': errors.length }">
 									<option value="" disabled selected>縣市</option>
 									<option v-for="(item, index) in getCounties" :value="item.id" :key="index">{{ item.name }}</option>
 								</select>
+								<VeeErrorMessage name="county" class="form-text text-danger mt-2" />
 							</VeeField>
 						</div>
 						<div class="col-6">
-							<VeeField name="distList" label="區域" rules="required" v-model="form.dist" v-slot="{ field }">
-								<select class="form-control" id="distList" v-bind="field">
+							<VeeField name="distList" label="區域" rules="required" v-model="form.dist" v-slot="{ field, errors }">
+								<select class="form-control" id="distList" v-bind="field" :class="{ 'is-invalid': errors.length }">
 									<option value="" disabled selected>區域</option>
 									<option v-for="(item, index) in getDist(form.county)" :value="item.zipcode" :key="index">{{ item.city }}</option>
 								</select>
+								<VeeErrorMessage name="distList" class="form-text text-danger mt-2" />
 							</VeeField>
 						</div>
 						<div class="col-12">
-							<VeeField name="address" label="地址" rules="required" v-slot="{ field }">
-								<input type="text" class="form-control" id="address" placeholder="請輸入詳細地址" v-bind="field" v-model="form.address">
+							<VeeField name="address" label="地址" rules="required" v-slot="{ field, errors }">
+								<input type="text" class="form-control" id="address" placeholder="請輸入詳細地址" v-bind="field" v-model="form.address" :class="{ 'is-invalid': errors.length }">
 							</VeeField>
+							<VeeErrorMessage name="address" class="form-text text-danger mt-2" />
 						</div>
 					</div>
 					<div class="form-check">
@@ -148,26 +159,6 @@ const form = ref({
 	address: '',
 	isAgree: false
 });
-// 檢查密碼是否符合規則
-const checkPassword = callback => {
-	if (form.value.password !== form.value.confirmPassword) {
-		$notify({
-			type: 'danger',
-			text: '密碼與確認密碼不相符'
-		});
-		return;
-	}
-	// 檢查密碼是否包含英文及數字
-	const regex = /^(?=.*[a-zA-Z])(?=.*\d).{8,}$/;
-	if (!regex.test(form.value.password)) {
-		$notify({
-			type: 'danger',
-			text: '密碼必須包含英文及數字，且長度需大於8'
-		});
-		return;
-	}
-	callback();
-};
 // 檢查信箱是否已被註冊
 const verifyEmail = async () => {
 	const configData = {
@@ -218,7 +209,7 @@ const register = async () => {
 const submit = step => {
 	switch (step) {
 	case 'first':
-		checkPassword(verifyEmail);
+		verifyEmail();
 		break;
 	case 'second':
 		register();
