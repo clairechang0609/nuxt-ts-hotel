@@ -39,7 +39,8 @@ export default defineNuxtConfig({
 		'@pinia/nuxt',
 		'@pinia-plugin-persistedstate/nuxt',
 		'@vee-validate/nuxt',
-		'nuxt-swiper'
+		'nuxt-swiper',
+		'@samk-dev/nuxt-vcalendar'
 	],
 	veeValidate: {
 		// 啟用 auto imports
@@ -53,6 +54,10 @@ export default defineNuxtConfig({
 		}
 	},
 	swiper: {
+		modules: [
+			'pagination',
+			'navigation'
+		],
 		prefix: 'Swiper'
 	},
 	stylelint: {
