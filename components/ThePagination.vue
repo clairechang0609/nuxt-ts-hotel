@@ -79,14 +79,6 @@ const getCurrentPage = computed({
 </script>
 
 <style lang="scss" scoped>
-.form-select {
-	max-width: 50px;
-	background-position: right 5px center;
-	background-size: auto;
-	border-radius: 0.25rem;
-	background-image: url('~/assets/image/select.svg');
-}
-
 .page-link {
 	color: $gray-60;
 	background-color: transparent;
