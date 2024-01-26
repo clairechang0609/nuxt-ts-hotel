@@ -90,6 +90,7 @@ const logout = () => {
 	padding-right: 0.75rem;
 	padding-left: 0.75rem;
 	height: $header-height-sm;
+	transition: all 0.3s ease-in-out;
 
 	@include media-md {
 		padding-right: 5rem;
