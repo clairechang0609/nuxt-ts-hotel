@@ -1,7 +1,7 @@
 <template>
 	<div class="bg-primary-10">
 		<div class="container container-with-navbar">
-			<NuxtLink :to="{path: 'room/1'}" class="mb-5 d-flex">
+			<NuxtLink :to="{path: `room/${$route.params}`}" class="mb-5 d-flex">
 				<img src="/image/ic_arrow left.svg" class="mr-2" alt="">
 				<div class="fs-3">確認訂房資訊</div>
 			</NuxtLink>
@@ -164,7 +164,7 @@ const { getCounties, getDist, districts } = useZipcode();
 
 // TODO: 這是假的 id
 const orderId = ref('65a8c16758767d4550207785');
-const router = useRouter();
+const route = useRoute();
 // 訂房人資訊
 const bookingInfo = ref({
 	name: '',
