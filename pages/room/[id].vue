@@ -17,7 +17,7 @@
 				</div>
 				<div class="col-6 h-100">
 					<div class="row g-2 h-100">
-						<div v-for="(item, index) in roomData.imageUrlList.slice(1)" :key="index" class="col-6">
+						<div v-for="(item, index) in roomData.imageUrlList.slice(1)" :key="index" class="col-6 h-50">
 							<img class="room-pic" :src="item" :alt="`room_${index+1}`">
 						</div>
 					</div>
@@ -104,25 +104,53 @@
 						<div class="card-body p-0">
 							<h2 class="card-title">尊爵雙人房</h2>
 							<p class="card-text">享受高級的住宿體驗，尊爵雙人房提供給您舒適寬敞的空間和精緻的裝潢。</p>
-							<div class="date-picker-wrap mb-3 d-flex gap-2">
-								<button type="button" class="btn btn-outline-primary text-black border-black d-flex flex-column align-items-start w-50 p-3">
-									<span>入住</span>
-									<span>2023 / 12 / 03</span>
-								</button>
-								<button type="button" class="btn btn-outline-primary text-black border-black d-flex flex-column align-items-start w-50 p-3">
-									<span>退房</span>
-									<span>2023 / 12 / 06</span>
-								</button>
+							<div class="position-relative">
+								<div class="date-picker-wrap mb-3 d-flex gap-2 position-relative">
+									<button type="button" class="btn btn-outline-primary text-black border-black d-flex flex-column align-items-start w-50 p-3"
+										@click="isOpenDesktopDatePickerModal = !isOpenDesktopDatePickerModal">
+										<span>入住</span>
+										<span>{{ transferToFullDate(range.start) }}</span>
+									</button>
+									<button type="button" class="btn btn-outline-primary text-black border-black d-flex flex-column align-items-start w-50 p-3"
+										@click="isOpenDesktopDatePickerModal = !isOpenDesktopDatePickerModal">
+										<span>退房</span>
+										<span>{{ transferToFullDate(range.end) }}</span>
+									</button>
+								</div>
+								<!-- desktop 日曆Modal -->
+								<div class="mobile-date-picker-modal-wrap" :class="isOpenDesktopDatePickerModal ? 'd-block' : ' d-none'">
+									<div class="modal-backdrop"></div>
+									<div class="mobile-date-picker-modal position-absolute bg-white">
+										<div class="mobile-date-picker-modal-header">
+											<h5 v-if="range.start || range.end">
+												{{ getNumberOfDays(range.start, range.end) }} 晚
+												<p class="text-gray-80 fs-sm mt-2">{{ transferToFullDate(range.start) }} - {{ transferToFullDate(range.end) }}</p>
+											</h5>
+											<h5 v-else>請選擇入住日期</h5>
+										</div>
+										<div class="mobile-date-picker-modal-body bg-white">
+											<client-only>
+												<!-- 選擇日期區塊 -->
+												<VDatePicker expanded :columns="2" :attributes="attrs" v-model.range="range" mode="date" transparent borderless color="gray" />
+											</client-only>
+										</div>
+										<div class="mobile-date-picker-modal-footer d-flex justify-content-end">
+											<button class="btn btn-white" type="button" @click="clearDate">清除日期</button>
+											<button class="btn btn-primary" type="button" @click="confirmDate('desktop')" :disabled="!range.start || !range.end">確定日期</button>
+										</div>
+									</div>
+								</div>
+							<!-- End -->
 							</div>
 							<!-- 調整人數 -->
 							<div class="peopel-info d-flex justify-content-between align-items-center">
 								<label for="">人數</label>
 								<div>
 									<button type="button" class="adjust-people-btn" @click="adjustPeople('decrease')" :disabled="totalPeople <= 1">
-										<img src="/image/ic_minus.svg" alt="minus icon">
+										<img :src="totalPeople <= 1 ? '/image/ic_minus_disabled.svg' : '/image/ic_minus.svg'" alt="minus icon">
 									</button>
 									<span class="mx-3">{{ totalPeople }}</span>
-									<button type="button" class="adjust-people-btn" @click="adjustPeople('increase')" :disabled="totalPeople > 3">
+									<button type="button" class="adjust-people-btn" @click="adjustPeople('increase')" :disabled="totalPeople >= roomData.maxPeople">
 										<img src="/image/ic_plus.svg" alt="plus icon">
 									</button>
 								</div>
@@ -144,7 +172,7 @@
 					<!-- 選擇日期 -->
 					<div class="w-100" v-if="!isConfirmDate">
 						<button class="btn btn-white w-50" type="button" @click="clearDate">清除日期</button>
-						<button class="btn btn-primary w-50" type="button" @click="confirmDate" :disabled="!range.start || !range.end">確定日期</button>
+						<button class="btn btn-primary w-50" type="button" @click="confirmDate('mobile')" :disabled="!range.start || !range.end">確定日期</button>
 					</div>
 					<!-- 選擇人數 -->
 					<div class="w-100" v-else-if="isConfirmDate && !isConfirmPeople">
@@ -162,7 +190,7 @@
 				</div>
 			</div>
 		</div>
-		<!-- 日曆 Modal -->
+		<!-- mobile 日曆 Modal -->
 		<div class="offcanvas offcanvas-bottom d-md-none" :class="{ 'confirm-date-modal-height': isConfirmDate, 'show': isOpenOffcanvasModal}" ref="offcanvasRef" tabindex="-1" id="offcanvasBottom" aria-labelledby="offcanvasBottomLabel">
 			<div class="offcanvas-header py-3 px-4 d-flex	flex-column align-items-start">
 				<button type="button" class="btn-close text-reset mb-2" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -188,7 +216,7 @@
 							<img :src="totalPeople <= 1 ? '/image/ic_minus_disabled.svg' : '/image/ic_minus.svg'" alt="minus icon">
 						</button>
 						<span class="mx-3">{{ totalPeople || 0 }}</span>
-						<button type="button" class="adjust-people-btn" @click="adjustPeople('increase')" :disabled="totalPeople > 3">
+						<button type="button" class="adjust-people-btn" @click="adjustPeople('increase')" :disabled="totalPeople >= roomData.maxPeople">
 							<img src="/image/ic_plus.svg" alt="plus icon">
 						</button>
 					</div>
@@ -203,11 +231,12 @@ import type { GetRoomRes } from '@/types/rooms';
 
 const route = useRoute();
 const router = useRouter();
-const totalPeople = ref(2);
-const isOpenOffcanvasModal = ref(false);
-const offcanvasRef = ref<any>(null);
-const isConfirmDate = ref(false);
-const isConfirmPeople = ref(false);
+const totalPeople = ref<number>(2);
+const isOpenOffcanvasModal = ref<boolean>(false);
+const isOpenDesktopDatePickerModal = ref<boolean>(false);
+const offcanvasRef = ref<HTMLElement | null>(null);
+const isConfirmDate = ref<boolean>(false);
+const isConfirmPeople = ref<boolean>(false);
 const swiperConfig = {
 	modules: [ SwiperPagination ],
 	loop: true,
@@ -266,8 +295,11 @@ const openDatePickerModal = () => {
 	isOpenOffcanvasModal.value = !isOpenOffcanvasModal.value;
 };
 
-const confirmDate = () => {
+const confirmDate = (param: string) => {
 	isConfirmDate.value = true;
+	if (param === 'desktop') {
+		router.push({ name: 'reservation' });
+	}
 };
 
 const adjustPeople = (param: string) => {
@@ -382,12 +414,10 @@ const goBooking = () => {
 		}
 	}
 
-	.order-room-desktop {  // TODO:
-		position: sticky;
-		top: 120px;
-		right: 0;
-
+	.order-room-desktop {
 		.card	{
+			position: sticky;
+			top: 160px;
 			padding: 40px;
 
 			.card-header {
@@ -399,6 +429,27 @@ const goBooking = () => {
 			.card-body {
 				.card-text {
 					margin-bottom: 40px;
+				}
+
+				.date-picker-wrap {
+					z-index: 1060;
+				}
+
+				.mobile-date-picker-modal {
+					top: -32px;
+					right: -32px;
+					padding: 32px;
+					width: 740px;
+					border-radius: 20px;
+					z-index: 1055;
+
+					.mobile-date-picker-modal-header {
+						height: 54px;
+					}
+
+					.mobile-date-picker-modal-body {
+						padding-top: 40px;
+					}
 				}
 			}
 
@@ -422,13 +473,13 @@ const goBooking = () => {
 
 	.order-room-mobile {
 		padding: 12px;
-		z-index: 3999;
+		z-index: 1065;
 		border-top: 1px solid $gray-40;
 	}
 }
 
 .confirm-date-modal-height {
-	bottom: 137px;
+	bottom: 81px;
 	height: auto;
 }
 </style>

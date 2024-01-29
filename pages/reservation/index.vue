@@ -260,6 +260,9 @@ const submitForm = async () => {
 }
 
 .price-info-wrap {
+	position: sticky;
+	top: 40px;
+
 	hr {
 		margin: 24px 0;
 		width: 100%;
