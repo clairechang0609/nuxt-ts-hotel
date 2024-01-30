@@ -1,7 +1,7 @@
 <template>
 	<div class="bg-primary-10">
 		<div class="container container-with-navbar">
-			<NuxtLink :to="{path: `room/${$route.params}`}" class="mb-5 d-flex">
+			<NuxtLink :to="`/room/${booking.roomId}`" class="mb-5 d-flex">
 				<img src="/image/ic_arrow left.svg" class="mr-2" alt="">
 				<div class="fs-3">確認訂房資訊</div>
 			</NuxtLink>
@@ -12,30 +12,29 @@
 					<div class="mb-4 d-flex justify-content-between align-items-center">
 						<div>
 							<div class="title mb-2">選擇房型</div>
-							<p>尊爵雙人房</p>
+							<p>{{ roomData.name }}</p>
 						</div>
-						<span class="text-decoration-underline cursor-pointer">編輯</span>
 					</div>
 					<div class="mb-4 d-flex justify-content-between align-items-center">
 						<div>
 							<div class="title mb-2">訂房日期</div>
-							<p>入住：12 月 4 日星期二</p>
-							<p>退房：12 月 6 日星期三</p>
+							<p>入住：{{ transferDateToStr(booking.checkInDate) }}</p>
+							<p>退房：{{ transferDateToStr(booking.checkOutDate) }}</p>
 						</div>
-						<span class="text-decoration-underline cursor-pointer">編輯</span>
+						<NuxtLink :to="`/room/${booking.roomId}`" class="text-decoration-underline cursor-pointer">編輯</NuxtLink>
 					</div>
 					<div class="mb-4 d-flex justify-content-between align-items-center">
 						<div>
 							<div class="title mb-2">房客人數</div>
-							<p>2 人</p>
+							<p>{{ booking.peopleNum }} 人</p>
 						</div>
-						<span class="text-decoration-underline cursor-pointer">編輯</span>
+						<NuxtLink :to="`/room/${booking.roomId}`" class="text-decoration-underline cursor-pointer">編輯</NuxtLink>
 					</div>
 					<hr />
 					<!-- 訂房人資訊 -->
 					<div class="d-flex justify-content-between align-items-center mb-5">
 						<h4>訂房人資訊</h4>
-						<span class="text-decoration-underline cursor-pointer text-primary">套用會員資料</span>
+						<span class="text-decoration-underline cursor-pointer text-primary" @click="setUserInfo">套用會員資料</span>
 					</div>
 					<VeeForm @submit="submitForm" v-slot="{ meta: globalMata }">
 						<div class="mb-4">
@@ -58,6 +57,7 @@
 								<input type="email" class="form-control" id="email" placeholder="請輸入電子信箱" v-bind="field">
 							</VeeField>
 						</div>
+						<!-- TODO: -->
 						<div class="mb-5 row gx-2">
 							<label for="confirm_email" class="form-label">地址</label>
 							<div class="col-6 pe-0 mb-3">
@@ -103,16 +103,6 @@
 							</div>
 						</div>
 					</div>
-					<!-- 房間格局 -->
-					<div class="mb-4">
-						<div class="title mb-3">房間格局</div>
-						<ul class="bg-white p-4 d-flex gap-4 rounded list-unstyled flex-wrap">
-							<li v-for="(item, index) in roomData.roomLayout" :key="`layout_${index+1}`">
-								<img src="/image/ic_check.svg" alt="" class="me-2">
-								<span>{{ item }}</span>
-							</li>
-						</ul>
-					</div>
 					<!-- 房內設備 -->
 					<div class="mb-4">
 						<div class="title mb-3">房內設備</div>
@@ -139,19 +129,19 @@
 					<div class="">
 						<h5 class="mb-4">價格詳情</h5>
 						<div class="d-flex justify-content-between">
-							<label>NT$ {{ roomData.price }} x 2 晚</label>
-							<span>NT$ 20,000</span>
+							<label>NT$ {{ toThousands(roomData.price) }} x {{ getNumberOfDays(booking.checkInDate, booking.checkOutDate) }} 晚</label>
+							<span>NT$ {{ toThousands(roomData.price*getNumberOfDays(booking.checkInDate, booking.checkOutDate)) }}</span>
 						</div>
-						<div class="d-flex justify-content-between">
+						<div class="discount d-flex justify-content-between">
 							<label>住宿折扣</label>
-							<span>-NT$ 1,000</span>
+							<span class="text-primary">-NT$ 1,000</span>
 						</div>
 						<hr />
 						<div class="d-flex justify-content-between mb-4">
 							<label>總價</label>
-							<span>NT$ 19,000</span>
+							<span>NT$ {{ toThousands(roomData.price*getNumberOfDays(booking.checkInDate, booking.checkOutDate) - 1000) }}</span>
 						</div>
-						<NuxtLink :to="`/reservation/success?id=${orderId}`" class="btn btn-primary w-100">確認訂房</NuxtLink>
+						<button type="submit" class="btn btn-primary w-100 w-md-auto" @click="submitForm">確認訂房</button>
 					</div>
 				</div>
 			</div>
@@ -159,60 +149,66 @@
 	</div>
 </template>
 
-<script setup>
-const { getCounties, getDist, districts } = useZipcode();
+<script lang="ts" setup>
+import type { User } from '@/types/user';
+import type { Order } from '@/types/order';
 
-// TODO: 這是假的 id
-const orderId = ref('65a8c16758767d4550207785');
-const route = useRoute();
+const { getCounties, getDist } = useZipcode();
+const { $bookingStore } = useNuxtApp();
+const router = useRouter();
+
+const bookingStore = $bookingStore;
+const { booking } = bookingStore;
+
 // 訂房人資訊
-const bookingInfo = ref({
+const defaultBookingInfo: User = {
 	name: '',
 	phone: '',
 	email: '',
+	birthday: '',
 	address: {
-		detail: '',
-		zipcode: ''
+		zipcode: '',
+		detail: ''
 	},
 	_id: ''
-});
+};
+const bookingInfo = ref<User>({ ...defaultBookingInfo });
 const county = ref('');
 
-const roomData = ref({
-	name: '尊爵雙人房',
-	description: '享受高級的住宿體驗，尊爵雙人房提供給您舒適寬敞的空間和精緻的裝潢。',
-	imageUrl: 'https://fakeimg.pl/300/',
-	imageUrlList: [
-		'https://github.com/hexschool/2022-web-layout-training/blob/main/typescript-hotel/%E6%A1%8C%E6%A9%9F%E7%89%88/room2-1.png?raw=true',
-		'https://github.com/hexschool/2022-web-layout-training/blob/main/typescript-hotel/%E6%A1%8C%E6%A9%9F%E7%89%88/room2-2.png?raw=true',
-		'https://github.com/hexschool/2022-web-layout-training/blob/main/typescript-hotel/%E6%A1%8C%E6%A9%9F%E7%89%88/room2-3.png?raw=true',
-		'https://github.com/hexschool/2022-web-layout-training/blob/main/typescript-hotel/%E6%A1%8C%E6%A9%9F%E7%89%88/room2-4.png?raw=true',
-		'https://github.com/hexschool/2022-web-layout-training/blob/main/typescript-hotel/%E6%A1%8C%E6%A9%9F%E7%89%88/room2-5.png?raw=true'
-	],
-	areaInfo: '24坪',
-	bedInfo: '一張大床',
-	maxPeople: 4,
-	price: 10000,
-	status: 1,
-	roomLayout: [ '市景', '獨立衛浴', '客廳', '書房', '樓層電梯' ],
-	facilityInfo: [
-		{
-			title: '平面電視',
-			isProvide: true
-		}
-	],
-	amenityInfo: [
-		{
-			title: '衛生紙',
-			isProvide: true
-		}
-	],
-	_id: '653e4661336cdccc752127a0',
-	createdAt: '2023-10-29T11:47:45.641Z',
-	updatedAt: '2023-10-29T11:47:45.641Z'
+const { response: userRes, refresh: getUserInfo } = await useCustomFetch<User>('/api/v1/user', {
+	method: 'GET',
+	immediate: false
+});
+onMounted(async () => {
+	await getUserInfo();
+});
+
+const setUserInfo = () => {
+	bookingInfo.value = userRes.value?.result || bookingInfo.value;
+};
+
+// 拿房型資料
+const apiUrl = computed(() => `/api/v1/rooms/${booking.roomId}`);
+const roomData = computed(() => JSON.parse(JSON.stringify(roomRes.value?.result)));
+const { response: roomRes } = await useCustomFetch<any>(apiUrl.value, {
+	method: 'GET'
 });
 
 const submitForm = async () => {
+	const { response } = await useCustomFetch<Order>('/api/v1/orders', {
+		method: 'POST',
+		body: {
+			...booking,
+			checkInDate: transferToFullDate(booking.checkInDate),
+			checkOutDate: transferToFullDate(booking.checkOutDate),
+			userInfo: { ...JSON.parse(JSON.stringify(bookingInfo.value)) }
+		}
+	});
+	if (!response.value?.status) {
+		return;
+	}
+	router.push(`/reservation/success?id=${response.value.result._id}`);
+	return response.value.result;
 };
 
 </script>
@@ -261,7 +257,11 @@ const submitForm = async () => {
 
 .price-info-wrap {
 	position: sticky;
-	top: 40px;
+	top: 160px;
+
+	.discount {
+		margin-top: 12px;
+	}
 
 	hr {
 		margin: 24px 0;

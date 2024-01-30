@@ -51,16 +51,6 @@
 							</div>
 						</div>
 					</div>
-					<!-- 房間格局 -->
-					<div class="mb-4">
-						<div class="title mb-3">房間格局</div>
-						<ul class="bg-white p-4 d-flex gap-4 rounded list-unstyled flex-wrap">
-							<li v-for="(item, index) in roomData.roomLayout" :key="`layout_${index+1}`">
-								<img src="/image/ic_check.svg" alt="" class="me-2">
-								<span>{{ item }}</span>
-							</li>
-						</ul>
-					</div>
 					<!-- 房內設備 -->
 					<div class="mb-4">
 						<div class="title mb-3">房內設備</div>
@@ -102,8 +92,8 @@
 					<div class="card">
 						<div class="card-header fs-5">預訂房型</div>
 						<div class="card-body p-0">
-							<h2 class="card-title">尊爵雙人房</h2>
-							<p class="card-text">享受高級的住宿體驗，尊爵雙人房提供給您舒適寬敞的空間和精緻的裝潢。</p>
+							<h2 class="card-title">{{ roomData.name }}</h2>
+							<p class="card-text">{{ roomData.description }}</p>
 							<div class="position-relative">
 								<div class="date-picker-wrap mb-3 d-flex gap-2 position-relative">
 									<button type="button" class="btn btn-outline-primary text-black border-black d-flex flex-column align-items-start w-50 p-3"
@@ -131,7 +121,7 @@
 										<div class="mobile-date-picker-modal-body bg-white">
 											<client-only>
 												<!-- 選擇日期區塊 -->
-												<VDatePicker expanded :columns="2" :attributes="attrs" v-model.range="range" mode="date" transparent borderless color="gray" />
+												<VDatePicker expanded :columns="2" v-model.range="range" mode="date" transparent borderless color="gray" />
 											</client-only>
 										</div>
 										<div class="mobile-date-picker-modal-footer d-flex justify-content-end">
@@ -156,11 +146,12 @@
 								</div>
 							</div>
 							<p class="total-price fs-5 text-primary">NT$ {{ toThousands(roomData.price) }}</p>
-							<NuxtLink to="/reservation" class="booking-btn btn btn-primary w-100">立即預訂</NuxtLink>
-							<!-- <NuxtLink :to="{ name:'/reservation', params: { id: `${route.params?.id}` }}" class="booking-btn btn btn-primary w-100">立即預訂</NuxtLink> -->
+							<!-- TODO: -->
+							<button type="button" class="booking-btn btn btn-primary w-100" @click="goBooking">立即預訂</button>
 						</div>
 					</div>
 				</div>
+				<!-- Offcanvas Modal -->
 				<div v-if="!isOpenOffcanvasModal" class="order-room-mobile d-flex justify-content-between align-items-center d-md-none bg-white position-fixed bottom-0 fs-sm">
 					<!-- 未打開日曆 -->
 					<div>NT$ {{ toThousands(roomData.price) }} / 晚</div>
@@ -191,7 +182,8 @@
 			</div>
 		</div>
 		<!-- mobile 日曆 Modal -->
-		<div class="offcanvas offcanvas-bottom d-md-none" :class="{ 'confirm-date-modal-height': isConfirmDate, 'show': isOpenOffcanvasModal}" ref="offcanvasRef" tabindex="-1" id="offcanvasBottom" aria-labelledby="offcanvasBottomLabel">
+		<div class="offcanvas offcanvas-bottom d-md-none" :class="{ 'confirm-date-modal-height': isConfirmDate, 'show': isOpenOffcanvasModal}"
+			ref="offcanvasRef" tabindex="-1" id="offcanvasBottom" aria-labelledby="offcanvasBottomLabel">
 			<div class="offcanvas-header py-3 px-4 d-flex	flex-column align-items-start">
 				<button type="button" class="btn-close text-reset mb-2" data-bs-dismiss="offcanvas" aria-label="Close"></button>
 				<h5 v-if="range.start || range.end" class="offcanvas-title" id="offcanvasBottomLabel">
@@ -204,7 +196,7 @@
 				<div v-if="!isConfirmDate">
 					<client-only>
 						<!-- 選擇日期區塊 -->
-						<VDatePicker expanded :rows="2" :attributes="attrs" v-model.range="range" mode="date" transparent borderless color="gray" />
+						<VDatePicker expanded :rows="2" v-model.range="range" mode="date" transparent borderless color="gray" />
 					</client-only>
 				</div>
 				<div v-else>
@@ -229,14 +221,18 @@
 <script lang="ts" setup>
 import type { GetRoomRes } from '@/types/rooms';
 
+const { $bookingStore } = useNuxtApp();
+const bookingStore = $bookingStore;
+const { booking } = bookingStore;
 const route = useRoute();
 const router = useRouter();
-const totalPeople = ref<number>(2);
+const totalPeople = ref<number>(booking.peopleNum || 2);
 const isOpenOffcanvasModal = ref<boolean>(false);
 const isOpenDesktopDatePickerModal = ref<boolean>(false);
 const offcanvasRef = ref<HTMLElement | null>(null);
 const isConfirmDate = ref<boolean>(false);
 const isConfirmPeople = ref<boolean>(false);
+
 const swiperConfig = {
 	modules: [ SwiperPagination ],
 	loop: true,
@@ -249,19 +245,11 @@ const swiperConfig = {
 
 // VDatePicker
 const range = ref<any>({
-	start: new Date(),
-	end: new	Date(new Date().setDate(new Date().getDate() + 1))
+	start: booking.checkInDate || new Date(),
+	end: booking.checkOutDate || new Date(new Date().setDate(new Date().getDate() + 1))
 });
-const attrs = ref([
-	{
-		key: 'today'
-		// dates: new Date()
-		// highlight: true,
-	}
-]);
 
 onMounted(() => {
-	// console.log('offcanvasRef:', offcanvasRef.value);
 	offcanvasRef.value!.addEventListener('shown.bs.offcanvas', function() {
 		isOpenOffcanvasModal.value = true;
 	});
@@ -272,7 +260,7 @@ onMounted(() => {
 
 const apiUrl = computed(() => `/api/v1/rooms/${route.params?.id}`);
 const roomData = computed(() => JSON.parse(JSON.stringify(roomRes.value?.result)));
-const { response: roomRes, refresh: getRooms } = await useCustomFetch<GetRoomRes>(apiUrl.value, {
+const { response: roomRes } = await useCustomFetch<GetRoomRes>(apiUrl.value, {
 	method: 'GET'
 });
 
@@ -286,11 +274,6 @@ const transferToOnlyDate = (param: Date) => {
 	return `${dateTime.getMonth() + 1} / ${dateTime.getDate()}`;
 };
 
-const transferToFullDate = (param: Date) => {
-	const dateTime = new Date(param);
-	return `${dateTime.getFullYear()} / ${dateTime.getMonth() + 1} / ${dateTime.getDate()}`;
-};
-
 const openDatePickerModal = () => {
 	isOpenOffcanvasModal.value = !isOpenOffcanvasModal.value;
 };
@@ -298,7 +281,7 @@ const openDatePickerModal = () => {
 const confirmDate = (param: string) => {
 	isConfirmDate.value = true;
 	if (param === 'desktop') {
-		router.push({ name: 'reservation' });
+		isOpenDesktopDatePickerModal.value = false;
 	}
 };
 
@@ -315,7 +298,12 @@ const confirmPeople = () => {
 };
 
 const goBooking = () => {
-	router.push({ name: 'reservation' });
+	booking.roomId = route.params?.id;
+	booking.checkInDate = range.value.start;
+	booking.checkOutDate = range.value.end;
+	booking.peopleNum = totalPeople.value;
+
+	router.push(`/reservation/?id=${route.params?.id}`);
 };
 </script>
 
