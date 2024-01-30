@@ -80,6 +80,9 @@
 <script lang="ts" setup>
 import type { GetRoomRes } from '@/types/rooms';
 
+definePageMeta({
+	layout: 'main'
+});
 const bannerImages = ref([
 	'/image/desktop/banner.png',
 	'/image/desktop/room2-1.png',
