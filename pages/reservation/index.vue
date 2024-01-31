@@ -1,7 +1,7 @@
 <template>
 	<div class="bg-primary-10">
 		<div class="container container-with-navbar">
-			<NuxtLink :to="`/room/${booking.roomId}`" class="mb-5 d-flex">
+			<NuxtLink :to="`/room/${route.query?.id}`" class="mb-5 d-flex">
 				<img src="/image/ic_arrow left.svg" class="mr-2" alt="">
 				<div class="fs-3">確認訂房資訊</div>
 			</NuxtLink>
@@ -22,14 +22,14 @@
 							<p>入住：{{ transferDateToStr(booking.checkInDate) }}</p>
 							<p>退房：{{ transferDateToStr(booking.checkOutDate) }}</p>
 						</div>
-						<NuxtLink :to="`/room/${booking.roomId}`" class="text-decoration-underline cursor-pointer">編輯</NuxtLink>
+						<NuxtLink :to="`/room/${route.query?.id}`" class="text-decoration-underline cursor-pointer">編輯</NuxtLink>
 					</div>
 					<div class="mb-4 d-flex justify-content-between align-items-center">
 						<div>
 							<div class="title mb-2">房客人數</div>
 							<p>{{ booking.peopleNum }} 人</p>
 						</div>
-						<NuxtLink :to="`/room/${booking.roomId}`" class="text-decoration-underline cursor-pointer">編輯</NuxtLink>
+						<NuxtLink :to="`/room/${route.query?.id}`" class="text-decoration-underline cursor-pointer">編輯</NuxtLink>
 					</div>
 					<hr />
 					<!-- 訂房人資訊 -->
@@ -37,7 +37,7 @@
 						<h4>訂房人資訊</h4>
 						<span class="text-decoration-underline cursor-pointer text-primary" @click="setUserInfo">套用會員資料</span>
 					</div>
-					<VeeForm @submit="submitForm" v-slot="{ meta: globalMata }">
+					<VeeForm>
 						<div class="mb-4">
 							<label for="name" class="form-label">姓名</label>
 							<VeeField name="name" label="姓名" rules="required" v-model="bookingInfo.name" v-slot="{ field, errors }">
@@ -61,7 +61,7 @@
 						<div class="mb-5 row gx-2">
 							<label for="confirm_email" class="form-label">地址</label>
 							<div class="col-6 pe-0 mb-3">
-								<VeeField name="county" label="縣市" rules="required" v-model="county" @change="bookingInfo.address.zipcode = ''" v-slot="{ field, errors }">
+								<VeeField name="county" label="縣市" rules="required" v-model="bookingInfo.address.county" @change="bookingInfo.address.zipcode = ''" v-slot="{ field, errors }">
 									<select class="form-select" id="county" v-bind="field" :class="{ 'is-invalid': errors.length }">
 										<option value="" :selected="county === ''" disabled>縣市</option>
 										<option v-for="item in getCounties" :value="item.id" :key="item.id">{{ item.name }}</option>
@@ -72,7 +72,7 @@
 								<VeeField name="distList" label="區域" rules="required" v-model="bookingInfo.address.zipcode" v-slot="{ field, errors }">
 									<select class="form-select" id="distList" v-bind="field" :class="{ 'is-invalid': errors.length }">
 										<option value="" :selected="bookingInfo.address.zipcode === ''" disabled>區域</option>
-										<option v-for="item in getDist(county)" :value="item.zipcode" :key="item.id">{{ item.city }}</option>
+										<option v-for="item in getDist(bookingInfo.address.county as string)" :value="item.zipcode" :key="item.id">{{ item.city }}</option>
 									</select>
 								</VeeField>
 							</div>
@@ -125,12 +125,12 @@
 					</div>
 				</div>
 				<div class="price-info-wrap card col-12 p-4 p-md-5 col-md-4">
-					<img :src="roomData.imageUrlList[0]" class="rounded mb-4" alt="room">
+					<img :src="roomData?.imageUrlList?.[0]" class="rounded mb-4" alt="room">
 					<div class="">
 						<h5 class="mb-4">價格詳情</h5>
 						<div class="d-flex justify-content-between">
-							<label>NT$ {{ toThousands(roomData.price) }} x {{ getNumberOfDays(booking.checkInDate, booking.checkOutDate) }} 晚</label>
-							<span>NT$ {{ toThousands(roomData.price*getNumberOfDays(booking.checkInDate, booking.checkOutDate)) }}</span>
+							<label>NT$ {{ toThousands(roomData.price || 0) }} x {{ getNumberOfDays(booking.checkInDate, booking.checkOutDate) }} 晚</label>
+							<span>NT$ {{ toThousands(roomData.price * getNumberOfDays(booking.checkInDate, booking.checkOutDate)) || 0 }}</span>
 						</div>
 						<div class="discount d-flex justify-content-between">
 							<label>住宿折扣</label>
@@ -139,9 +139,9 @@
 						<hr />
 						<div class="d-flex justify-content-between mb-4">
 							<label>總價</label>
-							<span>NT$ {{ toThousands(roomData.price*getNumberOfDays(booking.checkInDate, booking.checkOutDate) - 1000) }}</span>
+							<span>NT$ {{ toThousands(roomData.price * getNumberOfDays(booking.checkInDate, booking.checkOutDate) - 1000) }}</span>
 						</div>
-						<button type="submit" class="btn btn-primary w-100 w-md-auto" @click="submitForm">確認訂房</button>
+						<button type="button" class="btn btn-primary w-100 w-md-auto" @click="submitForm">確認訂房</button>
 					</div>
 				</div>
 			</div>
@@ -152,11 +152,14 @@
 <script lang="ts" setup>
 import type { User } from '@/types/user';
 import type { Order } from '@/types/order';
+import type { GetRoomRes } from '@/types/rooms';
 
-const { getCounties, getDist } = useZipcode();
+const { getCounties, getDist, districts } = useZipcode();
 const router = useRouter();
+const route = useRoute();
 const { $bookingStore } = useNuxtApp();
-const { booking } = $bookingStore;
+const { booking, clearBookingInfo } = $bookingStore;
+const county = ref('');
 
 // 訂房人資訊
 const defaultBookingInfo: User = {
@@ -165,13 +168,31 @@ const defaultBookingInfo: User = {
 	email: '',
 	birthday: '',
 	address: {
-		zipcode: '',
-		detail: ''
+		zipcode: 0,
+		detail: '',
+		county: '',
+		city: ''
 	},
 	_id: ''
 };
+// 房型資訊
+const defaultRoomData: GetRoomRes = {
+	name: '',
+	description: '',
+	imageUrl: '',
+	imageUrlList: [],
+	areaInfo: '',
+	bedInfo: '',
+	maxPeople: 0,
+	price: 0,
+	status: 1,
+	facilityInfo: [],
+	amenityInfo: [],
+	_id: '',
+	createdAt: '',
+	updatedAt: ''
+};
 const bookingInfo = ref<User>({ ...defaultBookingInfo });
-const county = ref('');
 
 const { response: userRes, refresh: getUserInfo } = await useCustomFetch<User>('/api/v1/user', {
 	method: 'GET',
@@ -185,11 +206,27 @@ const setUserInfo = () => {
 	bookingInfo.value = userRes.value?.result || bookingInfo.value;
 };
 
+watch(() => bookingInfo.value.address.zipcode, () => {
+	const result = districts.find(item => String(item.zipcode) === String(bookingInfo.value.address.zipcode));
+
+	bookingInfo.value.address.county = result?.county || '';
+	bookingInfo.value.address.zipcode = result?.zipcode || 0;
+}, {
+	immediate: true
+});
+
 // 拿房型資料
-const apiUrl = computed(() => `/api/v1/rooms/${booking.roomId}`);
-const roomData = computed(() => JSON.parse(JSON.stringify(roomRes.value?.result)));
-const { response: roomRes } = await useCustomFetch<any>(apiUrl.value, {
+const apiUrl = computed(() => `/api/v1/rooms/${route.query?.id}`);
+const roomData = ref<GetRoomRes>({ ...defaultRoomData });
+const { response: roomRes } = await useCustomFetch<GetRoomRes>(apiUrl.value, {
 	method: 'GET'
+});
+watch(() => roomRes, () => {
+	if (roomRes.value?.result) {
+		roomData.value = roomRes.value?.result;
+	}
+}, {
+	immediate: true
 });
 
 const submitForm = async () => {
@@ -206,6 +243,9 @@ const submitForm = async () => {
 		return;
 	}
 	router.push(`/reservation/success?id=${response.value.result._id}`);
+
+	clearBookingInfo();
+
 	return response.value.result;
 };
 

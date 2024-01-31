@@ -1,7 +1,9 @@
 export interface User {
 	address: {
-		zipcode: string;
+		zipcode: string | number;
 		detail: string;
+		county?: string;
+		city?: string;
 	},
 	_id: string;
 	name: string;
