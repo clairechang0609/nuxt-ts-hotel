@@ -9,7 +9,7 @@ export const useBookingStore = defineStore('booking', () => {
 	const defaultBooking = {
 		roomId: '',
 		checkInDate: new Date(),
-		checkOutDate: new Date(),
+		checkOutDate: new Date(new Date().setDate(new Date().getDate() + 1)),
 		peopleNum: 0
 	};
 	const booking = ref<BookingInfo>({ ...defaultBooking });

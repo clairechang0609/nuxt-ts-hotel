@@ -1,7 +1,7 @@
 <template>
 	<div class="bg-primary-10">
 		<!-- 手機板Banner -->
-		<div class="room-banner-mobile position-relative col-12 d-lg-none">
+		<div class="room-banner-mobile position-relative col-12 d-md-none">
 			<Swiper class="room-swiper" v-bind="swiperConfig">
 				<SwiperSlide v-for="(item, index) in roomData.imageUrlList" :key="index">
 					<img class="room-pic" :src="item" :alt="`room${index+1}`">
@@ -10,7 +10,7 @@
 			<button type="button" class="check-more-btn btn btn-outline-primary bg-white me-3 position-absolute">看更多</button>
 		</div>
 		<!-- 電腦版Banner -->
-		<div class="room-banner-desktop position-relative col-12 d-none d-lg-block">
+		<div class="room-banner-desktop position-relative col-12 d-none d-md-block">
 			<div class="room-wrap row g-0">
 				<div class="col-6 h-100 pe-2">
 					<img class="room-pic" :src="roomData.imageUrlList[0]" alt="">
@@ -95,13 +95,13 @@
 							<h2 class="card-title">{{ roomData.name }}</h2>
 							<p class="card-text">{{ roomData.description }}</p>
 							<div class="position-relative">
-								<div class="date-picker-wrap mb-3 d-flex gap-2 position-relative">
-									<button type="button" class="btn btn-outline-primary text-black border-black d-flex flex-column align-items-start w-50 p-3"
+								<div class="date-picker-wrap d-flex gap-2 position-relative">
+									<button type="button" class="date-picker-btn btn btn-outline-primary text-black border-black d-flex flex-column align-items-start w-50 p-3"
 										@click="isOpenDesktopDatePickerModal = !isOpenDesktopDatePickerModal">
 										<span>入住</span>
 										<span>{{ transferToFullDate(range.start) }}</span>
 									</button>
-									<button type="button" class="btn btn-outline-primary text-black border-black d-flex flex-column align-items-start w-50 p-3"
+									<button type="button" class="date-picker-btn btn btn-outline-primary text-black border-black d-flex flex-column align-items-start w-50 p-3"
 										@click="isOpenDesktopDatePickerModal = !isOpenDesktopDatePickerModal">
 										<span>退房</span>
 										<span>{{ transferToFullDate(range.end) }}</span>
@@ -146,8 +146,7 @@
 								</div>
 							</div>
 							<p class="total-price fs-5 text-primary">NT$ {{ toThousands(roomData.price) }}</p>
-							<!-- TODO: -->
-							<button type="button" class="booking-btn btn btn-primary w-100" @click="goBooking">立即預訂</button>
+							<button type="button" class="booking-btn btn btn-primary w-100" @click="goBooking" :disabled="!range.start || !range.end">立即預訂</button>
 						</div>
 					</div>
 				</div>
@@ -222,8 +221,7 @@
 import type { GetRoomRes } from '@/types/rooms';
 
 const { $bookingStore } = useNuxtApp();
-const bookingStore = $bookingStore;
-const { booking } = bookingStore;
+const { booking, setBookingInfo } = $bookingStore;
 const route = useRoute();
 const router = useRouter();
 const totalPeople = ref<number>(booking.peopleNum || 2);
@@ -245,8 +243,8 @@ const swiperConfig = {
 
 // VDatePicker
 const range = ref<any>({
-	start: booking.checkInDate || new Date(),
-	end: booking.checkOutDate || new Date(new Date().setDate(new Date().getDate() + 1))
+	start: booking.checkInDate,
+	end: booking.checkOutDate
 });
 
 onMounted(() => {
@@ -298,12 +296,14 @@ const confirmPeople = () => {
 };
 
 const goBooking = () => {
-	booking.roomId = route.params?.id;
-	booking.checkInDate = range.value.start;
-	booking.checkOutDate = range.value.end;
-	booking.peopleNum = totalPeople.value;
+	setBookingInfo({
+		roomId: route.params?.id,
+		checkInDate: range.value.start,
+		checkOutDate: range.value.end,
+		peopleNum: totalPeople.value
+	});
 
-	router.push(`/reservation/?id=${route.params?.id}`);
+	router.push(`/reservation?id=${route.params?.id}`);
 };
 </script>
 
@@ -421,6 +421,11 @@ const goBooking = () => {
 
 				.date-picker-wrap {
 					z-index: 1060;
+					margin-bottom: 1rem;
+
+					.date-picker-btn {
+						height: 82px;
+					}
 				}
 
 				.mobile-date-picker-modal {
@@ -432,7 +437,7 @@ const goBooking = () => {
 					z-index: 1055;
 
 					.mobile-date-picker-modal-header {
-						height: 54px;
+						height: 82px;
 					}
 
 					.mobile-date-picker-modal-body {
