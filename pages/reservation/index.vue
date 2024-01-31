@@ -1,7 +1,7 @@
 <template>
 	<div class="bg-primary-10">
 		<div class="container container-with-navbar">
-			<NuxtLink :to="`/room/${booking.roomId}`" class="mb-5 d-flex">
+			<NuxtLink :to="`/room/${route.query?.id}`" class="mb-5 d-flex">
 				<img src="/image/ic_arrow left.svg" class="mr-2" alt="">
 				<div class="fs-3">確認訂房資訊</div>
 			</NuxtLink>
@@ -12,7 +12,7 @@
 					<div class="mb-4 d-flex justify-content-between align-items-center">
 						<div>
 							<div class="title mb-2">選擇房型</div>
-							<p>{{ roomData.name }}</p>
+							<p>{{ roomData?.name }}</p>
 						</div>
 						<NuxtLink :to="`/all-rooms`" class="text-decoration-underline cursor-pointer">編輯</NuxtLink>
 					</div>
@@ -22,14 +22,14 @@
 							<p>入住：{{ transferDateToStr(booking.checkInDate) }}</p>
 							<p>退房：{{ transferDateToStr(booking.checkOutDate) }}</p>
 						</div>
-						<NuxtLink :to="`/room/${booking.roomId}`" class="text-decoration-underline cursor-pointer">編輯</NuxtLink>
+						<NuxtLink :to="`/room/${route.query?.id}`" class="text-decoration-underline cursor-pointer">編輯</NuxtLink>
 					</div>
 					<div class="mb-4 d-flex justify-content-between align-items-center">
 						<div>
 							<div class="title mb-2">房客人數</div>
 							<p>{{ booking.peopleNum }} 人</p>
 						</div>
-						<NuxtLink :to="`/room/${booking.roomId}`" class="text-decoration-underline cursor-pointer">編輯</NuxtLink>
+						<NuxtLink :to="`/room/${route.query?.id}`" class="text-decoration-underline cursor-pointer">編輯</NuxtLink>
 					</div>
 					<hr />
 					<!-- 訂房人資訊 -->
@@ -91,15 +91,15 @@
 						<div class="d-flex gap-3">
 							<div class="room-info bg-white border border-1 border-primary-40 p-3 rounded d-flex flex-column justify-content-center gap-2">
 								<img src="/image/ic_Size.svg" class="icon" alt="">
-								<span>{{ roomData.areaInfo }}</span>
+								<span>{{ roomData?.areaInfo }}</span>
 							</div>
 							<div class="room-info bg-white border border-1 border-primary-40 p-3 rounded d-flex flex-column justify-content-center gap-2">
 								<img src="/image/Group.svg" class="icon" alt="">
-								<span>{{ roomData.bedInfo }}</span>
+								<span>{{ roomData?.bedInfo }}</span>
 							</div>
 							<div class="room-info bg-white border border-1 border-primary-40 p-3 rounded d-flex flex-column justify-content-center gap-2">
 								<img src="/image/ic_Person.svg" class="icon" alt="">
-								<span>{{ roomData.maxPeople }}人</span>
+								<span>{{ roomData?.maxPeople }}人</span>
 							</div>
 						</div>
 					</div>
@@ -107,7 +107,7 @@
 					<div class="mb-4">
 						<div class="title mb-3">房內設備</div>
 						<ul class="bg-white p-4 d-flex gap-4 rounded list-unstyled flex-wrap">
-							<li v-for="(item, index) in roomData.facilityInfo" :key="`facility_${index+1}`">
+							<li v-for="(item, index) in roomData?.facilityInfo" :key="`facility_${index+1}`">
 								<img src="/image/ic_check.svg" alt="" class="me-2">
 								<span>{{ item.title }}</span>
 							</li>
@@ -117,7 +117,7 @@
 					<div class="mb-4">
 						<div class="title mb-3">備品提供</div>
 						<ul class="bg-white p-4 d-flex gap-4 rounded list-unstyled flex-wrap">
-							<li v-for="(item, index) in roomData.amenityInfo" :key="`amenity_${index+1}`">
+							<li v-for="(item, index) in roomData?.amenityInfo" :key="`amenity_${index+1}`">
 								<img src="/image/ic_check.svg" alt="" class="me-2">
 								<span>{{ item.title }}</span>
 							</li>
@@ -125,12 +125,12 @@
 					</div>
 				</div>
 				<div class="price-info-wrap card col-12 p-4 p-md-5 col-md-4">
-					<img :src="roomData.imageUrlList[0]" class="rounded mb-4" alt="room">
+					<img :src="roomData?.imageUrlList?.[0]" class="rounded mb-4" alt="room">
 					<div class="">
 						<h5 class="mb-4">價格詳情</h5>
 						<div class="d-flex justify-content-between">
-							<label>NT$ {{ toThousands(roomData.price) }} x {{ getNumberOfDays(booking.checkInDate, booking.checkOutDate) }} 晚</label>
-							<span>NT$ {{ toThousands(roomData.price*getNumberOfDays(booking.checkInDate, booking.checkOutDate)) }}</span>
+							<label>NT$ {{ toThousands(roomData?.price || 0) }} x {{ getNumberOfDays(booking.checkInDate, booking.checkOutDate) }} 晚</label>
+							<span>NT$ {{ toThousands(roomData?.price * getNumberOfDays(booking.checkInDate, booking.checkOutDate)) || 0 }}</span>
 						</div>
 						<div class="discount d-flex justify-content-between">
 							<label>住宿折扣</label>
@@ -139,7 +139,7 @@
 						<hr />
 						<div class="d-flex justify-content-between mb-4">
 							<label>總價</label>
-							<span>NT$ {{ toThousands(roomData.price*getNumberOfDays(booking.checkInDate, booking.checkOutDate) - 1000) }}</span>
+							<span>NT$ {{ toThousands(roomData.price * getNumberOfDays(booking.checkInDate, booking.checkOutDate) - 1000) }}</span>
 						</div>
 						<button type="submit" class="btn btn-primary w-100 w-md-auto" @click="submitForm">確認訂房</button>
 					</div>
@@ -152,9 +152,11 @@
 <script lang="ts" setup>
 import type { User } from '@/types/user';
 import type { Order } from '@/types/order';
+import type { GetRoomRes } from '@/types/rooms';
 
 const { getCounties, getDist } = useZipcode();
 const router = useRouter();
+const route = useRoute();
 const { $bookingStore } = useNuxtApp();
 const { booking } = $bookingStore;
 
@@ -184,12 +186,18 @@ onMounted(async () => {
 const setUserInfo = () => {
 	bookingInfo.value = userRes.value?.result || bookingInfo.value;
 };
-
 // 拿房型資料
-const apiUrl = computed(() => `/api/v1/rooms/${booking.roomId}`);
-const roomData = computed(() => JSON.parse(JSON.stringify(roomRes.value?.result)));
-const { response: roomRes } = await useCustomFetch<any>(apiUrl.value, {
+const apiUrl = computed(() => `/api/v1/rooms/${route.query?.id}`);
+const roomData = ref<GetRoomRes>();
+const { response: roomRes } = await useCustomFetch<GetRoomRes>(apiUrl.value, {
 	method: 'GET'
+});
+watch(() => roomRes, () => {
+	if (roomRes.value?.result) {
+		roomData.value = roomRes.value?.result;
+	}
+}, {
+	immediate: true
 });
 
 const submitForm = async () => {
