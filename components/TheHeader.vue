@@ -19,7 +19,7 @@
 								<NuxtLink to="/login" class="btn btn-ghost mb-3" v-if="!$store.user.name">會員登入</NuxtLink>
 								<NuxtLink to="/member" class="btn btn-ghost mb-3" v-else>我的帳戶</NuxtLink>
 							</ClientOnly>
-							<NuxtLink to="/reservation" class="btn btn-primary w-100">立即訂房</NuxtLink>
+							<NuxtLink to="/all-rooms" class="btn btn-primary w-100">立即訂房</NuxtLink>
 						</div>
 						<button type="button" class="btn btn-ghost position-absolute top-0 end-0" @click="openMenu = false">
 							<span class="material-symbols-outlined fill-0 p-3">close</span>
@@ -43,7 +43,7 @@
 						</div>
 					</div>
 				</ClientOnly>
-				<NuxtLink to="/reservation" class="btn btn-primary">立即訂房</NuxtLink>
+				<NuxtLink to="/all-rooms" class="btn btn-primary">立即訂房</NuxtLink>
 				<!-- Guideline 按鈕僅限開發環境 -->
 				<NuxtLink to="/guideline" class="btn btn-primary ms-3" v-if="isDevEnv">Guideline</NuxtLink>
 			</div>
@@ -73,7 +73,7 @@ watch(() => route.path, () => {
 });
 watch(() => openMenu.value, val => {
 	const event = val ? 'add' : 'remove';
-	document.body.classList[event]('overflow-hidden');
+	document.body.classList[event]('custom-scroll-lock');
 });
 
 // 登出
@@ -126,5 +126,15 @@ const logout = () => {
 		transform-origin: top;
 		transform: scaleY(1);
 	}
+}
+</style>
+
+<style lang="scss">
+.custom-scroll-lock {
+	@include media-md {
+		overflow: unset;
+	}
+
+	overflow: hidden;
 }
 </style>
