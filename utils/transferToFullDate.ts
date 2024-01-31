@@ -1,4 +1,7 @@
 export default (dateString: Date): string => {
+	if (!dateString) {
+		return '';
+	}
 	const dateTime = new Date(dateString);
 	const month = dateTime.getMonth();
 	const date = dateTime.getDate();
