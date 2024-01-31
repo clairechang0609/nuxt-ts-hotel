@@ -14,6 +14,7 @@
 							<div class="title mb-2">選擇房型</div>
 							<p>{{ roomData.name }}</p>
 						</div>
+						<NuxtLink :to="`/all-rooms`" class="text-decoration-underline cursor-pointer">編輯</NuxtLink>
 					</div>
 					<div class="mb-4 d-flex justify-content-between align-items-center">
 						<div>
@@ -57,7 +58,6 @@
 								<input type="email" class="form-control" id="email" placeholder="請輸入電子信箱" v-bind="field">
 							</VeeField>
 						</div>
-						<!-- TODO: -->
 						<div class="mb-5 row gx-2">
 							<label for="confirm_email" class="form-label">地址</label>
 							<div class="col-6 pe-0 mb-3">
@@ -154,11 +154,9 @@ import type { User } from '@/types/user';
 import type { Order } from '@/types/order';
 
 const { getCounties, getDist } = useZipcode();
-const { $bookingStore } = useNuxtApp();
 const router = useRouter();
-
-const bookingStore = $bookingStore;
-const { booking } = bookingStore;
+const { $bookingStore } = useNuxtApp();
+const { booking } = $bookingStore;
 
 // 訂房人資訊
 const defaultBookingInfo: User = {
