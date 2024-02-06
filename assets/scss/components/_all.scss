@@ -52,8 +52,17 @@ a {
 }
 
 // backdrop
-.backdrop, .modal-backdrop, .offcanvas-backdrop {
+.modal-backdrop, .offcanvas-backdrop {
 	--bs-backdrop-zindex: 1050;
+
+	background-color: rgb($black, 0.5);
+	opacity: 1 !important;
+	backdrop-filter: blur(10px);
+	z-index: var(--bs-backdrop-zindex);
+}
+
+.backdrop {
+	--bs-backdrop-zindex: 1056;
 
 	background-color: rgb($black, 0.5);
 	opacity: 1 !important;
