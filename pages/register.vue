@@ -120,9 +120,8 @@
 
 <script setup>
 const { getCounties, getDist } = useZipcode();
-const { $notify } = useNuxtApp();
+const { $notify, $store } = useNuxtApp();
 const router = useRouter();
-const { $store } = useNuxtApp();
 definePageMeta({
 	layout: 'login'
 });
