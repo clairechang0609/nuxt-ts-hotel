@@ -50,7 +50,6 @@ const bannerSwiperConfig = {
 </script>
 
 <style lang="scss" scoped>
-
 .banner-wrap {
 	@include media-md {
 		padding: 12.25rem 0 7.25rem;

@@ -27,7 +27,9 @@
 					<div class="mb-4 d-flex justify-content-between align-items-center">
 						<div>
 							<div class="title mb-2">房客人數</div>
-							<p>{{ booking.peopleNum }} 人</p>
+							<ClientOnly>
+								<p>{{ booking.peopleNum }} 人</p>
+							</ClientOnly>
 						</div>
 						<NuxtLink :to="`/room/${route.query?.id}`" class="text-decoration-underline cursor-pointer">編輯</NuxtLink>
 					</div>
@@ -206,11 +208,13 @@ const setUserInfo = () => {
 	bookingInfo.value = userRes.value?.result || bookingInfo.value;
 };
 
-watch(() => bookingInfo.value.address.zipcode, () => {
-	const result = districts.find(item => String(item.zipcode) === String(bookingInfo.value.address.zipcode));
+watch(() => bookingInfo.value.address.zipcode, value => {
+	if (value) {
+		const result = districts.find(item => String(item.zipcode) === String(bookingInfo.value.address.zipcode));
 
-	bookingInfo.value.address.county = result?.county || '';
-	bookingInfo.value.address.zipcode = result?.zipcode || 0;
+		bookingInfo.value.address.county = result?.county || '';
+		bookingInfo.value.address.zipcode = result?.zipcode || 0;
+	}
 }, {
 	immediate: true
 });
