@@ -106,6 +106,9 @@ onMounted(() => {
 });
 const setOrders = () => {
 	if (ordersRes.value?.result) {
+		upcomingOrders.value = [];
+		oldOrders.value = [];
+
 		ordersRes.value?.result.forEach((item: Order) => {
 			const checkInDate = new Date(item.checkInDate);
 			const today = new Date();
@@ -119,7 +122,7 @@ const setOrders = () => {
 
 // 取消預約
 const cancelReservation = async () => {
-	const { response } = await useCustomFetch(`/api/v1/orders/${upcomingOrders.value?.[currentPage.value]._id}`, {
+	const { response } = await useCustomFetch(`/api/v1/orders/${upcomingOrders.value?.[currentPage.value - 1]._id}`, {
 		method: 'DELETE'
 	});
 	if (!response.value?.status) {
