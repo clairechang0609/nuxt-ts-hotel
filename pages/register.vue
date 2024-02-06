@@ -201,7 +201,7 @@ const register = async () => {
 	}
 	const token = useCookie('token');
 	token.value = response.value.token;
-	$store.user.name = response.result.name;
+	$store.user.name = response.value.result.name;
 	router.push('/');
 };
 // 送出表單
