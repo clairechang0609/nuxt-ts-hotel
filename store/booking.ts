@@ -27,4 +27,8 @@ export const useBookingStore = defineStore('booking', () => {
 		setBookingInfo,
 		clearBookingInfo
 	};
+}, {
+	persist: {
+		storage: persistedState.localStorage
+	}
 });
