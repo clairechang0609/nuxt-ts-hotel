@@ -12,7 +12,7 @@
 					<div class="mb-4 d-flex justify-content-between align-items-center">
 						<div>
 							<div class="title mb-2">選擇房型</div>
-							<p>{{ roomData?.name }}</p>
+							<p>{{ roomData.name }}</p>
 						</div>
 						<NuxtLink :to="`/all-rooms`" class="text-decoration-underline cursor-pointer">編輯</NuxtLink>
 					</div>
@@ -37,7 +37,7 @@
 						<h4>訂房人資訊</h4>
 						<span class="text-decoration-underline cursor-pointer text-primary" @click="setUserInfo">套用會員資料</span>
 					</div>
-					<VeeForm @submit="submitForm" v-slot="{ meta: globalMata }">
+					<VeeForm>
 						<div class="mb-4">
 							<label for="name" class="form-label">姓名</label>
 							<VeeField name="name" label="姓名" rules="required" v-model="bookingInfo.name" v-slot="{ field, errors }">
@@ -61,7 +61,7 @@
 						<div class="mb-5 row gx-2">
 							<label for="confirm_email" class="form-label">地址</label>
 							<div class="col-6 pe-0 mb-3">
-								<VeeField name="county" label="縣市" rules="required" v-model="county" @change="bookingInfo.address.zipcode = ''" v-slot="{ field, errors }">
+								<VeeField name="county" label="縣市" rules="required" v-model="bookingInfo.address.county" @change="bookingInfo.address.zipcode = ''" v-slot="{ field, errors }">
 									<select class="form-select" id="county" v-bind="field" :class="{ 'is-invalid': errors.length }">
 										<option value="" :selected="county === ''" disabled>縣市</option>
 										<option v-for="item in getCounties" :value="item.id" :key="item.id">{{ item.name }}</option>
@@ -72,7 +72,7 @@
 								<VeeField name="distList" label="區域" rules="required" v-model="bookingInfo.address.zipcode" v-slot="{ field, errors }">
 									<select class="form-select" id="distList" v-bind="field" :class="{ 'is-invalid': errors.length }">
 										<option value="" :selected="bookingInfo.address.zipcode === ''" disabled>區域</option>
-										<option v-for="item in getDist(county)" :value="item.zipcode" :key="item.id">{{ item.city }}</option>
+										<option v-for="item in getDist(bookingInfo.address.county as string)" :value="item.zipcode" :key="item.id">{{ item.city }}</option>
 									</select>
 								</VeeField>
 							</div>
@@ -91,15 +91,15 @@
 						<div class="d-flex gap-3">
 							<div class="room-info bg-white border border-1 border-primary-40 p-3 rounded d-flex flex-column justify-content-center gap-2">
 								<img src="/image/ic_Size.svg" class="icon" alt="">
-								<span>{{ roomData?.areaInfo }}</span>
+								<span>{{ roomData.areaInfo }}</span>
 							</div>
 							<div class="room-info bg-white border border-1 border-primary-40 p-3 rounded d-flex flex-column justify-content-center gap-2">
 								<img src="/image/Group.svg" class="icon" alt="">
-								<span>{{ roomData?.bedInfo }}</span>
+								<span>{{ roomData.bedInfo }}</span>
 							</div>
 							<div class="room-info bg-white border border-1 border-primary-40 p-3 rounded d-flex flex-column justify-content-center gap-2">
 								<img src="/image/ic_Person.svg" class="icon" alt="">
-								<span>{{ roomData?.maxPeople }}人</span>
+								<span>{{ roomData.maxPeople }}人</span>
 							</div>
 						</div>
 					</div>
@@ -107,7 +107,7 @@
 					<div class="mb-4">
 						<div class="title mb-3">房內設備</div>
 						<ul class="bg-white p-4 d-flex gap-4 rounded list-unstyled flex-wrap">
-							<li v-for="(item, index) in roomData?.facilityInfo" :key="`facility_${index+1}`">
+							<li v-for="(item, index) in roomData.facilityInfo" :key="`facility_${index+1}`">
 								<img src="/image/ic_check.svg" alt="" class="me-2">
 								<span>{{ item.title }}</span>
 							</li>
@@ -117,7 +117,7 @@
 					<div class="mb-4">
 						<div class="title mb-3">備品提供</div>
 						<ul class="bg-white p-4 d-flex gap-4 rounded list-unstyled flex-wrap">
-							<li v-for="(item, index) in roomData?.amenityInfo" :key="`amenity_${index+1}`">
+							<li v-for="(item, index) in roomData.amenityInfo" :key="`amenity_${index+1}`">
 								<img src="/image/ic_check.svg" alt="" class="me-2">
 								<span>{{ item.title }}</span>
 							</li>
@@ -129,8 +129,8 @@
 					<div class="">
 						<h5 class="mb-4">價格詳情</h5>
 						<div class="d-flex justify-content-between">
-							<label>NT$ {{ toThousands(roomData?.price || 0) }} x {{ getNumberOfDays(booking.checkInDate, booking.checkOutDate) }} 晚</label>
-							<span>NT$ {{ toThousands(roomData?.price * getNumberOfDays(booking.checkInDate, booking.checkOutDate)) || 0 }}</span>
+							<label>NT$ {{ toThousands(roomData.price || 0) }} x {{ getNumberOfDays(booking.checkInDate, booking.checkOutDate) }} 晚</label>
+							<span>NT$ {{ toThousands(roomData.price * getNumberOfDays(booking.checkInDate, booking.checkOutDate)) || 0 }}</span>
 						</div>
 						<div class="discount d-flex justify-content-between">
 							<label>住宿折扣</label>
@@ -141,7 +141,7 @@
 							<label>總價</label>
 							<span>NT$ {{ toThousands(roomData.price * getNumberOfDays(booking.checkInDate, booking.checkOutDate) - 1000) }}</span>
 						</div>
-						<button type="submit" class="btn btn-primary w-100 w-md-auto" @click="submitForm">確認訂房</button>
+						<button type="button" class="btn btn-primary w-100 w-md-auto" @click="submitForm">確認訂房</button>
 					</div>
 				</div>
 			</div>
@@ -154,11 +154,12 @@ import type { User } from '@/types/user';
 import type { Order } from '@/types/order';
 import type { GetRoomRes } from '@/types/rooms';
 
-const { getCounties, getDist } = useZipcode();
+const { getCounties, getDist, districts } = useZipcode();
 const router = useRouter();
 const route = useRoute();
 const { $bookingStore } = useNuxtApp();
-const { booking } = $bookingStore;
+const { booking, clearBookingInfo } = $bookingStore;
+const county = ref('');
 
 // 訂房人資訊
 const defaultBookingInfo: User = {
@@ -167,13 +168,31 @@ const defaultBookingInfo: User = {
 	email: '',
 	birthday: '',
 	address: {
-		zipcode: '',
-		detail: ''
+		zipcode: 0,
+		detail: '',
+		county: '',
+		city: ''
 	},
 	_id: ''
 };
+// 房型資訊
+const defaultRoomData: GetRoomRes = {
+	name: '',
+	description: '',
+	imageUrl: '',
+	imageUrlList: [],
+	areaInfo: '',
+	bedInfo: '',
+	maxPeople: 0,
+	price: 0,
+	status: 1,
+	facilityInfo: [],
+	amenityInfo: [],
+	_id: '',
+	createdAt: '',
+	updatedAt: ''
+};
 const bookingInfo = ref<User>({ ...defaultBookingInfo });
-const county = ref('');
 
 const { response: userRes, refresh: getUserInfo } = await useCustomFetch<User>('/api/v1/user', {
 	method: 'GET',
@@ -186,9 +205,19 @@ onMounted(async () => {
 const setUserInfo = () => {
 	bookingInfo.value = userRes.value?.result || bookingInfo.value;
 };
+
+watch(() => bookingInfo.value.address.zipcode, () => {
+	const result = districts.find(item => String(item.zipcode) === String(bookingInfo.value.address.zipcode));
+
+	bookingInfo.value.address.county = result?.county || '';
+	bookingInfo.value.address.zipcode = result?.zipcode || 0;
+}, {
+	immediate: true
+});
+
 // 拿房型資料
 const apiUrl = computed(() => `/api/v1/rooms/${route.query?.id}`);
-const roomData = ref<GetRoomRes>();
+const roomData = ref<GetRoomRes>({ ...defaultRoomData });
 const { response: roomRes } = await useCustomFetch<GetRoomRes>(apiUrl.value, {
 	method: 'GET'
 });
@@ -214,6 +243,9 @@ const submitForm = async () => {
 		return;
 	}
 	router.push(`/reservation/success?id=${response.value.result._id}`);
+
+	clearBookingInfo();
+
 	return response.value.result;
 };
 
