@@ -40,7 +40,7 @@
 </template>
 
 <script setup>
-const props = defineProps({
+defineProps({
 	currentStep: {
 		type: Number,
 		default: 1
@@ -58,9 +58,11 @@ const props = defineProps({
 	border-radius: 50%;
 	margin-bottom: 0.25rem;
 }
+
 .bar {
 	height: 2px;
 }
+
 .border-gray-60 {
 	border: 1px solid $gray-60;
 }

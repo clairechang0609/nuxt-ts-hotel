@@ -92,7 +92,7 @@ const isShowAll = ref(false);
 const currentPage = ref(1);
 const upcomingOrders = ref<Order[]>([]);
 const oldOrders = ref<Order[]>([]);
-const showOldOrders = computed(() => isShowAll.value ? oldOrders.value.slice(1) : oldOrders.value.slice(1, 4));
+const showOldOrders = computed(() => isShowAll.value ? oldOrders.value : oldOrders.value.slice(0, 4));
 const { response: ordersRes, refresh: fetchOrders } = await useCustomFetch<Order[]>('/api/v1/orders', {
 	method: 'GET',
 	immediate: false
