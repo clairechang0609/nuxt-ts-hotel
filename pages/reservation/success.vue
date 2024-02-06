@@ -1,7 +1,7 @@
 <template>
 	<div class="bg-secondary">
 		<div class="container container-with-navbar">
-			<div class="row gx-5 text-white">
+			<div class="row text-white">
 				<div class="col-lg-7 pe-md-5 mb-4 mb-lg-0">
 					<div class="d-flex flex-column flex-md-row align-items-md-center mb-5">
 						<div class="check-icon bg-success rounded-circle d-flex align-items-center justify-content-center me-5 mb-3 mb-md-0">
